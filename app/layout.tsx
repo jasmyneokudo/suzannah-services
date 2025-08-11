@@ -1,8 +1,28 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Open_Sans, Roboto_Mono, Edu_SA_Beginner } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
+
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  // display: 'swap',
+  //👇 Add variable to our object
+  variable: '--font-opensans',
+})
+
+//👇 Configure the object for our second font
+const robotoMono = Roboto_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-roboto-mono',
+})
+
+const eduSABeginner = Edu_SA_Beginner({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-edu-sa-beginner'
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${openSans.variable} ${robotoMono.variable} ${eduSABeginner.variable} font-inter`}>
       <body className={inter.className}>{children}</body>
     </html>
   );
