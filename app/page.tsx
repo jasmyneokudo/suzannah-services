@@ -22,9 +22,11 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { FormHelperText, TextareaAutosize, TextField } from "@mui/material";
+import { FormHelperText, TextField } from "@mui/material";
 import Button from "./components/Button";
-// import PersonIcon from '@mui/icons-material/Person';
+import { faqs } from "@/data/faqs";
+import { services } from "@/data/services";
+import AlertDialogSlide from "./components/Dialog";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 
@@ -33,122 +35,18 @@ function SampleNextArrow(props: any) {
   return (
     <div
       className={className}
-      style={{ ...style, display: "block", background: "red" }}
+      style={{ ...style, display: "block" }}
       onClick={onClick}
     />
   );
 }
-
-const services = [
-  {
-    serviceName: "Live-in Nanny Services",
-    serviceDescription:
-      "Reliable, experienced live-in nannies who provide loving care for your children and support with their daily routines in the comfort of your home.",
-    whatsIncluded: [
-      "Daily childcare, including feeding, bathing, and dressing.",
-      "Accompanying children to outings or appointments as needed.",
-      "Monitoring children’s health and safety at all times.",
-      "Supervising homework and educational activities.",
-    ],
-  },
-  {
-    serviceName: "Live-in Help Services",
-    serviceDescription:
-      "Your reliable extra pair of hands, from tidying up to managing household errands, our live-in helpers ensure your home is always at its best.",
-    whatsIncluded: [
-      "Daily cleaning of rooms and living spaces.",
-      "Laundry, ironing, and wardrobe organization.",
-      "Grocery assistance and household supply management.",
-      "Assistance with small household errands.",
-    ],
-  },
-  {
-    serviceName: "Live-in Nanny + Help Services",
-    serviceDescription:
-      "An experienced and caring Nanny-Helo who lives in your home to provide loving childcare and assist with essential household duties.",
-    whatsIncluded: [
-      "Assistance with meal preparation and basic cooking.",
-      "General home organization and tidiness.",
-      "Accompanying children to school, activities, or appointments (if required).",
-      "Assistance with small household errands.",
-    ],
-  },
-  {
-    serviceName: "Live-in Housekeeper Services",
-    serviceDescription:
-      "Full-time live-in housekeeper for a consistently clean, well-maintained, and beautifully arranged home, so you never have to worry about the details.",
-    whatsIncluded: [
-      "Daily cleaning and tidying of all rooms.",
-      "Organization of closets, shelves, and storage areas.",
-      "Bed-making and linen changes on schedule.",
-      "Seasonal deep cleaning tasks (as agreed).",
-    ],
-  },
-];
-
-const faqs = [
-  {
-    id: 1,
-    question: "Where is your office located?",
-    answer:
-      " Facilis, distinctio recusandae nostrum soluta suscipit iure endi!",
-  },
-  {
-    id: 2,
-    question: "Where is your office located?",
-    answer:
-      " Facilis, distinctio recusandae nostrum soluta suscipit iure endi!",
-  },
-  {
-    id: 3,
-    question: "Where is your office located?",
-    answer:
-      " Facilis, distinctio recusandae nostrum soluta suscipit iure endi!",
-  },
-  {
-    id: 4,
-    question: "Where is your office located?",
-    answer:
-      " Facilis, distinctio recusandae nostrum soluta suscipit iure endi!",
-  },
-  {
-    id: 5,
-    question: "Where is your office located?",
-    answer:
-      " Facilis, distinctio recusandae nostrum soluta suscipit iure endi!",
-  },
-  {
-    id: 6,
-    question: "Where is your office located?",
-    answer:
-      " Facilis, distinctio recusandae nostrum soluta suscipit iure endi!",
-  },
-  {
-    id: 7,
-    question: "Where is your office located?",
-    answer:
-      " Facilis, distinctio recusandae nostrum soluta suscipit iure endi!",
-  },
-  {
-    id: 8,
-    question: "Where is your office located?",
-    answer:
-      " Facilis, distinctio recusandae nostrum soluta suscipit iure endi!",
-  },
-  {
-    id: 9,
-    question: "Where is your office located?",
-    answer:
-      " Facilis, distinctio recusandae nostrum soluta suscipit iure endi!",
-  },
-];
 
 export default function Home() {
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 1,
     slidesToScroll: 1,
     swipeToSlide: true,
     nextArrow: <SampleNextArrow />,
@@ -165,8 +63,10 @@ export default function Home() {
     | "Live-in Nanny + Help Services"
     | "Live-in Housekeeper Services";
 
-  const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(0);
+  const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(3);
 
+  const [isCustomerServicePolicyOpen, setIsCustomerServicePolicyOpen] =
+    useState(false);
   const [customerRequest, setCustomerRequest] = useState({
     serviceType: "",
     employeeGender: "",
@@ -189,7 +89,6 @@ export default function Home() {
   });
 
   function selectService(serviceType: ServiceType) {
-    // alert("selecting service " + serviceType);
     setCustomerRequest({ ...customerRequest, serviceType: serviceType });
     setRequestStage(1);
 
@@ -197,8 +96,33 @@ export default function Home() {
     section?.scrollIntoView({ behavior: "smooth" });
   }
 
+  function closeCustomerServicePolicy(e: React.MouseEvent<HTMLButtonElement>) {
+    console.log("Closing customer service policy dialog", e.target.textContent);
+    if (e.target?.textContent === "Proceed") {
+      setIsCustomerServicePolicyOpen(false);
+      setRequestStage(3);
+      setTimeout(() => {
+        document
+          .getElementById("payment-section")
+          ?.scrollIntoView({ behavior: "smooth" });
+      }, 0);
+    }
+  }
+
+  type PaymentPlan = "monthly" | "one-off";
+
+  function selectPlan(paymentPlan: PaymentPlan): void {
+    if (paymentPlan === "monthly") {
+      setIsCustomerServicePolicyOpen(true);
+    }
+  }
+
   return (
     <main className="flex bg-white min-h-screen w-full flex-col items-center justify-between overflow-clip">
+      <AlertDialogSlide
+        open={isCustomerServicePolicyOpen}
+        onClose={(e: React.MouseEvent) => closeCustomerServicePolicy(e)}
+      />
       <div className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90  h-3/4 max-sm:h-[400px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
         {/* for our menu items #0D98BA */}
         <div className="flex max-sm:hidden absolute top-3 left-0 right-0 mr-auto ml-auto w-[600px]">
@@ -593,11 +517,21 @@ export default function Home() {
           </h3>
           <ol className="mt-1 text-sm list-none text-black dark:text-gray-900">
             <li className="flex">
-              <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />{" "}
+              <IconCheck
+                color="green"
+                stroke={2}
+                size={20}
+                className="mr-2 shrink-0"
+              />{" "}
               We manage the staff’s performance and payroll.
             </li>
             <li className="flex">
-              <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />{" "}
+              <IconCheck
+                color="green"
+                stroke={2}
+                size={20}
+                className="mr-2 shrink-0"
+              />{" "}
               Guaranteed replacement policy throughout your subscription..
             </li>
           </ol>
@@ -608,22 +542,16 @@ export default function Home() {
           </span>
 
           <Button
-          onClick={() => {
-            // setRequestStage(2);
-
-            // setTimeout(() => {
-            //   document
-            //     .getElementById("payment-section")
-            //     ?.scrollIntoView({ behavior: "smooth" });
-            // }, 0);
-          }}
-          style={{ width: "100%"}}
-          buttonName="Select Plan" 
-        />
+            onClick={() => selectPlan("monthly")}
+            style={{ width: "100%" }}
+            buttonName="Select Plan"
+          />
         </div>
 
         <div className="border border-gray-300 rounded-lg p-4 mt-5">
-          <h1 className="font-semibold text-xl text-black dark:text-gray-900">One-off Placement Plan</h1>
+          <h1 className="font-semibold text-xl text-black dark:text-gray-900">
+            One-off Placement Plan
+          </h1>
 
           <p className="text-xs text-gray-600 mt-1">
             Perfect for clients who prefer to employ and manage staff directly.
@@ -679,15 +607,31 @@ export default function Home() {
           </h3>
           <ul className="mt-1 text-sm list-none text-black dark:text-gray-900">
             <li className="flex">
-              <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />{" "}
-              We manage Opportinity to interview and select staff directly.
+              <IconCheck
+                color="green"
+                stroke={2}
+                size={20}
+                className="mr-2 shrink-0"
+              />{" "}
+              Opportunity to interview up to 2 candidates and select your
+              preferred candidate.
             </li>
             <li className="flex">
-              <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />
+              <IconCheck
+                color="green"
+                stroke={2}
+                size={20}
+                className="mr-2 shrink-0"
+              />
               Free Medical Test for selected candidate
             </li>
             <li className="flex">
-              <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />
+              <IconCheck
+                color="green"
+                stroke={2}
+                size={20}
+                className="mr-2 shrink-0"
+              />
               Manage your own staff directly without external inteference and
               any monthly service fee
             </li>
@@ -696,41 +640,99 @@ export default function Home() {
             <h1 className="text-2xl font-bold text-blue-950">₦120,000</h1>
           </span>
           <Button
-          onClick={() => {
-            // setRequestStage(2);
+            onClick={() => selectPlan("one-off" as PaymentPlan)}
+            style={{ width: "100%" }}
+            buttonName="Select Plan"
+          />
+        </div>
+      </section>
 
-            // setTimeout(() => {
-            //   document
-            //     .getElementById("payment-section")
-            //     ?.scrollIntoView({ behavior: "smooth" });
-            // }, 0);
-          }}
-          style={{ width: "100%"}}
-          buttonName="Select Plan" 
-        />
+      <section
+        id="final-section"
+        className={`${
+          requestStage !== 3 && "hidden"
+        } mt-20 max-sm:mt-10 flex flex-col bg-white max-sm:px-8`}
+      >
+        <Link
+          onClick={() => setRequestStage(2)}
+          href="#"
+          className="text-start text-blue-950"
+        >
+          &larr; Back
+        </Link>
+        <h1 className="font-extralight text-center text-3xl mt-2 text-black dark:text-gray-800">
+          COMPLETE YOUR REQUEST
+        </h1>
+        <p className="text-gray-600 mt-5 text-base">
+          Step 4 of 4: Fill in your contact details
+        </p>
+
+        <div className="border border-gray-300 rounded-lg p-4 mt-5">
+          <TextField
+            fullWidth
+            sx={{ mt: 2 }}
+            id="client-name"
+            label="Your Name"
+            variant="outlined"
+            value={customerRequest.clientName}
+            onChange={(e) =>
+              setCustomerRequest({
+                ...customerRequest,
+                clientName: e.target.value,
+              })
+            }
+          />
+          <TextField
+            fullWidth
+            sx={{ mt: 2 }}
+            id="client-phone-number"
+            label="Phone Number"
+            variant="outlined"
+            value={customerRequest.clientPhoneNumber}
+            onChange={(e) =>
+              setCustomerRequest({
+                ...customerRequest,
+                clientPhoneNumber: e.target.value,
+              })
+            }
+          />
+          <TextField
+            fullWidth
+            sx={{ mt: 2 }}
+            id="client-email"
+            label="Email Address"
+            variant="outlined"
+            value={customerRequest.clientEmail}
+            onChange={(e) =>
+              setCustomerRequest({
+                ...customerRequest,
+                clientEmail: e.target.value,
+              })
+            }
+          />
         </div>
       </section>
 
       {/* CLIENT REVIEWS SECTION STARTS */}
-      <div className="z-50 relative h-3/4 w-full mt-10 flex flex-col bg-gradient-to-b  from-blue-950 to-[#0D98BA]">
-        <h1 className="absolute z-50 top-72 font-extralight text-3xl mt-20 mb-20 self-center text-white">
-          WHAT OUR CLIENTS ARE SAYING ABOUT US
+      <div className="z-50 relative h-3/4 w-full mt-10 flex flex-col bg-gradient-to-b from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90">
+        <h1 className="absolute z-50 top-72 max-sm:top-[10%] font-extralight text-3xl max-sm:text-2xl mt-5 mb-20 self-center text-white">
+          WHAT OUR FAMILIES SAY
         </h1>
         <div className="relative ">
-          <div className="absolute z-50 bg-[#EFF2F2] w-full h-72 rounded-br-[400px]"></div>
+          <div className="absolute z-50 bg-[#EFF2F2] max-sm:bg-transparent w-full h-72 rounded-br-[400px] max-sm:"></div>
           <Image
             src="/images/reviews-bg2.jpg"
             alt="Vercel Logo"
             width="0"
             height="0"
             sizes="100vw"
-            className="-z-[100] w-full h-auto opacity-30"
+            className="-z-[100] w-full h-auto max-sm:h-[400px] opacity-30"
             priority
           />
         </div>
 
-        <div className="absolute top-2/3 w-3/4 right-0 flex justify-center items-top">
-          <SliderTyped {...settings} className=" w-full mr-[-100px]">
+        <div className="absolute top-2/3 max-sm:top-[45%] max-sm:left-5 w-3/4 max-sm:w-full right-0 flex justify-center items-top">
+          <SliderTyped {...settings} className="w-full mr-[-100px] max-sm:mr-0">
             <ReviewCard
               name="Mrs. A | Guzape"
               review="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
