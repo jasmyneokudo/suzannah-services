@@ -192,7 +192,7 @@ export default function Home() {
 
   return (
     <main className="flex bg-white min-h-screen w-full flex-col items-center justify-between overflow-clip">
-      <div className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950 h-3/4 max-sm:h-[400px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
+      <div className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90  h-3/4 max-sm:h-[400px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
         {/* for our menu items #0D98BA */}
         <div className="flex max-sm:hidden absolute top-3 left-0 right-0 mr-auto ml-auto w-[600px]">
           <a
@@ -251,16 +251,16 @@ export default function Home() {
           width="0"
           height="0"
           sizes="100vw"
-          className="w-full h-auto max-sm:h-[400px] opacity-15 rounded-br-[400px] max-sm:rounded-none bg-repeat-y"
+          className="w-full max-sm:blur-sm h-auto max-sm:h-[400px] opacity-15 rounded-br-[400px] max-sm:rounded-none"
           priority
         />
 
-        <h1 className="absolute text-white top-[50%] max-sm:top-[25%] w-1/2 text-center left-1/4 z-10 font-extralight text-4xl max-sm:text-2xl">
-          Trusted, Professional Home And Care Service Provider In F.C.T
+        <h1 className="absolute text-white top-[50%] max-sm:top-[29%] w-1/2 max-sm:w-[55%] text-center left-1/2 -translate-x-1/2 z-10 font-extralight text-4xl max-sm:text-2xl">
+          Trusted, Professional Home And Care Service Provider In The F.C.T
         </h1>
 
         <Link
-          className="hidden max-sm:flex max-sm:absolute max-sm:top-[75%] max-sm:left-[33%] hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-sm"
+          className="hidden font-bold max-sm:flex max-sm:absolute max-sm:top-[75%] left-1/2 -translate-x-1/2 hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-sm"
           href="."
         >
           Book A Service Now
