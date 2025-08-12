@@ -12,7 +12,7 @@ const ServiceCard = (props: ServiceProps) => {
   return (
     <div className="mt-20 max-sm:mt-10 flex w-1/2 max-sm:w-full justify-between p-5  shadow-md shadow-stone-300">
       <div className="ml-10 max-sm:ml-2">
-        <h2 className="font-semibold text-[20px]">{props.serviceName}</h2>
+        <h2 className="font-semibold text-[20px] text-black dark:text-gray-900">{props.serviceName}</h2>
         <p className="mt-2 text-gray-600 max-lg font-light">
           {props.serviceDescription}
         </p>

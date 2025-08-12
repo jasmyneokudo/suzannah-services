@@ -272,7 +272,7 @@ export default function Home() {
           requestStage !== 0 && "hidden"
         } mt-20 max-sm:mt-10 flex flex-col items-center bg-white max-sm:px-10`}
       >
-        <h1 className="font-extralight text-3xl">SERVICES</h1>
+        <h1 className="font-extralight text-3xl text-black dark:text-gray-700">SERVICES</h1>
 
         {services.map((service, index) => (
           <ServiceCard
@@ -284,30 +284,13 @@ export default function Home() {
           />
         ))}
 
-        {/* <ServiceCard
-          imgUrl="/images/nanny.jpg"
-          serviceDescription="Lorem ipsum dolor sit amet, ipsum inventore illo amet facere
-              perferendis accusamus veritatis suscipit, in blanditiis
-              necessitatibus magnam beatae aliquam non architecto debitis"
-          serviceUrl="https://www.google.com"
-          serviceName="Live-in Help Services"
-        />
-
-        <ServiceCard
-          imgUrl="/images/nanny.jpg"
-          serviceDescription="Lorem ipsum dolor sit amet, ipsum inventore illo amet facere
-              perferendis accusamus veritatis suscipit, in blanditiis
-              necessitatibus magnam beatae aliquam non architecto debitis"
-          serviceUrl="https://www.google.com"
-          serviceName="Live-in Nanny + Help Services"
-        /> */}
       </section>
 
       <section className={`${requestStage !== 1 && 'hidden'} mt-20 max-sm:mt-10 flex flex-col bg-white max-sm:px-8`}>
         <Link onClick={() => setRequestStage(0)} href="#" className="text-start text-blue-950">
           &larr; Back
         </Link>
-        <h1 className="font-extralight text-center text-3xl mt-2">
+        <h1 className="font-extralight text-center text-3xl mt-2 text-black dark:text-gray-800">
           CUSTOMIZE YOUR SERVICE
         </h1>
         <p className="text-gray-600 mt-5 text-base">
@@ -315,7 +298,7 @@ export default function Home() {
         </p>
 
         <div className="border border-gray-300 rounded-lg p-4 mt-5">
-          <p className="font-extralight flex text-1xl mt-2">
+          <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
             <IconUserQuestion color="black" stroke={2} size={16} />
             &nbsp;&nbsp;&nbsp;Staff Preferences
           </p>
@@ -429,7 +412,7 @@ export default function Home() {
         </div>
 
         <div className="border border-gray-300 rounded-lg p-4 mt-5">
-          <p className="font-extralight flex text-1xl mt-2">
+          <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
             <IconHomeQuestion color="black" stroke={2} size={18} />
             &nbsp;&nbsp;&nbsp;Home/Family Details
           </p>
