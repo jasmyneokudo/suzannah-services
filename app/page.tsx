@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import ServiceCard from "./components/ServiceCard";
-import Slider from "react-slick";
+import Slider, { Settings } from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ReviewCard from "./components/ReviewCard";
@@ -10,8 +10,20 @@ import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandWhatsapp,
+  IconHomeQuestion,
+  IconUserQuestion,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import { useState } from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { FormHelperText, TextareaAutosize, TextField } from "@mui/material";
+import Button from "./components/Button";
+// import PersonIcon from '@mui/icons-material/Person';
+
+const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
@@ -23,6 +35,53 @@ function SampleNextArrow(props: any) {
     />
   );
 }
+
+const services = [
+  {
+    serviceName: "Live-in Nanny Services",
+    serviceDescription:
+      "Reliable, experienced live-in nannies who provide loving care for your children and support with their daily routines in the comfort of your home.",
+    whatsIncluded: [
+      "Daily childcare, including feeding, bathing, and dressing.",
+      "Accompanying children to outings or appointments as needed.",
+      "Monitoring children’s health and safety at all times.",
+      "Supervising homework and educational activities."
+    ],
+  },
+  {
+    serviceName: "Live-in Help Services",
+    serviceDescription:
+      "Your reliable extra pair of hands, from tidying up to managing household errands, our live-in helpers ensure your home is always at its best.",
+    whatsIncluded: [
+      "Daily cleaning of rooms and living spaces.",
+      "Laundry, ironing, and wardrobe organization.",
+      "Grocery assistance and household supply management.",
+      "Assistance with small household errands."
+    ],
+  },
+  {
+    serviceName: "Live-in Nanny + Help Services",
+    serviceDescription:
+      "An experienced and caring Nanny-Helo who lives in your home to provide loving childcare and assist with essential household duties.",
+    whatsIncluded: [
+      "Assistance with meal preparation and basic cooking.",
+      "General home organization and tidiness.",
+      "Accompanying children to school, activities, or appointments (if required).",
+      "Assistance with small household errands."
+    ],
+  },
+  {
+    serviceName: "Live-in Housekeeper Services",
+    serviceDescription:
+      "Full-time live-in housekeeper for a consistently clean, well-maintained, and beautifully arranged home, so you never have to worry about the details.",
+    whatsIncluded: [
+      "Daily cleaning and tidying of all rooms.",
+      "Organization of closets, shelves, and storage areas.",
+      "Bed-making and linen changes on schedule.",
+      "Seasonal deep cleaning tasks (as agreed)."
+    ],
+  },
+];
 
 const faqs = [
   {
@@ -92,9 +151,48 @@ export default function Home() {
     nextArrow: <SampleNextArrow />,
   };
 
+  type Kid = {
+    name: string;
+    age: number;
+  };
+
+  type ServiceType = "Live-in Nanny Services" | "Live-in Help Services" | "Live-in Nanny + Help Services" | "Live-in Housekeeper Services";
+
+  const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(0);
+
+  const [customerRequest, setCustomerRequest] = useState({
+    serviceType: "",
+    employeeGender: "",
+    employeeAgeRange: "",
+    employeeTribePreference: "",
+    employeeReligionPreference: "",
+    extraComment: "",
+    clientName: "",
+    clientPhoneNumber: "",
+    clientEmail: "",
+    clientAddress: "",
+    numberOfKids: 0,
+    agesOfKids: [],
+    numberOfRooms: 0,
+    numberOfBathrooms: 0,
+    mustBeAbleToCook: false,
+    mustBeAbleToIron: false,
+    mustBeAbleToTeachKids: false,
+    otherMustBes: "",
+  });
+
+  function selectService(serviceType: ServiceType) {
+    // alert("selecting service " + serviceType);
+    setCustomerRequest({...customerRequest, serviceType: serviceType})
+    setRequestStage(1)
+
+    const section = document.getElementById("services-section")
+    section?.scrollIntoView({ behavior: "smooth" })
+  }
+
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-between overflow-clip">
-      <div className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] h-3/4 max-sm:h-[400px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
+    <main className="flex bg-white min-h-screen w-full flex-col items-center justify-between overflow-clip">
+      <div className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950 h-3/4 max-sm:h-[400px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
         {/* for our menu items #0D98BA */}
         <div className="flex max-sm:hidden absolute top-3 left-0 right-0 mr-auto ml-auto w-[600px]">
           <a
@@ -157,52 +255,42 @@ export default function Home() {
           priority
         />
 
-        <h1 className="absolute text-white top-1/2 max-sm:top-[20%] w-1/2 text-center left-1/4 z-10 font-extralight text-4xl max-sm:text-2xl">
-          Trusted Professional Home And Care Service Provider In F.C.T
+        <h1 className="absolute text-white top-[50%] max-sm:top-[25%] w-1/2 text-center left-1/4 z-10 font-extralight text-4xl max-sm:text-2xl">
+          Trusted, Professional Home And Care Service Provider In F.C.T
         </h1>
 
-        <Link href=".">
-        
-        Book A Service</Link>
+        <Link
+          className="hidden max-sm:flex max-sm:absolute max-sm:top-[75%] max-sm:left-[33%] hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-sm"
+          href="."
+        >
+          Book A Service Now
+        </Link>
       </div>
 
-      <div className="mt-20 flex flex-col items-center">
-        <h1 className="font-extralight text-3xl">HOW WE CAN SERVE YOU</h1>
+      <section id="services-section"
+        className={`${
+          requestStage !== 0 && "hidden"
+        } mt-20 max-sm:mt-10 flex flex-col items-center bg-white max-sm:px-10`}
+      >
+        <h1 className="font-extralight text-3xl">SERVICES</h1>
 
-        <ServiceCard
+        {services.map((service, index) => (
+          <ServiceCard
+            whatsIncluded={service.whatsIncluded}
+            key={index}
+            serviceDescription={service.serviceDescription}
+            serviceName={service.serviceName}
+            onClick={() => selectService(service.serviceName as ServiceType)}
+          />
+        ))}
+
+        {/* <ServiceCard
           imgUrl="/images/nanny.jpg"
           serviceDescription="Lorem ipsum dolor sit amet, ipsum inventore illo amet facere
               perferendis accusamus veritatis suscipit, in blanditiis
               necessitatibus magnam beatae aliquam non architecto debitis"
           serviceUrl="https://www.google.com"
-          serviceName="Nanny Services"
-        />
-
-        <ServiceCard
-          imgUrl="/images/housekeeper-1.jpg"
-          serviceDescription="Lorem ipsum dolor sit amet, ipsum inventore illo amet facere
-              perferendis accusamus veritatis suscipit, in blanditiis
-              necessitatibus magnam beatae aliquam non architecto debitis"
-          serviceUrl="https://www.google.com"
-          serviceName="Housekeeping/Home Cleaning Services"
-        />
-
-        <ServiceCard
-          imgUrl="/images/eldercare1.jpg"
-          serviceDescription="Lorem ipsum dolor sit amet, ipsum inventore illo amet facere
-              perferendis accusamus veritatis suscipit, in blanditiis
-              necessitatibus magnam beatae aliquam non architecto debitis"
-          serviceUrl="https://www.google.com"
-          serviceName="Elderly Care Services"
-        />
-
-        <ServiceCard
-          imgUrl="/images/chef.jpg"
-          serviceDescription="Lorem ipsum dolor sit amet, ipsum inventore illo amet facere
-              perferendis accusamus veritatis suscipit, in blanditiis
-              necessitatibus magnam beatae aliquam non architecto debitis"
-          serviceUrl="https://www.google.com"
-          serviceName="Home Cooking Services"
+          serviceName="Live-in Help Services"
         />
 
         <ServiceCard
@@ -211,9 +299,227 @@ export default function Home() {
               perferendis accusamus veritatis suscipit, in blanditiis
               necessitatibus magnam beatae aliquam non architecto debitis"
           serviceUrl="https://www.google.com"
-          serviceName="Other Services"
+          serviceName="Live-in Nanny + Help Services"
+        /> */}
+      </section>
+
+      <section className={`${requestStage !== 1 && 'hidden'} mt-20 max-sm:mt-10 flex flex-col bg-white max-sm:px-8`}>
+        <Link onClick={() => setRequestStage(0)} href="#" className="text-start text-blue-950">
+          &larr; Back
+        </Link>
+        <h1 className="font-extralight text-center text-3xl mt-2">
+          CUSTOMIZE YOUR SERVICE
+        </h1>
+        <p className="text-gray-600 mt-5 text-base">
+          Step 1 of 2: Tell us about your preferences and home details
+        </p>
+
+        <div className="border border-gray-300 rounded-lg p-4 mt-5">
+          <p className="font-extralight flex text-1xl mt-2">
+            <IconUserQuestion color="black" stroke={2} size={16} />
+            &nbsp;&nbsp;&nbsp;Staff Preferences
+          </p>
+          <p className="text-xs text-gray-400">
+            Choose your preferred characteristics for your care provider
+          </p>
+
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo-simple-select-label">Age Range</InputLabel>
+            <Select
+              displayEmpty
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeAgeRange}
+              label="Age Range"
+              onChange={(event: SelectChangeEvent) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  employeeAgeRange: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value={10}>18-22</MenuItem>
+              <MenuItem value={20}>22-25</MenuItem>
+              <MenuItem value={30}>25-28</MenuItem>
+              <MenuItem value={30}>29-32</MenuItem>
+              <MenuItem value={30}>33-36</MenuItem>
+              <MenuItem value={30}>37-40</MenuItem>
+              <MenuItem value={30}>41-44</MenuItem>
+              <MenuItem value={30}>45+</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+            <Select
+              displayEmpty
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeAgeRange}
+              label="Age Range"
+              onChange={(event: SelectChangeEvent) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  employeeAgeRange: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value={10}>Female</MenuItem>
+              <MenuItem value={20}>Male</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo-simple-select-label">
+              Religion Preference
+            </InputLabel>
+            <Select
+              displayEmpty
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeAgeRange}
+              label="Age Range"
+              onChange={(event: SelectChangeEvent) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  employeeAgeRange: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value={10}>Christian</MenuItem>
+              <MenuItem value={20}>Islam</MenuItem>
+              <MenuItem value={20}>No Preference</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo-simple-select-label">
+              Tribe Preference
+            </InputLabel>
+            <Select
+              displayEmpty
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeAgeRange}
+              aria-placeholder="Age Range"
+              onChange={(event: SelectChangeEvent) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  employeeAgeRange: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value={10}>Hausa</MenuItem>
+              <MenuItem value={20}>Igbo</MenuItem>
+              <MenuItem value={20}>Yoruba</MenuItem>
+              <MenuItem value={20}>Fulani</MenuItem>
+              <MenuItem value={20}>Edo</MenuItem>
+              <MenuItem value={20}>Any tribe is fine</MenuItem>
+            </Select>
+          </FormControl>
+
+          <TextField
+            fullWidth
+            sx={{ mt: 2 }}
+            id="filled-multiline-static"
+            placeholder="Other Preferences"
+            multiline
+            rows={4}
+          />
+        </div>
+
+        <div className="border border-gray-300 rounded-lg p-4 mt-5">
+          <p className="font-extralight flex text-1xl mt-2">
+            <IconHomeQuestion color="black" stroke={2} size={18} />
+            &nbsp;&nbsp;&nbsp;Home/Family Details
+          </p>
+          <p className="text-xs text-gray-400">
+            Tell us about your household to better match our services
+          </p>
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo-simple-select-label">
+              Number of Kids to be cared for
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeAgeRange}
+              onChange={(event: SelectChangeEvent) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  employeeAgeRange: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value={10}>1</MenuItem>
+              <MenuItem value={20}>2</MenuItem>
+              <MenuItem value={20}>3</MenuItem>
+              <MenuItem value={20}>4</MenuItem>
+              <MenuItem value={20}>5</MenuItem>
+              <MenuItem value={20}>6</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <TextField placeholder="Ages of Kids" sx={{ mt: 2 }} />
+            <FormHelperText>Separate with commas, e.g 1,2,3,5</FormHelperText>
+          </FormControl>
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo-simple-select-label">
+              Number of Rooms
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeAgeRange}
+              onChange={(event: SelectChangeEvent) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  employeeAgeRange: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value={10}>1 Bedroom</MenuItem>
+              <MenuItem value={20}>2 Bedroom</MenuItem>
+              <MenuItem value={20}>3 Bedroom</MenuItem>
+              <MenuItem value={20}>4 Bedroom</MenuItem>
+              <MenuItem value={20}>5 Bedroom</MenuItem>
+              <MenuItem value={20}>6 Bedroom</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo-simple-select-label">Type of house</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeAgeRange}
+              onChange={(event: SelectChangeEvent) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  employeeAgeRange: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value={10}>Bungalow</MenuItem>
+              <MenuItem value={20}>1 storey</MenuItem>
+              <MenuItem value={20}>2 storey</MenuItem>
+              <MenuItem value={20}>3 storey</MenuItem>
+              <MenuItem value={20}>4 storey</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
+        <div className="h-[0.9px] bg-gray-300 mt-3"></div>
+
+        <p className="text-sm text-gray-600">
+          Kindly review the information your provided before clicking `Continue`
+        </p>
+
+        <Button
+          style={{ width: "150px", alignSelf: "end" }}
+          buttonName="Continue"
         />
-      </div>
+      </section>
 
       {/* CLIENT REVIEWS SECTION STARTS */}
       <div className="z-50 relative h-3/4 w-full mt-10 flex flex-col bg-gradient-to-b  from-blue-950 to-[#0D98BA]">
@@ -234,7 +540,7 @@ export default function Home() {
         </div>
 
         <div className="absolute top-2/3 w-3/4 right-0 flex justify-center items-top">
-          <Slider {...settings} className=" w-full mr-[-100px]">
+          <SliderTyped {...settings} className=" w-full mr-[-100px]">
             <ReviewCard
               name="Mrs. A | Guzape"
               review="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
@@ -273,7 +579,7 @@ export default function Home() {
               beatae repellendus, quaerat, voluptas obcaecati sint minima et
               excepturi, aut quas voluptatem odit amet temporibus similique quam"
             />
-          </Slider>
+          </SliderTyped>
         </div>
       </div>
 
@@ -371,7 +677,8 @@ export default function Home() {
 
         <div className="flex flex-col items-center absolute bottom-14 text-white">
           <p className="text-4xl">
-            <span className="font-edu-sa">The </span>BRAND <span className="font-edu-sa">for</span>
+            <span className="font-edu-sa">The </span>BRAND{" "}
+            <span className="font-edu-sa">for</span>
           </p>
           <hr className=" bg-white w-full" />
           <h1 className="mt-2 text-white text-2xl">FAMILIES and HOMES</h1>
