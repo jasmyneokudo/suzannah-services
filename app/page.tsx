@@ -269,6 +269,7 @@ export default function Home() {
         <Link
           className="hidden font-bold max-sm:flex max-sm:absolute max-sm:top-[75%] left-1/2 -translate-x-1/2 hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-sm"
           href="#services-section"
+          onClick={() => requestStage !== 0 && setRequestStage(0)}
         >
           Book A Service Now
         </Link>
@@ -550,7 +551,7 @@ export default function Home() {
           Step 3 of 3: Choose your payment plan
         </p>
 
-        <div className="border border-gray-300 rounded-lg p-4 mt-5">
+        <div className="border border-gray-300 rounded-lg p-4 mt-5 text-black dark:text-gray-900">
           <h1 className="font-semibold text-xl">Monthly Management Plan</h1>
           <p className="text-xs text-gray-600 mt-1">
             Ideal for clients who want convenience and full staff management.
@@ -559,7 +560,7 @@ export default function Home() {
             <IconProgressCheck color="#172554" stroke={2} size={20} />
             How It works
           </h3>
-          <ol className=" text-sm list-inside mt-2">
+          <ol className="text-sm list-inside mt-2 text-black dark:text-gray-900">
             <li className="flex items-start gap-2">
               <span className="flex-shrink-0 text-bold text-blue-950">1.</span>
               Within 24 hours of booking this payment plan, we send 1-3
@@ -603,7 +604,7 @@ export default function Home() {
 
           <span className="flex mt-4 items-baseline">
             <h1 className="text-2xl font-bold text-blue-950">₦80,000</h1>
-            <span>/month</span>
+            <span className="text-black dark:text-gray-900">/month</span>
           </span>
 
           <Button
@@ -622,7 +623,7 @@ export default function Home() {
         </div>
 
         <div className="border border-gray-300 rounded-lg p-4 mt-5">
-          <h1 className="font-semibold text-xl">One-off Placement Plan</h1>
+          <h1 className="font-semibold text-xl text-black dark:text-gray-900">One-off Placement Plan</h1>
 
           <p className="text-xs text-gray-600 mt-1">
             Perfect for clients who prefer to employ and manage staff directly.
@@ -632,7 +633,7 @@ export default function Home() {
             <IconProgressCheck color="#172554" stroke={2} size={20} />
             How It works
           </h3>
-          <ol className=" text-sm list-inside mt-2">
+          <ol className="text-sm list-inside mt-2 text-black dark:text-gray-900">
             <li className="flex items-start gap-2">
               <span className="flex-shrink-0 text-bold text-blue-950">1.</span>
               Client makes a one-time payment for recruitment & screening.
