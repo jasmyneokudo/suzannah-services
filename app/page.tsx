@@ -122,7 +122,7 @@ export default function Home() {
     <main className="flex bg-white min-h-screen w-full flex-col items-center justify-between overflow-clip">
       <AlertDialogSlide
         open={isCustomerServicePolicyOpen}
-        onClose={(e: React.MouseEvent) => closeCustomerServicePolicy(e)}
+        onClose={(e: React.MouseEvent<HTMLElement>) => closeCustomerServicePolicy(e)}
       />
       <div className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90  h-3/4 max-sm:h-[400px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
         {/* for our menu items #0D98BA */}

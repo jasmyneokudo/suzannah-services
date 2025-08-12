@@ -20,7 +20,7 @@ const Transition = React.forwardRef(function Transition(
 
 type DialogProps = {
   open: boolean;
-  onClose: (e: React.MouseEvent) => void;
+  onClose: (e: React.MouseEvent<HTMLElement>) => void;
 };
 
 export default function AlertDialogSlide(props: DialogProps) {
