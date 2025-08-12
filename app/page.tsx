@@ -673,11 +673,11 @@ export default function Home() {
             </li>
           </ol>
 
-          <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
+          <h3 className="text-xl mt-3 font-medium flex items-center gap-1 text-black dark:text-gray-900">
             <IconMoodCheck color="#172554" stroke={2} size={20} />
             Benefits
           </h3>
-          <ul className="mt-1 text-sm list-none">
+          <ul className="mt-1 text-sm list-none text-black dark:text-gray-900">
             <li className="flex">
               <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />{" "}
               We manage Opportinity to interview and select staff directly.
