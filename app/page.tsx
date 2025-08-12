@@ -27,6 +27,7 @@ import Button from "./components/Button";
 import { faqs } from "@/data/faqs";
 import { services } from "@/data/services";
 import AlertDialogSlide from "./components/Dialog";
+import { CustomerRequest, ServiceType } from "@/types/ClientRequest";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 
@@ -57,18 +58,13 @@ export default function Home() {
     age: number;
   };
 
-  type ServiceType =
-    | "Live-in Nanny Services"
-    | "Live-in Help Services"
-    | "Live-in Nanny + Help Services"
-    | "Live-in Housekeeper Services";
-
   const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(3);
 
   const [isCustomerServicePolicyOpen, setIsCustomerServicePolicyOpen] =
     useState(false);
-  const [customerRequest, setCustomerRequest] = useState({
-    serviceType: "",
+
+  const [customerRequest, setCustomerRequest] = useState<CustomerRequest>({
+    serviceType: "Live-in Nanny Services",
     employeeGender: "",
     employeeAgeRange: "",
     employeeTribePreference: "",
@@ -80,7 +76,8 @@ export default function Home() {
     clientAddress: "",
     numberOfKids: 0,
     agesOfKids: [],
-    numberOfRooms: 0,
+    numberOfRooms: "",
+    typeOfHouse: "",
     numberOfBathrooms: 0,
     mustBeAbleToCook: false,
     mustBeAbleToIron: false,
@@ -96,9 +93,13 @@ export default function Home() {
     section?.scrollIntoView({ behavior: "smooth" });
   }
 
-  function closeCustomerServicePolicy(e: React.MouseEvent<HTMLButtonElement>) {
-    console.log("Closing customer service policy dialog", e.target.textContent);
-    if (e.target?.textContent === "Proceed") {
+  function closeCustomerServicePolicy(e: React.MouseEvent<HTMLElement>) {
+    console.log(
+      "Closing customer service policy dialog",
+      e.currentTarget.TEXT_NODE.toString()
+    );
+    const target = e.target as HTMLElement;
+    if (target.textContent === "Proceed") {
       setIsCustomerServicePolicyOpen(false);
       setRequestStage(3);
       setTimeout(() => {
@@ -249,10 +250,10 @@ export default function Home() {
           </p>
 
           <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="demo-simple-select-label">Age Range</InputLabel>
+            <InputLabel id="demo2-simple-select-label">Age Range</InputLabel>
             <Select
               displayEmpty
-              labelId="demo-simple-select-label"
+              labelId="demo2-simple-select-label"
               id="demo-simple-select"
               value={customerRequest.employeeAgeRange}
               label="Age Range"
@@ -263,14 +264,14 @@ export default function Home() {
                 });
               }}
             >
-              <MenuItem value={10}>18-22</MenuItem>
-              <MenuItem value={20}>22-25</MenuItem>
-              <MenuItem value={30}>25-28</MenuItem>
-              <MenuItem value={30}>29-32</MenuItem>
-              <MenuItem value={30}>33-36</MenuItem>
-              <MenuItem value={30}>37-40</MenuItem>
-              <MenuItem value={30}>41-44</MenuItem>
-              <MenuItem value={30}>45+</MenuItem>
+              <MenuItem value="18-22">18-22</MenuItem>
+              <MenuItem value="23-27">23-27</MenuItem>
+              <MenuItem value="28-32">28-32</MenuItem>
+              <MenuItem value="33-37">33-37</MenuItem>
+              <MenuItem value="38-42">38-42</MenuItem>
+              <MenuItem value="43-47">43-47</MenuItem>
+              <MenuItem value="46-51">46-51</MenuItem>
+              <MenuItem value="50+">50+</MenuItem>
             </Select>
           </FormControl>
 
@@ -280,17 +281,20 @@ export default function Home() {
               displayEmpty
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={customerRequest.employeeAgeRange}
+              value={customerRequest.employeeGender}
               label="Age Range"
               onChange={(event: SelectChangeEvent) => {
                 setCustomerRequest({
                   ...customerRequest,
-                  employeeAgeRange: event.target.value,
+                  employeeGender: event.target.value,
                 });
               }}
             >
-              <MenuItem value={10}>Female</MenuItem>
-              <MenuItem value={20}>Male</MenuItem>
+              <MenuItem value="Female">Female</MenuItem>
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="No Preference">
+                No Preference (Any is fine)
+              </MenuItem>
             </Select>
           </FormControl>
 
@@ -302,18 +306,20 @@ export default function Home() {
               displayEmpty
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={customerRequest.employeeAgeRange}
+              value={customerRequest.employeeReligionPreference}
               label="Age Range"
               onChange={(event: SelectChangeEvent) => {
                 setCustomerRequest({
                   ...customerRequest,
-                  employeeAgeRange: event.target.value,
+                  employeeReligionPreference: event.target.value,
                 });
               }}
             >
-              <MenuItem value={10}>Christian</MenuItem>
-              <MenuItem value={20}>Islam</MenuItem>
-              <MenuItem value={20}>No Preference</MenuItem>
+              <MenuItem value="Christian">Christian</MenuItem>
+              <MenuItem value="Islam">Islam</MenuItem>
+              <MenuItem value="No Preference">
+                No Preference (Any is fine)
+              </MenuItem>
             </Select>
           </FormControl>
 
@@ -325,25 +331,32 @@ export default function Home() {
               displayEmpty
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={customerRequest.employeeAgeRange}
+              value={customerRequest.employeeTribePreference}
               aria-placeholder="Age Range"
               onChange={(event: SelectChangeEvent) => {
                 setCustomerRequest({
                   ...customerRequest,
-                  employeeAgeRange: event.target.value,
+                  employeeTribePreference: event.target.value,
                 });
               }}
             >
-              <MenuItem value={10}>Hausa</MenuItem>
-              <MenuItem value={20}>Igbo</MenuItem>
-              <MenuItem value={20}>Yoruba</MenuItem>
-              <MenuItem value={20}>Fulani</MenuItem>
-              <MenuItem value={20}>Edo</MenuItem>
-              <MenuItem value={20}>Any tribe is fine</MenuItem>
+              <MenuItem value="north">Northerners/Hausa</MenuItem>
+              <MenuItem value="igbo">Igbo</MenuItem>
+              <MenuItem value="yoruba">Yoruba/Edo</MenuItem>
+              <MenuItem value="benue">Idoma/Igede</MenuItem>
+              <MenuItem value="efik">Efik/Ibibio</MenuItem>
+              <MenuItem value="none">No Preference</MenuItem>
             </Select>
           </FormControl>
 
           <TextField
+            value={customerRequest.extraComment}
+            onChange={(e) =>
+              setCustomerRequest({
+                ...customerRequest,
+                extraComment: e.target.value,
+              })
+            }
             fullWidth
             sx={{ mt: 2 }}
             id="filled-multiline-static"
@@ -361,77 +374,106 @@ export default function Home() {
           <p className="text-xs text-gray-400">
             Tell us about your household to better match our services
           </p>
-          <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="demo-simple-select-label">
-              Number of Kids to be cared for
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={customerRequest.employeeAgeRange}
-              onChange={(event: SelectChangeEvent) => {
-                setCustomerRequest({
-                  ...customerRequest,
-                  employeeAgeRange: event.target.value,
-                });
-              }}
-            >
-              <MenuItem value={10}>1</MenuItem>
-              <MenuItem value={20}>2</MenuItem>
-              <MenuItem value={20}>3</MenuItem>
-              <MenuItem value={20}>4</MenuItem>
-              <MenuItem value={20}>5</MenuItem>
-              <MenuItem value={20}>6</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <TextField placeholder="Ages of Kids" sx={{ mt: 2 }} />
-            <FormHelperText>Separate with commas, e.g 1,2,3,5</FormHelperText>
-          </FormControl>
-          <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="demo-simple-select-label">
-              Number of Rooms
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={customerRequest.employeeAgeRange}
-              onChange={(event: SelectChangeEvent) => {
-                setCustomerRequest({
-                  ...customerRequest,
-                  employeeAgeRange: event.target.value,
-                });
-              }}
-            >
-              <MenuItem value={10}>1 Bedroom</MenuItem>
-              <MenuItem value={20}>2 Bedroom</MenuItem>
-              <MenuItem value={20}>3 Bedroom</MenuItem>
-              <MenuItem value={20}>4 Bedroom</MenuItem>
-              <MenuItem value={20}>5 Bedroom</MenuItem>
-              <MenuItem value={20}>6 Bedroom</MenuItem>
-            </Select>
-          </FormControl>
+          {(customerRequest.serviceType !== "Live-in Housekeeper Services" &&
+          customerRequest.serviceType !== "Live-in Help Services" as ServiceType)  && (
+            <>
+              <FormControl fullWidth sx={{ mt: 2 }}>
+                <InputLabel id="demo-simple-select-label">
+                  Number of Kids to be cared for
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={customerRequest.employeeAgeRange}
+                  onChange={(event: SelectChangeEvent) => {
+                    setCustomerRequest({
+                      ...customerRequest,
+                      employeeAgeRange: event.target.value,
+                    });
+                  }}
+                >
+                  <MenuItem value={10}>1</MenuItem>
+                  <MenuItem value={20}>2</MenuItem>
+                  <MenuItem value={20}>3</MenuItem>
+                  <MenuItem value={20}>4</MenuItem>
+                  <MenuItem value={20}>5</MenuItem>
+                  <MenuItem value={20}>6</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl fullWidth>
+                <TextField
+                  value={customerRequest.agesOfKids}
+                  onChange={(e) =>
+                    setCustomerRequest({
+                      ...customerRequest,
+                      agesOfKids: e.target.value
+                        .split(",")
+                        .map((age) => parseInt(age.trim(), 10)) as [], // Convert to numbers
+                    })
+                  }
+                  placeholder="Ages of Kids"
+                  sx={{ mt: 2 }}
+                />
+                <FormHelperText>
+                  Separate with commas, e.g 1,2,3,5
+                </FormHelperText>
+              </FormControl>
+            </>
+          )}
 
-          <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="demo-simple-select-label">Type of house</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={customerRequest.employeeAgeRange}
-              onChange={(event: SelectChangeEvent) => {
-                setCustomerRequest({
-                  ...customerRequest,
-                  employeeAgeRange: event.target.value,
-                });
-              }}
-            >
-              <MenuItem value={10}>Bungalow</MenuItem>
-              <MenuItem value={20}>1 storey</MenuItem>
-              <MenuItem value={20}>2 storey</MenuItem>
-              <MenuItem value={20}>3 storey</MenuItem>
-              <MenuItem value={20}>4 storey</MenuItem>
-            </Select>
-          </FormControl>
+          {customerRequest.serviceType !== "Live-in Nanny Services" && (
+            <>
+              <FormControl fullWidth sx={{ mt: 2 }}>
+                <InputLabel id="demo-simple-select-label">
+                  Number of Rooms
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={customerRequest.numberOfRooms}
+                  onChange={(event: SelectChangeEvent) => {
+                    console.log("event.target.value", event.target.value);
+
+                    setCustomerRequest({
+                      ...customerRequest,
+                      numberOfRooms: event.target.value,
+                    });
+                  }}
+                >
+                  <MenuItem value="1 Bedroom">1 Bedroom</MenuItem>
+                  <MenuItem value="2 Bedroom">2 Bedroom</MenuItem>
+                  <MenuItem value="3 Bedroom">3 Bedroom</MenuItem>
+                  <MenuItem value="4 Bedroom">4 Bedroom</MenuItem>
+                  <MenuItem value="5 Bedroom">5 Bedroom</MenuItem>
+                  <MenuItem value="6 Bedroom">6 Bedroom</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl fullWidth sx={{ mt: 2 }}>
+                <InputLabel id="demo-simple-select-label">
+                  Type of house
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={customerRequest.typeOfHouse}
+                  onChange={(event: SelectChangeEvent) => {
+                    setCustomerRequest({
+                      ...customerRequest,
+                      typeOfHouse: event.target.value,
+                    });
+                  }}
+                >
+                  <MenuItem value="bungalow">Bungalow</MenuItem>
+                  <MenuItem value="1 storey">1 storey</MenuItem>
+                  <MenuItem value="2 storey">2 storey</MenuItem>
+                  <MenuItem value="3 storey">3 storey</MenuItem>
+                  <MenuItem value="4 storey">4 storey</MenuItem>
+                  <MenuItem value="4 storey">4 storey</MenuItem>
+                </Select>
+              </FormControl>
+            </>
+          )}
         </div>
 
         <div className="h-[0.9px] bg-gray-300 mt-3"></div>
@@ -726,7 +768,7 @@ export default function Home() {
             width="0"
             height="0"
             sizes="100vw"
-            className="-z-[100] w-full h-auto max-sm:h-[400px] opacity-30"
+            className="-z-[100] max-sm:blur-[1px] w-full h-auto max-sm:h-[400px] opacity-30"
             priority
           />
         </div>
@@ -776,17 +818,17 @@ export default function Home() {
       </div>
 
       {/* FAQs SECTION STARTS */}
-      <div className="flex flex-col justify-center mx-10">
-        <h1 className="font-extralight text-3xl mt-20 mb-20 self-center">
+      <section className="flex flex-col justify-center mx-10 h-[400px]">
+        <h1 className="max-sm:hidden font-extralight text-3xl mt-20 mb-20 self-center">
           FREQUENTLY ASKED QUESTIONS
         </h1>
 
-        <div className="grid-cols-3 grid-flow-row grid place-items-center">
+        <div className="max-sm:hidden  grid-cols-3 grid-flow-row grid place-items-center">
           {faqs.map((faq) => (
             <FAQBox key={faq.id} question={faq.question} answer={faq.answer} />
           ))}
         </div>
-      </div>
+      </section>
 
       {/* FOOTER SECTION STARTS */}
       <footer className="p-5 h-full py-52 bg-gradient-to-b relative from-blue-950 to-[#0D98BA] w-full flex flex-col justify-center items-center ">
@@ -799,7 +841,7 @@ export default function Home() {
           priority
         />
 
-        <div className=" flex-col justify-center grid-cols-3 w-1/2 text-white grid-flow-row grid place-items-center">
+        <div className="flex-col justify-center grid-cols-3 w-1/2 text-white grid-flow-row grid place-items-center">
           <div>
             <a href="#">
               <p>Resources</p>
