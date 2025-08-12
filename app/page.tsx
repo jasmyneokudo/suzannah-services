@@ -165,7 +165,7 @@ export default function Home() {
     | "Live-in Nanny + Help Services"
     | "Live-in Housekeeper Services";
 
-  const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(2);
+  const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(0);
 
   const [customerRequest, setCustomerRequest] = useState({
     serviceType: "",
@@ -517,16 +517,21 @@ export default function Home() {
 
         <Button
           onClick={() => {
-            setRequestStage(2)
-            const paymentSection = document.getElementById('#payment-section')
-            paymentSection?.scrollIntoView({ behavior: "smooth" });
+            setRequestStage(2);
+
+            setTimeout(() => {
+              document
+                .getElementById("payment-section")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }, 0);
           }}
           style={{ width: "150px", alignSelf: "end" }}
           buttonName="Continue"
         />
       </section>
 
-      <section id="payment-section"
+      <section
+        id="payment-section"
         className={`${
           requestStage !== 2 && "hidden"
         } mt-20 max-sm:mt-10 flex flex-col bg-white max-sm:px-8`}
@@ -545,106 +550,163 @@ export default function Home() {
           Step 3 of 3: Choose your payment plan
         </p>
 
-        <div className="border border-gray-300 rounded-lg p-3 mt-5">
+        <div className="border border-gray-300 rounded-lg p-4 mt-5">
           <h1 className="font-semibold text-xl">Monthly Management Plan</h1>
           <p className="text-xs text-gray-600 mt-1">
             Ideal for clients who want convenience and full staff management.
           </p>
           <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
-            <IconProgressCheck color="black" stroke={2} size={20} />
+            <IconProgressCheck color="#172554" stroke={2} size={20} />
             How It works
           </h3>
           <ol className=" text-sm list-inside mt-2">
-            <li className="flex items-start gap-3">
-               <span className="flex-shrink-0 text-bold text-blue-950">1.</span>
+            <li className="flex items-start gap-2">
+              <span className="flex-shrink-0 text-bold text-blue-950">1.</span>
               Within 24 hours of booking this payment plan, we send 1-3
               available staff profiles for selection.
             </li>
-            <li className="flex items-start gap-3">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">2.</span>
-              Once selected, the staff resumes work promptly.</li>
-            <li className="flex items-start gap-3">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">3.</span>
-              We manage the staff’s performance.</li>
-            <li className="flex items-start gap-3">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">4.</span>
+            <li className="flex items-start gap-2">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
+                2.
+              </span>
+              Once selected, the staff resumes work promptly.
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
+                3.
+              </span>
+              We manage the staff’s performance.
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
+                4.
+              </span>
               Client pays a monthly service fee to the company and need not pay
               staff directly.
             </li>
           </ol>
 
           <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
-            <IconMoodCheck color="black" stroke={2} size={20} />
+            <IconMoodCheck color="#172554" stroke={2} size={20} />
             Benefits
           </h3>
-          <ol className="mt-1 text-sm list-item">
+          <ol className="mt-1 text-sm list-none">
             <li className="flex">
-              <IconCheck color="green" stroke={2} size={20} className="mr-2" /> We manage
-              the staff’s performance and payroll.
+              <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />{" "}
+              We manage the staff’s performance and payroll.
             </li>
             <li className="flex">
-              <IconCheck color="green" stroke={2} size={20} className="mr-2" /> Guaranteed
-              replacement policy throughout your subscription..
+              <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />{" "}
+              Guaranteed replacement policy throughout your subscription..
             </li>
           </ol>
 
-          <p className="flex mt-4 items-baseline"><h1 className="text-2xl font-bold text-blue-950">₦80,000</h1><span>/month</span></p>
+          <span className="flex mt-4 items-baseline">
+            <h1 className="text-2xl font-bold text-blue-950">₦80,000</h1>
+            <span>/month</span>
+          </span>
+
+          <Button
+          onClick={() => {
+            // setRequestStage(2);
+
+            // setTimeout(() => {
+            //   document
+            //     .getElementById("payment-section")
+            //     ?.scrollIntoView({ behavior: "smooth" });
+            // }, 0);
+          }}
+          style={{ width: "100%"}}
+          buttonName="Select Plan" 
+        />
         </div>
 
         <div className="border border-gray-300 rounded-lg p-4 mt-5">
           <h1 className="font-semibold text-xl">One-off Placement Plan</h1>
 
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-gray-600 mt-1">
             Perfect for clients who prefer to employ and manage staff directly.
           </p>
 
-          <h3 className="text-xl mt-1 font-medium flex items-center gap-1">
-            <IconProgressCheck color="black" stroke={2} size={20} />
+          <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
+            <IconProgressCheck color="#172554" stroke={2} size={20} />
             How It works
           </h3>
           <ol className=" text-sm list-inside mt-2">
-            <li className="flex items-start gap-3">
+            <li className="flex items-start gap-2">
               <span className="flex-shrink-0 text-bold text-blue-950">1.</span>
               Client makes a one-time payment for recruitment & screening.
             </li>
-            <li className="flex items-start gap-3">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">2.</span>
-              We conduct interviews and shortlist 2 competent candidates within 48 hours and send their profiles to client.</li>
-            <li className="flex items-start gap-3">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">3.</span>
-              We bring the candidates over to client&apos;s selected location for physical interview</li>
-            <li className="flex items-start gap-3">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">4.</span>
-              Client discusses and agrees on salary directly with their chosen candidate (starting from ₦60,000 monthly).
+            <li className="flex items-start gap-2">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
+                2.
+              </span>
+              We conduct interviews and shortlist 2 competent candidates within
+              48 hours and send their profiles to client.
             </li>
-            <li className="flex items-start gap-3">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">5.</span>
+            <li className="flex items-start gap-2">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
+                3.
+              </span>
+              We bring the candidates over to client&apos;s selected location
+              for physical interview
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
+                4.
+              </span>
+              Client discusses and agrees on salary directly with their chosen
+              candidate (starting from ₦60,000 monthly).
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
+                5.
+              </span>
               We run medical tests before the staff resumes.
             </li>
-            <li className="flex items-start gap-3">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">6.</span>
+            <li className="flex items-start gap-2">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
+                6.
+              </span>
               Replacement is only valid for one month after initial placemment
             </li>
           </ol>
 
           <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
-            <IconMoodCheck color="black" stroke={2} size={20} />
+            <IconMoodCheck color="#172554" stroke={2} size={20} />
             Benefits
           </h3>
-          <ul className="mt-1 text-sm">
+          <ul className="mt-1 text-sm list-none">
             <li className="flex">
-              <IconCheck color="green" stroke={2} size={20} className="mr-2" /> We manage
-              Opportinity to interview and select staff directly.
+              <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />{" "}
+              We manage Opportinity to interview and select staff directly.
             </li>
             <li className="flex">
-              <IconCheck color="green" stroke={2} size={20} className="mr-2" />Free Medical Test for selected candidate
+              <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />
+              Free Medical Test for selected candidate
             </li>
             <li className="flex">
-              <IconCheck color="green" stroke={2} size={20} className="mr-2" />Manage your own staff directly without external inteference and any monthly service fee
+              <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />
+              Manage your own staff directly without external inteference and
+              any monthly service fee
             </li>
           </ul>
-          <p className="flex mt-4 items-baseline"><h1 className="text-2xl font-bold text-blue-950">₦120,000</h1></p>
+          <span className="flex mt-4 items-baseline">
+            <h1 className="text-2xl font-bold text-blue-950">₦120,000</h1>
+          </span>
+          <Button
+          onClick={() => {
+            // setRequestStage(2);
 
+            // setTimeout(() => {
+            //   document
+            //     .getElementById("payment-section")
+            //     ?.scrollIntoView({ behavior: "smooth" });
+            // }, 0);
+          }}
+          style={{ width: "100%"}}
+          buttonName="Select Plan" 
+        />
         </div>
       </section>
 
