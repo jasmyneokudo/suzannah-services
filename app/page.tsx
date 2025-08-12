@@ -10,7 +10,10 @@ import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandWhatsapp,
+  IconCheck,
   IconHomeQuestion,
+  IconMoodCheck,
+  IconProgressCheck,
   IconUserQuestion,
 } from "@tabler/icons-react";
 import Link from "next/link";
@@ -45,7 +48,7 @@ const services = [
       "Daily childcare, including feeding, bathing, and dressing.",
       "Accompanying children to outings or appointments as needed.",
       "Monitoring children’s health and safety at all times.",
-      "Supervising homework and educational activities."
+      "Supervising homework and educational activities.",
     ],
   },
   {
@@ -56,7 +59,7 @@ const services = [
       "Daily cleaning of rooms and living spaces.",
       "Laundry, ironing, and wardrobe organization.",
       "Grocery assistance and household supply management.",
-      "Assistance with small household errands."
+      "Assistance with small household errands.",
     ],
   },
   {
@@ -67,7 +70,7 @@ const services = [
       "Assistance with meal preparation and basic cooking.",
       "General home organization and tidiness.",
       "Accompanying children to school, activities, or appointments (if required).",
-      "Assistance with small household errands."
+      "Assistance with small household errands.",
     ],
   },
   {
@@ -78,7 +81,7 @@ const services = [
       "Daily cleaning and tidying of all rooms.",
       "Organization of closets, shelves, and storage areas.",
       "Bed-making and linen changes on schedule.",
-      "Seasonal deep cleaning tasks (as agreed)."
+      "Seasonal deep cleaning tasks (as agreed).",
     ],
   },
 ];
@@ -156,9 +159,13 @@ export default function Home() {
     age: number;
   };
 
-  type ServiceType = "Live-in Nanny Services" | "Live-in Help Services" | "Live-in Nanny + Help Services" | "Live-in Housekeeper Services";
+  type ServiceType =
+    | "Live-in Nanny Services"
+    | "Live-in Help Services"
+    | "Live-in Nanny + Help Services"
+    | "Live-in Housekeeper Services";
 
-  const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(0);
+  const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(2);
 
   const [customerRequest, setCustomerRequest] = useState({
     serviceType: "",
@@ -183,11 +190,11 @@ export default function Home() {
 
   function selectService(serviceType: ServiceType) {
     // alert("selecting service " + serviceType);
-    setCustomerRequest({...customerRequest, serviceType: serviceType})
-    setRequestStage(1)
+    setCustomerRequest({ ...customerRequest, serviceType: serviceType });
+    setRequestStage(1);
 
-    const section = document.getElementById("services-section")
-    section?.scrollIntoView({ behavior: "smooth" })
+    const section = document.getElementById("services-section");
+    section?.scrollIntoView({ behavior: "smooth" });
   }
 
   return (
@@ -251,7 +258,7 @@ export default function Home() {
           width="0"
           height="0"
           sizes="100vw"
-          className="w-full max-sm:blur-sm h-auto max-sm:h-[400px] opacity-15 rounded-br-[400px] max-sm:rounded-none"
+          className="w-full max-sm:blur-[1px] h-auto max-sm:h-[400px] opacity-15 rounded-br-[400px] max-sm:rounded-none"
           priority
         />
 
@@ -261,18 +268,21 @@ export default function Home() {
 
         <Link
           className="hidden font-bold max-sm:flex max-sm:absolute max-sm:top-[75%] left-1/2 -translate-x-1/2 hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-sm"
-          href="."
+          href="#services-section"
         >
           Book A Service Now
         </Link>
       </div>
 
-      <section id="services-section"
+      <section
+        id="services-section"
         className={`${
           requestStage !== 0 && "hidden"
         } mt-20 max-sm:mt-10 flex flex-col items-center bg-white max-sm:px-10`}
       >
-        <h1 className="font-extralight text-3xl text-black dark:text-gray-700">SERVICES</h1>
+        <h1 className="font-extralight text-3xl text-black dark:text-gray-700">
+          SERVICES
+        </h1>
 
         {services.map((service, index) => (
           <ServiceCard
@@ -283,11 +293,18 @@ export default function Home() {
             onClick={() => selectService(service.serviceName as ServiceType)}
           />
         ))}
-
       </section>
 
-      <section className={`${requestStage !== 1 && 'hidden'} mt-20 max-sm:mt-10 flex flex-col bg-white max-sm:px-8`}>
-        <Link onClick={() => setRequestStage(0)} href="#" className="text-start text-blue-950">
+      <section
+        className={`${
+          requestStage !== 1 && "hidden"
+        } mt-20 max-sm:mt-10 flex flex-col bg-white max-sm:px-8`}
+      >
+        <Link
+          onClick={() => setRequestStage(0)}
+          href="#"
+          className="text-start text-blue-950"
+        >
           &larr; Back
         </Link>
         <h1 className="font-extralight text-center text-3xl mt-2 text-black dark:text-gray-800">
@@ -499,9 +516,136 @@ export default function Home() {
         </p>
 
         <Button
+          onClick={() => {
+            setRequestStage(2)
+            const paymentSection = document.getElementById('#payment-section')
+            paymentSection?.scrollIntoView({ behavior: "smooth" });
+          }}
           style={{ width: "150px", alignSelf: "end" }}
           buttonName="Continue"
         />
+      </section>
+
+      <section id="payment-section"
+        className={`${
+          requestStage !== 2 && "hidden"
+        } mt-20 max-sm:mt-10 flex flex-col bg-white max-sm:px-8`}
+      >
+        <Link
+          onClick={() => setRequestStage(1)}
+          href="#"
+          className="text-start text-blue-950"
+        >
+          &larr; Back
+        </Link>
+        <h1 className="font-extralight text-center text-3xl mt-2 text-black dark:text-gray-800">
+          CHOOSE YOUR PLAN
+        </h1>
+        <p className="text-gray-600 mt-5 text-base">
+          Step 3 of 3: Choose your payment plan
+        </p>
+
+        <div className="border border-gray-300 rounded-lg p-3 mt-5">
+          <h1 className="font-semibold text-xl">Monthly Management Plan</h1>
+          <p className="text-xs text-gray-600 mt-1">
+            Ideal for clients who want convenience and full staff management.
+          </p>
+          <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
+            <IconProgressCheck color="black" stroke={2} size={20} />
+            How It works
+          </h3>
+          <ol className=" text-sm list-inside mt-2">
+            <li className="flex items-start gap-3">
+               <span className="flex-shrink-0 text-bold text-blue-950">1.</span>
+              Within 24 hours of booking this payment plan, we send 1-3
+              available staff profiles for selection.
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">2.</span>
+              Once selected, the staff resumes work promptly.</li>
+            <li className="flex items-start gap-3">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">3.</span>
+              We manage the staff’s performance.</li>
+            <li className="flex items-start gap-3">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">4.</span>
+              Client pays a monthly service fee to the company and need not pay
+              staff directly.
+            </li>
+          </ol>
+
+          <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
+            <IconMoodCheck color="black" stroke={2} size={20} />
+            Benefits
+          </h3>
+          <ol className="mt-1 text-sm list-item">
+            <li className="flex">
+              <IconCheck color="green" stroke={2} size={20} className="mr-2" /> We manage
+              the staff’s performance and payroll.
+            </li>
+            <li className="flex">
+              <IconCheck color="green" stroke={2} size={20} className="mr-2" /> Guaranteed
+              replacement policy throughout your subscription..
+            </li>
+          </ol>
+
+          <p className="flex mt-4 items-baseline"><h1 className="text-2xl font-bold text-blue-950">₦80,000</h1><span>/month</span></p>
+        </div>
+
+        <div className="border border-gray-300 rounded-lg p-4 mt-5">
+          <h1 className="font-semibold text-xl">One-off Placement Plan</h1>
+
+          <p className="text-xs text-gray-600">
+            Perfect for clients who prefer to employ and manage staff directly.
+          </p>
+
+          <h3 className="text-xl mt-1 font-medium flex items-center gap-1">
+            <IconProgressCheck color="black" stroke={2} size={20} />
+            How It works
+          </h3>
+          <ol className=" text-sm list-inside mt-2">
+            <li className="flex items-start gap-3">
+              <span className="flex-shrink-0 text-bold text-blue-950">1.</span>
+              Client makes a one-time payment for recruitment & screening.
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">2.</span>
+              We conduct interviews and shortlist 2 competent candidates within 48 hours and send their profiles to client.</li>
+            <li className="flex items-start gap-3">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">3.</span>
+              We bring the candidates over to client&apos;s selected location for physical interview</li>
+            <li className="flex items-start gap-3">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">4.</span>
+              Client discusses and agrees on salary directly with their chosen candidate (starting from ₦60,000 monthly).
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">5.</span>
+              We run medical tests before the staff resumes.
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">6.</span>
+              Replacement is only valid for one month after initial placemment
+            </li>
+          </ol>
+
+          <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
+            <IconMoodCheck color="black" stroke={2} size={20} />
+            Benefits
+          </h3>
+          <ul className="mt-1 text-sm">
+            <li className="flex">
+              <IconCheck color="green" stroke={2} size={20} className="mr-2" /> We manage
+              Opportinity to interview and select staff directly.
+            </li>
+            <li className="flex">
+              <IconCheck color="green" stroke={2} size={20} className="mr-2" />Free Medical Test for selected candidate
+            </li>
+            <li className="flex">
+              <IconCheck color="green" stroke={2} size={20} className="mr-2" />Manage your own staff directly without external inteference and any monthly service fee
+            </li>
+          </ul>
+          <p className="flex mt-4 items-baseline"><h1 className="text-2xl font-bold text-blue-950">₦120,000</h1></p>
+
+        </div>
       </section>
 
       {/* CLIENT REVIEWS SECTION STARTS */}
@@ -517,7 +661,7 @@ export default function Home() {
             width="0"
             height="0"
             sizes="100vw"
-            className=" -z-[100] w-full h-auto opacity-30"
+            className="-z-[100] w-full h-auto opacity-30"
             priority
           />
         </div>
