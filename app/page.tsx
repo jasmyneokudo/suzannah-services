@@ -587,11 +587,11 @@ export default function Home() {
             </li>
           </ol>
 
-          <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
+          <h3 className="text-xl mt-3 font-medium flex items-center gap-1 text-black dark:text-gray-900">
             <IconMoodCheck color="#172554" stroke={2} size={20} />
             Benefits
           </h3>
-          <ol className="mt-1 text-sm list-none">
+          <ol className="mt-1 text-sm list-none text-black dark:text-gray-900">
             <li className="flex">
               <IconCheck color="green" stroke={2} size={20} className="mr-2 shrink-0" />{" "}
               We manage the staff’s performance and payroll.
@@ -629,7 +629,7 @@ export default function Home() {
             Perfect for clients who prefer to employ and manage staff directly.
           </p>
 
-          <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
+          <h3 className="text-xl mt-3 font-medium flex items-center gap-1 text-black dark:text-gray-900">
             <IconProgressCheck color="#172554" stroke={2} size={20} />
             How It works
           </h3>
