@@ -47,7 +47,7 @@ export default function Home() {
     nextArrow: <SampleNextArrow />,
   };
 
-  const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(3);
+  const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(0);
   const [isCustomerServicePolicyOpen, setIsCustomerServicePolicyOpen] =
     useState(false);
 
@@ -73,6 +73,7 @@ export default function Home() {
     otherMustBes: "",
     bookingFee: 200000,
   });
+
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
   const componentProps = {
     email: customerRequest.clientEmail,
@@ -80,6 +81,13 @@ export default function Home() {
     metadata: {
       name: customerRequest.clientName,
       phone: customerRequest.clientPhoneNumber,
+      custom_fields: [
+        {
+          display_name: "Customer ID",
+          variable_name: "customer_id",
+          value: "CUST123",
+        },
+      ],
     },
     publicKey,
     text: "Pay Now",
@@ -91,17 +99,32 @@ export default function Home() {
   };
 
   async function sendRequestDetails() {
+    const requestBody = `
+      Incoming Client Request ${Date.now}\n:
+      Name: ${customerRequest.clientName},
+      Email address: ${customerRequest.clientEmail},
+      Phone number: ${customerRequest.clientPhoneNumber},
+      Address: ${customerRequest.clientAddress},
+      Service Type: ${customerRequest.serviceType},
+      Number of Kids: ${customerRequest.numberOfKids},
+      Ages of Kids: ${customerRequest.agesOfKids},
+      House Type: ${customerRequest.typeOfHouse},
+      Candidate Preferences
+      Gender: ${customerRequest.employeeGender},
+      Age Range: ${customerRequest.employeeAgeRange},
+      Tribe Preference: ${customerRequest.employeeTribePreference},
+      Religion Preference: ${customerRequest.employeeReligionPreference},
+      Other Preferences: ${customerRequest.extraComment},
+      
+      Amount Paid: ${customerRequest.bookingFee}
+    `;
     try {
       const res = await fetch("/api/createRequest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           to: process.env.NEXT_PUBLIC_WASENDERAPI_PHONE_NUMBER,
-          text: `Hello from WasenderAPI",
-                    clientName: ${customerRequest.clientName},
-                    clientEmail: ${customerRequest.clientEmail},
-                    clientPhoneNumber: ${customerRequest.clientPhoneNumber},
-                    clientAddress: ${customerRequest.clientAddress}`,
+          text: requestBody,
         }),
       });
 
