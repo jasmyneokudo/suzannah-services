@@ -761,35 +761,32 @@ export default function Home() {
             width="0"
             height="0"
             sizes="100vw"
-            className="-z-[100] max-sm:blur-[1px] w-full h-auto max-sm:h-[400px] opacity-30"
+            className="-z-[100] max-sm:blur-[1px] w-full h-auto max-sm:h-[450px] opacity-30"
             priority
           />
         </div>
 
-        <div className="absolute top-2/3 max-sm:top-[40%] max-sm:left-[8%] w-3/4 max-sm:w-[90%] right-0 flex justify-center items-top">
+        <div className="absolute top-2/3 max-sm:top-[30%] w-3/4 max-sm:w-[84%] self-center flex justify-center items-top">
           <SliderTyped {...settings} className="w-full mr-[-100px] max-sm:mr-0">
             <ReviewCard
-              name="Mrs.  A"
-              location="Asokoro"
+              name="Mrs. Irene"
+              location="Jabi"
               serviceType="Live-In Nanny Services"
-              review="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-              excepturi, aut quas voluptatem odit amet temporibus similique quam"
+              review="I'm satisfied and impressed with the services of the Nanny assigned. She's really experienced"
             />
 
             <ReviewCard
-              name="Mrs.  A"
-              location="Asokoro"
+              name="Mrs. 0.A"
+              location="Gwarimpa"
               serviceType="Live-In Nanny Services"
-              review="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-              excepturi, aut quas voluptatem odit amet temporibus similique quam"
+              review="So far, so good, the assigned Nanny is hard-working and patient with my son"
             />
 
             <ReviewCard
-              name="Mrs.  A"
-              location="Asokoro"
-              serviceType="Live-In Nanny Services"
-              review="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-              excepturi, aut quas voluptatem odit amet temporibus similique quam"
+              name="Mrs. F"
+              location="Kubwa"
+              serviceType="Live-In Nanny + Help Services"
+              review="The assigned Nanny is doing a good job, I'm pleased with her services, she is hardworking and cheerful."
             />
           </SliderTyped>
         </div>
