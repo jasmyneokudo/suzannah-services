@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Open_Sans, Roboto_Mono, Edu_SA_Beginner } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,6 +37,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${openSans.variable} ${robotoMono.variable} ${eduSABeginner.variable} font-inter`}>
+      <Script
+          src="https://js.paystack.co/v1/inline.js"
+          strategy="beforeInteractive"
+        />
+
       <body className={inter.className}>{children}</body>
     </html>
   );
