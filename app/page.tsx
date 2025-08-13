@@ -95,8 +95,8 @@ export default function Home() {
     },
     publicKey,
     text: "Pay Now",
-    onSuccess: () => {
-      sendRequestDetails();
+    onSuccess: async () => {
+      await sendRequestDetails();
       alert("Thanks for doing business with us! Come back soon!!");
     },
     onClose: () => alert("Wait! Don't leave :("),
@@ -104,12 +104,14 @@ export default function Home() {
 
   async function sendRequestDetails() {
     const requestBody = `
-      Incoming Client Request ${Date.now}\n:
+      Incoming Client Request ${new Date(Date.now())}\n:
+      Service Type: ${customerRequest.serviceType},
+      Client's Particulars
       Name: ${customerRequest.clientName},
       Email address: ${customerRequest.clientEmail},
       Phone number: ${customerRequest.clientPhoneNumber},
       Address: ${customerRequest.clientAddress},
-      Service Type: ${customerRequest.serviceType},
+      Home/Family Details
       Number of Kids: ${customerRequest.numberOfKids},
       Ages of Kids: ${customerRequest.agesOfKids},
       House Type: ${customerRequest.typeOfHouse},
@@ -119,9 +121,11 @@ export default function Home() {
       Tribe Preference: ${customerRequest.employeeTribePreference},
       Religion Preference: ${customerRequest.employeeReligionPreference},
       Other Preferences: ${customerRequest.extraComment},
-      
       Amount Paid: ${customerRequest.bookingFee}
     `;
+
+    console.log('request body---->', requestBody);
+    
     try {
       const res = await fetch("/api/createRequest", {
         method: "POST",
@@ -720,7 +724,7 @@ export default function Home() {
             fullWidth
             sx={{ mt: 2 }}
             id="client-phone-number"
-            label="Phone Number"
+            label="Whatsapp Number"
             variant="outlined"
             value={customerRequest.clientPhoneNumber}
             onChange={(e) =>
@@ -741,6 +745,21 @@ export default function Home() {
               setCustomerRequest({
                 ...customerRequest,
                 clientEmail: e.target.value,
+              })
+            }
+          />
+
+          <TextField
+            fullWidth
+            sx={{ mt: 2 }}
+            id="client-email"
+            label="Address (Where Staff will work)"
+            variant="outlined"
+            value={customerRequest.clientAddress}
+            onChange={(e) =>
+              setCustomerRequest({
+                ...customerRequest,
+                clientAddress: e.target.value,
               })
             }
           />
