@@ -1,7 +1,6 @@
 "use client";
 
 import AlertDialogSlide from "./components/Dialog";
-import { PaystackButton } from "react-paystack";
 import Button from "./components/Button";
 import FAQBox from "./components/FAQBox";
 import FormControl from "@mui/material/FormControl";
@@ -22,6 +21,13 @@ import { services } from "@/data/services";
 import { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import dynamic from 'next/dynamic';
+
+    const PaystackButton = dynamic(
+      () => import('react-paystack').then((mod) => mod.PaystackButton),
+      { ssr: false } // This ensures the component is only loaded on the client-side
+    );
+
 
 import {
   IconBrandFacebook,
@@ -79,8 +85,6 @@ export default function Home() {
     email: customerRequest.clientEmail,
     amount: customerRequest.bookingFee,
     metadata: {
-      name: customerRequest.clientName,
-      phone: customerRequest.clientPhoneNumber,
       custom_fields: [
         {
           display_name: "Customer ID",
