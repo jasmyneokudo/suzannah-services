@@ -17,7 +17,7 @@
     clientEmail: string;
     clientAddress: string;
     numberOfKids: number;
-    agesOfKids: number[];
+    agesOfKids: string;
     numberOfRooms: string;
     typeOfHouse: string;
     numberOfBathrooms: number;
@@ -25,5 +25,5 @@
     mustBeAbleToIron: boolean;
     mustBeAbleToTeachKids: boolean;
     otherMustBes: string;
-
+    bookingFee: number;
   }

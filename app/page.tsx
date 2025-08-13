@@ -1,11 +1,28 @@
 "use client";
+
+import AlertDialogSlide from "./components/Dialog";
+import { PaystackButton } from "react-paystack";
+import Button from "./components/Button";
+import FAQBox from "./components/FAQBox";
+import FormControl from "@mui/material/FormControl";
 import Image from "next/image";
+import InputLabel from "@mui/material/InputLabel";
+import Link from "next/link";
+import MenuItem from "@mui/material/MenuItem";
+import ReviewCard from "./components/ReviewCard";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ServiceCard from "./components/ServiceCard";
 import Slider, { Settings } from "react-slick";
+import { CustomerRequest, ServiceType } from "@/types/ClientRequest";
+import { faqs } from "@/data/faqs";
+import { FormHelperText, TextField } from "@mui/material";
+import { Hero } from "./components/Hero";
+import { SampleNextArrow } from "./components/NextArrow";
+import { services } from "@/data/services";
+import { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ReviewCard from "./components/ReviewCard";
-import FAQBox from "./components/FAQBox";
+
 import {
   IconBrandFacebook,
   IconBrandInstagram,
@@ -16,31 +33,8 @@ import {
   IconProgressCheck,
   IconUserQuestion,
 } from "@tabler/icons-react";
-import Link from "next/link";
-import { useState } from "react";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { FormHelperText, TextField } from "@mui/material";
-import Button from "./components/Button";
-import { faqs } from "@/data/faqs";
-import { services } from "@/data/services";
-import AlertDialogSlide from "./components/Dialog";
-import { CustomerRequest, ServiceType } from "@/types/ClientRequest";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
-
-function SampleNextArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block" }}
-      onClick={onClick}
-    />
-  );
-}
 
 export default function Home() {
   const settings = {
@@ -53,13 +47,7 @@ export default function Home() {
     nextArrow: <SampleNextArrow />,
   };
 
-  type Kid = {
-    name: string;
-    age: number;
-  };
-
   const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(3);
-
   const [isCustomerServicePolicyOpen, setIsCustomerServicePolicyOpen] =
     useState(false);
 
@@ -75,7 +63,7 @@ export default function Home() {
     clientEmail: "",
     clientAddress: "",
     numberOfKids: 0,
-    agesOfKids: [],
+    agesOfKids: "",
     numberOfRooms: "",
     typeOfHouse: "",
     numberOfBathrooms: 0,
@@ -83,7 +71,48 @@ export default function Home() {
     mustBeAbleToIron: false,
     mustBeAbleToTeachKids: false,
     otherMustBes: "",
+    bookingFee: 200000,
   });
+  const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
+  const componentProps = {
+    email: customerRequest.clientEmail,
+    amount: customerRequest.bookingFee,
+    metadata: {
+      name: customerRequest.clientName,
+      phone: customerRequest.clientPhoneNumber,
+    },
+    publicKey,
+    text: "Pay Now",
+    onSuccess: () => {
+      sendRequestDetails();
+      alert("Thanks for doing business with us! Come back soon!!");
+    },
+    onClose: () => alert("Wait! Don't leave :("),
+  };
+
+  async function sendRequestDetails() {
+    try {
+      const res = await fetch("/api/createRequest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: process.env.NEXT_PUBLIC_WASENDERAPI_PHONE_NUMBER,
+          text: `Hello from WasenderAPI",
+                    clientName: ${customerRequest.clientName},
+                    clientEmail: ${customerRequest.clientEmail},
+                    clientPhoneNumber: ${customerRequest.clientPhoneNumber},
+                    clientAddress: ${customerRequest.clientAddress}`,
+        }),
+      });
+
+      const data = await res.json();
+      console.error("data:", data);
+    } catch (err) {
+      console.error("Error:", err);
+    } finally {
+      // setLoading(false);
+    }
+  }
 
   function selectService(serviceType: ServiceType) {
     setCustomerRequest({ ...customerRequest, serviceType: serviceType });
@@ -104,7 +133,7 @@ export default function Home() {
       setRequestStage(3);
       setTimeout(() => {
         document
-          .getElementById("payment-section")
+          .getElementById("final-section")
           ?.scrollIntoView({ behavior: "smooth" });
       }, 0);
     }
@@ -115,6 +144,13 @@ export default function Home() {
   function selectPlan(paymentPlan: PaymentPlan): void {
     if (paymentPlan === "monthly") {
       setIsCustomerServicePolicyOpen(true);
+    } else {
+      setRequestStage(3);
+      setTimeout(() => {
+        document
+          .getElementById("final-section")
+          ?.scrollIntoView({ behavior: "smooth" });
+      }, 0);
     }
   }
 
@@ -122,84 +158,13 @@ export default function Home() {
     <main className="flex bg-white min-h-screen w-full flex-col items-center justify-between overflow-clip">
       <AlertDialogSlide
         open={isCustomerServicePolicyOpen}
-        onClose={(e: React.MouseEvent<HTMLElement>) => closeCustomerServicePolicy(e)}
+        onClose={(e: React.MouseEvent<HTMLElement>) =>
+          closeCustomerServicePolicy(e)
+        }
       />
-      <div className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90  h-3/4 max-sm:h-[400px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
-        {/* for our menu items #0D98BA */}
-        <div className="flex max-sm:hidden absolute top-3 left-0 right-0 mr-auto ml-auto w-[600px]">
-          <a
-            href="https://google.com"
-            className="z-10 px-5 py-4 transition-colors text-white opacity-70 hover:opacity-100 duration-500 hover:scale-125"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <p className="m-0 max-w-[30ch]">Home</p>
-          </a>
-          <a
-            href="https://"
-            className="z-10 px-5 py-4 transition-colors text-white opacity-70 hover:opacity-100 duration-500 hover:scale-125"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <p className="m-0 max-w-[30ch]">Our Services</p>
-          </a>
-          <a
-            href="https://"
-            className="z-10 px-5 py-4 transition-colors text-white opacity-70 hover:opacity-100 duration-500 hover:scale-125"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <p className="m-0 max-w-[30ch]">Reviews</p>
-          </a>
+      <Hero bookAServiceNow={() => requestStage !== 0 && setRequestStage(0)} />
 
-          <a
-            href="https://"
-            className="z-10 px-5 py-4 transition-colors text-white opacity-70 hover:opacity-100 duration-500 hover:scale-125"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <p className="m-0 max-w-[30ch]">FAQs</p>
-          </a>
-          <a
-            href="https://"
-            className="z-10 px-5 py-4 transition-colors text-white opacity-70 hover:opacity-100 duration-500 hover:scale-125"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <p className="m-0 max-w-[30ch]">Contact Us</p>
-          </a>
-        </div>
-        <Image
-          src="/images/suzannah-large.png"
-          alt="Logo"
-          width="80"
-          height="30"
-          className="absolute top-2 left-2 z-20"
-          priority
-        />
-        <Image
-          src="/images/background-image.jpg"
-          alt="Background"
-          width="0"
-          height="0"
-          sizes="100vw"
-          className="w-full max-sm:blur-[1px] h-auto max-sm:h-[400px] opacity-15 rounded-br-[400px] max-sm:rounded-none"
-          priority
-        />
-
-        <h1 className="absolute text-white top-[50%] max-sm:top-[29%] w-1/2 max-sm:w-[55%] text-center left-1/2 -translate-x-1/2 z-10 font-extralight text-4xl max-sm:text-2xl">
-          Trusted, Professional Home And Care Service Provider In The F.C.T
-        </h1>
-
-        <Link
-          className="hidden font-bold max-sm:flex max-sm:absolute max-sm:top-[75%] left-1/2 -translate-x-1/2 hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-sm"
-          href="#services-section"
-          onClick={() => requestStage !== 0 && setRequestStage(0)}
-        >
-          Book A Service Now
-        </Link>
-      </div>
-
+      {/* SERVICES SECTION */}
       <section
         id="services-section"
         className={`${
@@ -221,6 +186,7 @@ export default function Home() {
         ))}
       </section>
 
+      {/* CUSTOMER PREFERENCES SECTION */}
       <section
         className={`${
           requestStage !== 1 && "hidden"
@@ -374,52 +340,51 @@ export default function Home() {
           <p className="text-xs text-gray-400">
             Tell us about your household to better match our services
           </p>
-          {(customerRequest.serviceType !== "Live-in Housekeeper Services" &&
-          customerRequest.serviceType !== "Live-in Help Services" as ServiceType)  && (
-            <>
-              <FormControl fullWidth sx={{ mt: 2 }}>
-                <InputLabel id="demo-simple-select-label">
-                  Number of Kids to be cared for
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={customerRequest.employeeAgeRange}
-                  onChange={(event: SelectChangeEvent) => {
-                    setCustomerRequest({
-                      ...customerRequest,
-                      employeeAgeRange: event.target.value,
-                    });
-                  }}
-                >
-                  <MenuItem value={10}>1</MenuItem>
-                  <MenuItem value={20}>2</MenuItem>
-                  <MenuItem value={20}>3</MenuItem>
-                  <MenuItem value={20}>4</MenuItem>
-                  <MenuItem value={20}>5</MenuItem>
-                  <MenuItem value={20}>6</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl fullWidth>
-                <TextField
-                  value={customerRequest.agesOfKids}
-                  onChange={(e) =>
-                    setCustomerRequest({
-                      ...customerRequest,
-                      agesOfKids: e.target.value
-                        .split(",")
-                        .map((age) => parseInt(age.trim(), 10)) as [], // Convert to numbers
-                    })
-                  }
-                  placeholder="Ages of Kids"
-                  sx={{ mt: 2 }}
-                />
-                <FormHelperText>
-                  Separate with commas, e.g 1,2,3,5
-                </FormHelperText>
-              </FormControl>
-            </>
-          )}
+          {customerRequest.serviceType !== "Live-in Housekeeper Services" &&
+            customerRequest.serviceType !==
+              ("Live-in Help Services" as ServiceType) && (
+              <>
+                <FormControl fullWidth sx={{ mt: 2 }}>
+                  <InputLabel id="demo-simple-select-label">
+                    Number of Kids to be cared for
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={customerRequest.employeeAgeRange}
+                    onChange={(event: SelectChangeEvent) => {
+                      setCustomerRequest({
+                        ...customerRequest,
+                        employeeAgeRange: event.target.value,
+                      });
+                    }}
+                  >
+                    <MenuItem value={10}>1</MenuItem>
+                    <MenuItem value={20}>2</MenuItem>
+                    <MenuItem value={20}>3</MenuItem>
+                    <MenuItem value={20}>4</MenuItem>
+                    <MenuItem value={20}>5</MenuItem>
+                    <MenuItem value={20}>6</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                  <TextField
+                    value={customerRequest.agesOfKids}
+                    onChange={(e) => {
+                      setCustomerRequest({
+                        ...customerRequest,
+                        agesOfKids: e.target.value, // Convert to numbers
+                      });
+                    }}
+                    placeholder="Ages of Kids"
+                    sx={{ mt: 2 }}
+                  />
+                  <FormHelperText>
+                    Separate with commas, e.g 1,2,3,5
+                  </FormHelperText>
+                </FormControl>
+              </>
+            )}
 
           {customerRequest.serviceType !== "Live-in Nanny Services" && (
             <>
@@ -432,8 +397,6 @@ export default function Home() {
                   id="demo-simple-select"
                   value={customerRequest.numberOfRooms}
                   onChange={(event: SelectChangeEvent) => {
-                    console.log("event.target.value", event.target.value);
-
                     setCustomerRequest({
                       ...customerRequest,
                       numberOfRooms: event.target.value,
@@ -497,6 +460,7 @@ export default function Home() {
         />
       </section>
 
+      {/* PAYMENT PLANS SECTION */}
       <section
         id="payment-section"
         className={`${
@@ -689,6 +653,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FINAL SECTION */}
       <section
         id="final-section"
         className={`${
@@ -706,7 +671,7 @@ export default function Home() {
           COMPLETE YOUR REQUEST
         </h1>
         <p className="text-gray-600 mt-5 text-base">
-          Step 4 of 4: Fill in your contact details
+          Step 4 of 4: Fill in your contact details and make payment
         </p>
 
         <div className="border border-gray-300 rounded-lg p-4 mt-5">
@@ -752,6 +717,7 @@ export default function Home() {
               })
             }
           />
+          <PaystackButton className="paystack-button" {...componentProps} />
         </div>
       </section>
 
@@ -773,44 +739,29 @@ export default function Home() {
           />
         </div>
 
-        <div className="absolute top-2/3 max-sm:top-[45%] max-sm:left-5 w-3/4 max-sm:w-full right-0 flex justify-center items-top">
+        <div className="absolute top-2/3 max-sm:top-[40%] max-sm:left-[8%] w-3/4 max-sm:w-[90%] right-0 flex justify-center items-top">
           <SliderTyped {...settings} className="w-full mr-[-100px] max-sm:mr-0">
             <ReviewCard
-              name="Mrs. A | Guzape"
+              name="Mrs.  A"
+              location="Asokoro"
+              serviceType="Live-In Nanny Services"
               review="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-              beatae repellendus, quaerat, voluptas obcaecati sint minima et
               excepturi, aut quas voluptatem odit amet temporibus similique quam"
             />
 
             <ReviewCard
-              name="Mrs. A | Wuse 2"
+              name="Mrs.  A"
+              location="Asokoro"
+              serviceType="Live-In Nanny Services"
               review="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-              beatae repellendus, quaerat, voluptas obcaecati sint minima et
               excepturi, aut quas voluptatem odit amet temporibus similique quam"
             />
 
             <ReviewCard
-              name="Mrs. A | Dawaki"
+              name="Mrs.  A"
+              location="Asokoro"
+              serviceType="Live-In Nanny Services"
               review="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-              beatae repellendus, quaerat, voluptas obcaecati sint minima et
-              excepturi, aut quas voluptatem odit amet temporibus similique quam"
-            />
-            <ReviewCard
-              name="Mrs. A | Asokoro"
-              review="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-              beatae repellendus, quaerat, voluptas obcaecati sint minima et
-              excepturi, aut quas voluptatem odit amet temporibus similique quam"
-            />
-            <ReviewCard
-              name="Mr. B | Katampe Extension"
-              review="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-              beatae repellendus, quaerat, voluptas obcaecati sint minima et
-              excepturi, aut quas voluptatem odit amet temporibus similique quam"
-            />
-            <ReviewCard
-              name="Mr. P | Area 1"
-              review="Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-              beatae repellendus, quaerat, voluptas obcaecati sint minima et
               excepturi, aut quas voluptatem odit amet temporibus similique quam"
             />
           </SliderTyped>
@@ -945,87 +896,6 @@ export default function Home() {
           </a>
         </div>
       </footer>
-
-      {/* <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div> */}
-      {/* 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div> */}
     </main>
   );
 }
