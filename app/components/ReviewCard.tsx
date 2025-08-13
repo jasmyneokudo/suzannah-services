@@ -1,7 +1,6 @@
 import Rating from "@mui/material/Rating";
 import { styled } from "@mui/material/styles";
 import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
-import { PaystackButton } from 'react-paystack'
 
 const StyledRating = styled(Rating)({
   "& .MuiRating-iconFilled": {
