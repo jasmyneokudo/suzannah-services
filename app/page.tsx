@@ -12,7 +12,11 @@ import ReviewCard from "./components/ReviewCard";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ServiceCard from "./components/ServiceCard";
 import Slider, { Settings } from "react-slick";
-import { CustomerRequest, ServiceType } from "@/types/ClientRequest";
+import {
+  CustomerRequest,
+  PaymentPlan,
+  ServiceType,
+} from "@/types/ClientRequest";
 import { faqs } from "@/data/faqs";
 import { FormHelperText, TextField } from "@mui/material";
 import { Hero } from "./components/Hero";
@@ -22,6 +26,7 @@ import { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import dynamic from "next/dynamic";
+import Tooltip from "@mui/material/Tooltip";
 
 const PaystackButton = dynamic(
   () => import("react-paystack").then((mod) => mod.PaystackButton),
@@ -33,9 +38,11 @@ import {
   IconBrandInstagram,
   IconBrandWhatsapp,
   IconCheck,
+  IconFileDescription,
   IconHomeQuestion,
   IconMoodCheck,
   IconProgressCheck,
+  IconQuestionMark,
   IconUserQuestion,
 } from "@tabler/icons-react";
 
@@ -60,8 +67,8 @@ export default function Home() {
     serviceType: "Live-in Nanny Services",
     employeeGender: "",
     employeeAgeRange: "",
-    employeeTribePreference: "none",
-    employeeReligionPreference: "none",
+    employeeTribePreference: "any tribe",
+    employeeReligionPreference: "any religion",
     extraComment: "",
     clientName: "",
     clientPhoneNumber: "",
@@ -78,6 +85,7 @@ export default function Home() {
     mustBeAbleToTeachKids: false,
     otherMustBes: "",
     bookingFee: 500000,
+    paymentPlan: "monthly",
   });
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
@@ -94,7 +102,7 @@ export default function Home() {
       ],
     },
     publicKey,
-    text: "Pay Now",
+    text: `Pay Now (₦${customerRequest.paymentPlan === 'one-off' ? customerRequest.bookingFee.toLocaleString() : '10,000'})`,
     onSuccess: async () => {
       await sendRequestDetails();
       alert("Thanks for doing business with us! Come back soon!!");
@@ -144,8 +152,6 @@ export default function Home() {
       Amount Paid: ${customerRequest.bookingFee}
     `;
 
-    console.log("request body---->", requestBody);
-
     try {
       const res = await fetch("/api/createRequest", {
         method: "POST",
@@ -174,13 +180,10 @@ export default function Home() {
   }
 
   function closeCustomerServicePolicy(e: React.MouseEvent<HTMLElement>) {
-    console.log(
-      "Closing customer service policy dialog",
-      e.currentTarget.TEXT_NODE.toString()
-    );
     const target = e.target as HTMLElement;
+    setIsCustomerServicePolicyOpen(false);
+
     if (target.textContent === "Proceed") {
-      setIsCustomerServicePolicyOpen(false);
       setRequestStage(3);
       setTimeout(() => {
         document
@@ -190,9 +193,8 @@ export default function Home() {
     }
   }
 
-  type PaymentPlan = "monthly" | "one-off";
-
   function selectPlan(paymentPlan: PaymentPlan): void {
+    setCustomerRequest({ ...customerRequest, paymentPlan });
     if (paymentPlan === "monthly") {
       setIsCustomerServicePolicyOpen(true);
     } else {
@@ -256,291 +258,290 @@ export default function Home() {
         <p className="text-gray-600 mt-5 text-base">
           Step 1 of 2: Tell us about your preferences and home details
         </p>
-          <div className="border border-gray-300 rounded-lg p-4 mt-5">
-            <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
-              <IconUserQuestion color="black" stroke={2} size={16} />
-              &nbsp;&nbsp;&nbsp;Staff Preferences
-            </p>
-            <p className="text-xs text-gray-400">
-              Choose your preferred characteristics for your care provider
-            </p>
+        <div className="border border-gray-300 rounded-lg p-4 mt-5">
+          <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
+            <IconUserQuestion color="black" stroke={2} size={16} />
+            &nbsp;&nbsp;&nbsp;Staff Preferences
+          </p>
+          <p className="text-xs text-gray-400">
+            Choose your preferred characteristics for your care provider
+          </p>
 
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="demo2-simple-select-label">Age Range</InputLabel>
-              <Select
-                displayEmpty
-                labelId="demo2-simple-select-label"
-                id="demo-simple-select"
-                value={customerRequest.employeeAgeRange}
-                label="Age Range"
-                required
-                onChange={(event: SelectChangeEvent) => {
-                  setCustomerRequest({
-                    ...customerRequest,
-                    employeeAgeRange: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="18-22">18-22</MenuItem>
-                <MenuItem value="23-27">23-27</MenuItem>
-                <MenuItem value="28-32">28-32</MenuItem>
-                <MenuItem value="33-37">33-37</MenuItem>
-                <MenuItem value="38-42">38-42</MenuItem>
-                <MenuItem value="43-47">43-47</MenuItem>
-                <MenuItem value="46-51">46-51</MenuItem>
-                <MenuItem value="50+">50+</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-              <Select
-                displayEmpty
-                required
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={customerRequest.employeeGender}
-                label="Age Range"
-                onChange={(event: SelectChangeEvent) => {
-                  setCustomerRequest({
-                    ...customerRequest,
-                    employeeGender: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="No Preference">
-                  No Preference (Any gender is fine)
-                </MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="demo-simple-select-label">
-                Religion Preference
-              </InputLabel>
-              <Select
-                displayEmpty
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={customerRequest.employeeReligionPreference}
-                label="Age Range"
-                onChange={(event: SelectChangeEvent) => {
-                  setCustomerRequest({
-                    ...customerRequest,
-                    employeeReligionPreference: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="christianity">Christianity</MenuItem>
-                <MenuItem value="islam">Islam</MenuItem>
-                <MenuItem value="none">
-                  No Preference (Any Religion is fine)
-                </MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="demo-simple-select-label">
-                Tribe Preference
-              </InputLabel>
-              <Select
-                displayEmpty
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={customerRequest.employeeTribePreference}
-                aria-placeholder="Age Range"
-                onChange={(event: SelectChangeEvent) => {
-                  setCustomerRequest({
-                    ...customerRequest,
-                    employeeTribePreference: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="north">Northerners/Hausa</MenuItem>
-                <MenuItem value="igbo">Igbo</MenuItem>
-                <MenuItem value="yoruba">Yoruba/Edo</MenuItem>
-                <MenuItem value="benue">Idoma/Igede</MenuItem>
-                <MenuItem value="efik">Efik/Ibibio</MenuItem>
-                <MenuItem value="none">
-                  No Preference (Any Tribe is fine)
-                </MenuItem>
-              </Select>
-            </FormControl>
-
-            <TextField
-              value={customerRequest.extraComment}
-              onChange={(e) =>
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo2-simple-select-label">Age Range</InputLabel>
+            <Select
+              displayEmpty
+              labelId="demo2-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeAgeRange}
+              label="Age Range"
+              required
+              onChange={(event: SelectChangeEvent) => {
                 setCustomerRequest({
                   ...customerRequest,
-                  extraComment: e.target.value,
-                })
-              }
-              fullWidth
-              sx={{ mt: 2 }}
-              id="filled-multiline-static"
-              placeholder="Other Preferences"
-              multiline
-              rows={4}
-            />
-          </div>
+                  employeeAgeRange: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value="18-22">18-22</MenuItem>
+              <MenuItem value="23-27">23-27</MenuItem>
+              <MenuItem value="28-32">28-32</MenuItem>
+              <MenuItem value="33-37">33-37</MenuItem>
+              <MenuItem value="38-42">38-42</MenuItem>
+              <MenuItem value="43-47">43-47</MenuItem>
+              <MenuItem value="46-51">46-51</MenuItem>
+              <MenuItem value="50+">50+</MenuItem>
+            </Select>
+          </FormControl>
 
-          <div className="border border-gray-300 rounded-lg p-4 mt-5">
-            <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
-              <IconHomeQuestion color="black" stroke={2} size={18} />
-              &nbsp;&nbsp;&nbsp;Home/Family Details
-            </p>
-            <p className="text-xs text-gray-400">
-              Tell us about your household to better match our services
-            </p>
-            {customerRequest.serviceType !== "Live-in Housekeeper Services" &&
-              customerRequest.serviceType !==
-                ("Live-in Help Services" as ServiceType) && (
-                <>
-                  <FormControl fullWidth sx={{ mt: 2 }}>
-                    <InputLabel id="demo-simple-select-label">
-                      Number of Kids to be cared for
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      required
-                      value={customerRequest.numberOfKids.toString()}
-                      onChange={(event: SelectChangeEvent) => {
-                        setCustomerRequest({
-                          ...customerRequest,
-                          numberOfKids: Number(event.target.value),
-                        });
-                      }}
-                    >
-                      <MenuItem value={1}>1</MenuItem>
-                      <MenuItem value={2}>2</MenuItem>
-                      <MenuItem value={3}>3</MenuItem>
-                      <MenuItem value={4}>4</MenuItem>
-                      <MenuItem value={5}>5</MenuItem>
-                      <MenuItem value={6}>6</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <FormControl fullWidth>
-                    <TextField
-                      value={customerRequest.agesOfKids}
-                      required
-                      error={customerRequest.agesOfKids === ""}
-                      onChange={(e) => {
-                        setCustomerRequest({
-                          ...customerRequest,
-                          agesOfKids: e.target.value, // Convert to numbers
-                        });
-                      }}
-                      placeholder="Ages of Kids"
-                      sx={{ mt: 2 }}
-                    />
-                    <FormHelperText>
-                      Separate with commas, e.g 15 months,2 years,1 year and 3
-                      months
-                    </FormHelperText>
-                  </FormControl>
-                </>
-              )}
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+            <Select
+              displayEmpty
+              required
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeGender}
+              label="Age Range"
+              onChange={(event: SelectChangeEvent) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  employeeGender: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value="Female">Female</MenuItem>
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="any gender">
+                No Preference (Any gender is fine)
+              </MenuItem>
+            </Select>
+          </FormControl>
 
-            {customerRequest.serviceType !== "Live-in Nanny Services" && (
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo-simple-select-label">
+              Religion Preference
+            </InputLabel>
+            <Select
+              displayEmpty
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeReligionPreference}
+              label="Age Range"
+              onChange={(event: SelectChangeEvent) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  employeeReligionPreference: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value="Christian">Christianity</MenuItem>
+              <MenuItem value="Muslim">Islam</MenuItem>
+              <MenuItem value="any religion">
+                No Preference (Any Religion is fine)
+              </MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo-simple-select-label">
+              Tribe Preference
+            </InputLabel>
+            <Select
+              displayEmpty
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeTribePreference}
+              aria-placeholder="Age Range"
+              onChange={(event: SelectChangeEvent) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  employeeTribePreference: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value="north">Northerners/Hausa</MenuItem>
+              <MenuItem value="igbo">Igbo</MenuItem>
+              <MenuItem value="yoruba">Yoruba/Edo</MenuItem>
+              <MenuItem value="benue">Idoma/Igede</MenuItem>
+              <MenuItem value="efik">Efik/Ibibio</MenuItem>
+              <MenuItem value="any tribe">
+                No Preference (Any Tribe is fine)
+              </MenuItem>
+            </Select>
+          </FormControl>
+
+          <TextField
+            value={customerRequest.extraComment}
+            onChange={(e) =>
+              setCustomerRequest({
+                ...customerRequest,
+                extraComment: e.target.value,
+              })
+            }
+            fullWidth
+            sx={{ mt: 2 }}
+            id="filled-multiline-static"
+            placeholder="Other Preferences"
+            multiline
+            rows={4}
+          />
+        </div>
+
+        <div className="border border-gray-300 rounded-lg p-4 mt-5">
+          <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
+            <IconHomeQuestion color="black" stroke={2} size={18} />
+            &nbsp;&nbsp;&nbsp;Home/Family Details
+          </p>
+          <p className="text-xs text-gray-400">
+            Tell us about your household to better match our services
+          </p>
+          {customerRequest.serviceType !== "Live-in Housekeeper Services" &&
+            customerRequest.serviceType !==
+              ("Live-in Help Services" as ServiceType) && (
               <>
                 <FormControl fullWidth sx={{ mt: 2 }}>
                   <InputLabel id="demo-simple-select-label">
-                    Number of Rooms
+                    Number of Kids to be cared for
                   </InputLabel>
                   <Select
-                    error={customerRequest.numberOfRooms === ""}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     required
-                    value={customerRequest.numberOfRooms}
+                    value={customerRequest.numberOfKids.toString()}
                     onChange={(event: SelectChangeEvent) => {
                       setCustomerRequest({
                         ...customerRequest,
-                        numberOfRooms: event.target.value,
+                        numberOfKids: Number(event.target.value),
                       });
                     }}
                   >
-                    <MenuItem value="1 Bedroom">1 Bedroom</MenuItem>
-                    <MenuItem value="2 Bedroom">2 Bedroom</MenuItem>
-                    <MenuItem value="3 Bedroom">3 Bedroom</MenuItem>
-                    <MenuItem value="4 Bedroom">4 Bedroom</MenuItem>
-                    <MenuItem value="5 Bedroom">5 Bedroom</MenuItem>
-                    <MenuItem value="6 Bedroom">6 Bedroom</MenuItem>
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                    <MenuItem value={4}>4</MenuItem>
+                    <MenuItem value={5}>5</MenuItem>
+                    <MenuItem value={6}>6</MenuItem>
                   </Select>
                 </FormControl>
-
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                  <InputLabel id="demo-simple-select-label">
-                    Type of house
-                  </InputLabel>
-                  <Select
+                <FormControl fullWidth>
+                  <TextField
+                    value={customerRequest.agesOfKids}
                     required
-                    error={customerRequest.typeOfHouse === ""}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={customerRequest.typeOfHouse}
-                    onChange={(event: SelectChangeEvent) => {
+                    error={customerRequest.agesOfKids === ""}
+                    onChange={(e) => {
                       setCustomerRequest({
                         ...customerRequest,
-                        typeOfHouse: event.target.value,
+                        agesOfKids: e.target.value, // Convert to numbers
                       });
                     }}
-                  >
-                    <MenuItem value="bungalow">Bungalow</MenuItem>
-                    <MenuItem value="1 storey">1 storey</MenuItem>
-                    <MenuItem value="2 storey">2 storey</MenuItem>
-                    <MenuItem value="3 storey">3 storey</MenuItem>
-                    <MenuItem value="4 storey">4 storey</MenuItem>
-                    <MenuItem value="4 storey">4 storey</MenuItem>
-                  </Select>
+                    placeholder="Ages of Kids"
+                    sx={{ mt: 2 }}
+                  />
+                  <FormHelperText>
+                    Separate with commas, e.g 15 months,2 years,1 year and 3
+                    months
+                  </FormHelperText>
                 </FormControl>
               </>
             )}
 
-            <FormControl fullWidth>
-              <TextField
-                value={customerRequest.extraHomeInformation}
-                multiline
-                rows={4}
-                onChange={(e) => {
-                  setCustomerRequest({
-                    ...customerRequest,
-                    extraHomeInformation: e.target.value, // Convert to numbers
-                  });
-                }}
-                placeholder="Other Information"
-                sx={{ mt: 2 }}
-              />
-              <FormHelperText>
-                Any extra important information as regards the above
-              </FormHelperText>
-            </FormControl>
-          </div>
+          {customerRequest.serviceType !== "Live-in Nanny Services" && (
+            <>
+              <FormControl fullWidth sx={{ mt: 2 }}>
+                <InputLabel id="demo-simple-select-label">
+                  Number of Rooms
+                </InputLabel>
+                <Select
+                  error={customerRequest.numberOfRooms === ""}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  required
+                  value={customerRequest.numberOfRooms}
+                  onChange={(event: SelectChangeEvent) => {
+                    setCustomerRequest({
+                      ...customerRequest,
+                      numberOfRooms: event.target.value,
+                    });
+                  }}
+                >
+                  <MenuItem value="1 Bedroom">1 Bedroom</MenuItem>
+                  <MenuItem value="2 Bedroom">2 Bedroom</MenuItem>
+                  <MenuItem value="3 Bedroom">3 Bedroom</MenuItem>
+                  <MenuItem value="4 Bedroom">4 Bedroom</MenuItem>
+                  <MenuItem value="5 Bedroom">5 Bedroom</MenuItem>
+                  <MenuItem value="6 Bedroom">6 Bedroom</MenuItem>
+                </Select>
+              </FormControl>
 
-          <div className="h-[0.9px] bg-gray-300 mt-3"></div>
+              <FormControl fullWidth sx={{ mt: 2 }}>
+                <InputLabel id="demo-simple-select-label">
+                  Type of house
+                </InputLabel>
+                <Select
+                  required
+                  error={customerRequest.typeOfHouse === ""}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={customerRequest.typeOfHouse}
+                  onChange={(event: SelectChangeEvent) => {
+                    setCustomerRequest({
+                      ...customerRequest,
+                      typeOfHouse: event.target.value,
+                    });
+                  }}
+                >
+                  <MenuItem value="bungalow">Bungalow</MenuItem>
+                  <MenuItem value="1 storey">1 storey</MenuItem>
+                  <MenuItem value="2 storey">2 storey</MenuItem>
+                  <MenuItem value="3 storey">3 storey</MenuItem>
+                  <MenuItem value="4 storey">4 storey</MenuItem>
+                  <MenuItem value="4 storey">4 storey</MenuItem>
+                </Select>
+              </FormControl>
+            </>
+          )}
 
-          <p className="text-sm text-gray-600">
-            Kindly review the information your provided before clicking
-            `Continue`
-          </p>
+          <FormControl fullWidth>
+            <TextField
+              value={customerRequest.extraHomeInformation}
+              multiline
+              rows={4}
+              onChange={(e) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  extraHomeInformation: e.target.value, // Convert to numbers
+                });
+              }}
+              placeholder="Other Information"
+              sx={{ mt: 2 }}
+            />
+            <FormHelperText>
+              Any extra important information as regards the above
+            </FormHelperText>
+          </FormControl>
+        </div>
 
-          <Button
-            disabled={disableButton()}
-            onClick={() => {
-              setRequestStage(2);
+        <div className="h-[0.9px] bg-gray-300 mt-3"></div>
 
-              setTimeout(() => {
-                document
-                  .getElementById("payment-section")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }, 0);
-            }}
-            style={{ width: "150px", alignSelf: "end" }}
-            buttonName="Continue"
-          />
+        <p className="text-sm text-gray-600">
+          Kindly review the information your provided before clicking `Continue`
+        </p>
+
+        <Button
+          disabled={disableButton()}
+          onClick={() => {
+            setRequestStage(2);
+
+            setTimeout(() => {
+              document
+                .getElementById("payment-section")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }, 0);
+          }}
+          style={{ width: "150px", alignSelf: "end" }}
+          buttonName="Continue"
+        />
       </section>
 
       {/* PAYMENT PLANS SECTION */}
@@ -621,7 +622,7 @@ export default function Home() {
                 size={20}
                 className="mr-2 shrink-0"
               />{" "}
-              Guaranteed replacement policy throughout your subscription..
+              Guaranteed replacement policy throughout your subscription.
             </li>
           </ol>
 
@@ -756,6 +757,114 @@ export default function Home() {
         <p className="text-gray-600 mt-5 text-base">
           Step 4 of 4: Fill in your contact details and make payment
         </p>
+
+        <div className="border border-gray-300 rounded-lg p-4 mt-5">
+          <span className="flex items-center gap-2">
+            <IconFileDescription color="#172554" stroke={2} size={20} />
+            <h2 className="text-black dark:text-gray-900 text-lg font-bold">
+              Request Summary
+            </h2>
+          </span>
+
+          <span className="flex items-center justify-between mt-2 gap-3">
+            <p className="font-semibold text-black text-sm">Service Type:</p>
+            <p className="text-xs text-gray-700">
+              {customerRequest.serviceType}
+            </p>
+          </span>
+
+          {(customerRequest.serviceType === "Live-in Nanny Services" ||
+            customerRequest.serviceType ===
+              "Live-in Nanny + Help Services") && (
+            <>
+              <span className="flex items-center justify-between mt-2 gap-3">
+                <p className="font-semibold text-black text-sm">
+                  Kids Details:
+                </p>
+                <p className="text-xs text-gray-700">
+                  {customerRequest.numberOfKids} kid(s) of age(s):{" "}
+                  {customerRequest.agesOfKids}
+                </p>
+              </span>
+            </>
+          )}
+
+          {(customerRequest.serviceType === "Live-in Housekeeper Services" ||
+            customerRequest.serviceType === "Live-in Help Services" ||
+            customerRequest.serviceType ===
+              "Live-in Nanny + Help Services") && (
+            <>
+              <span className="flex items-center justify-between mt-2 gap-3">
+                <p className="font-semibold text-black text-sm">
+                  Home Details:
+                </p>
+                <p className="text-xs text-gray-700 text-end">
+                  {customerRequest.typeOfHouse} home of &nbsp;
+                  {customerRequest.numberOfRooms}
+                </p>
+              </span>
+              <span className="flex items-center justify-between mt-2 gap-3">
+                <p className="font-semibold text-black text-sm">
+                  Additional Home Info:
+                </p>
+                <p className="text-xs text-gray-700">
+                  {customerRequest.extraHomeInformation || "nil"}
+                </p>
+              </span>
+            </>
+          )}
+
+          <span className="flex items-center justify-between mt-2 gap-3">
+            <p className="font-semibold text-black text-sm">Staff Details:</p>
+            <p className="text-xs text-gray-700 text-end">
+              Ages{" "}
+              {`${customerRequest.employeeAgeRange}, ${customerRequest.employeeGender}, ${customerRequest.employeeTribePreference},
+              ${customerRequest.employeeReligionPreference}`}
+            </p>
+          </span>
+
+          <span className="flex items-center justify-between mt-2 gap-3">
+            <p className="font-semibold text-black text-sm">
+              Additional Staff Details:
+            </p>
+            <p className="text-xs text-gray-700 text-end">
+              {customerRequest.extraComment || "nil"}
+            </p>
+          </span>
+
+          <div className="w-full bg-gray-300 h-[0.5px] mt-3"></div>
+
+          <span className="flex items-center gap-2 mt-3">
+            <IconFileDescription color="#172554" stroke={2} size={20} />
+            <h2 className="text-black dark:text-gray-900 text-lg font-bold">
+              Payment Summary
+            </h2>
+          </span>
+          <span className="flex items-center justify-between mt-2 gap-3">
+            <p className="font-semibold text-black text-sm">Payment Plan:</p>
+            <p className="text-xs text-gray-700 text-end">
+              {customerRequest.paymentPlan}
+            </p>
+          </span>
+          <span className="flex items-center justify-between mt-2 gap-3">
+            <p className="font-bold text-black text-sm">Service Fee:</p>
+            <p className="text-sm text-red-700 text-end">
+              ₦{customerRequest.bookingFee.toLocaleString()}{" "}
+              {customerRequest.paymentPlan === "monthly" && "/month"}
+            </p>
+          </span>
+          {customerRequest.paymentPlan === "monthly" && (
+            <span className="flex items-center justify-between mt-2 gap-3">
+              <p className="font-bold text-black text-sm flex">
+                Booking Fee:{" "}
+                <Tooltip title="To be paid now">
+                  <IconQuestionMark color="#a0a0a0" stroke={2} size={20} />
+                </Tooltip>
+              </p>
+              <p className="text-sm text-red-700 text-end">₦10,000</p>
+            </span>
+          )}
+        </div>
 
         <div className="border border-gray-300 rounded-lg p-4 mt-5">
           <TextField

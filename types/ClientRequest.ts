@@ -5,6 +5,8 @@
     | "Live-in Nanny + Help Services"
     | "Live-in Housekeeper Services";
 
+  export type PaymentPlan = "monthly" | "one-off";
+
   export interface CustomerRequest { 
     serviceType: ServiceType;
     employeeGender: string; 
@@ -27,4 +29,5 @@
     mustBeAbleToTeachKids: boolean;
     otherMustBes: string;
     bookingFee: number;
+    paymentPlan: PaymentPlan;
   }
