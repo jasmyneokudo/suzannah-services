@@ -21,13 +21,12 @@ import { services } from "@/data/services";
 import { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
-    const PaystackButton = dynamic(
-      () => import('react-paystack').then((mod) => mod.PaystackButton),
-      { ssr: false } // This ensures the component is only loaded on the client-side
-    );
-
+const PaystackButton = dynamic(
+  () => import("react-paystack").then((mod) => mod.PaystackButton),
+  { ssr: false } // This ensures the component is only loaded on the client-side
+);
 
 import {
   IconBrandFacebook,
@@ -61,23 +60,24 @@ export default function Home() {
     serviceType: "Live-in Nanny Services",
     employeeGender: "",
     employeeAgeRange: "",
-    employeeTribePreference: "",
-    employeeReligionPreference: "",
+    employeeTribePreference: "none",
+    employeeReligionPreference: "none",
     extraComment: "",
     clientName: "",
     clientPhoneNumber: "",
     clientEmail: "",
     clientAddress: "",
-    numberOfKids: 0,
+    numberOfKids: 1,
     agesOfKids: "",
     numberOfRooms: "",
     typeOfHouse: "",
     numberOfBathrooms: 0,
+    extraHomeInformation: "",
     mustBeAbleToCook: false,
     mustBeAbleToIron: false,
     mustBeAbleToTeachKids: false,
     otherMustBes: "",
-    bookingFee: 200000,
+    bookingFee: 500000,
   });
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
@@ -102,6 +102,26 @@ export default function Home() {
     onClose: () => alert("Wait! Don't leave :("),
   };
 
+  function disableButton(): boolean {
+    if (
+      customerRequest.serviceType === "Live-in Help Services" ||
+      customerRequest.serviceType === "Live-in Housekeeper Services"
+    ) {
+      return (
+        customerRequest.typeOfHouse === "" &&
+        customerRequest.numberOfRooms === ""
+      );
+    } else if (customerRequest.serviceType === "Live-in Nanny Services") {
+      return customerRequest.agesOfKids === "";
+    } else {
+      return (
+        customerRequest.typeOfHouse === "" &&
+        customerRequest.numberOfRooms === "" &&
+        customerRequest.agesOfKids === ""
+      );
+    }
+  }
+
   async function sendRequestDetails() {
     const requestBody = `
       Incoming Client Request ${new Date(Date.now())}\n:
@@ -124,8 +144,8 @@ export default function Home() {
       Amount Paid: ${customerRequest.bookingFee}
     `;
 
-    console.log('request body---->', requestBody);
-    
+    console.log("request body---->", requestBody);
+
     try {
       const res = await fetch("/api/createRequest", {
         method: "POST",
@@ -236,259 +256,291 @@ export default function Home() {
         <p className="text-gray-600 mt-5 text-base">
           Step 1 of 2: Tell us about your preferences and home details
         </p>
+          <div className="border border-gray-300 rounded-lg p-4 mt-5">
+            <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
+              <IconUserQuestion color="black" stroke={2} size={16} />
+              &nbsp;&nbsp;&nbsp;Staff Preferences
+            </p>
+            <p className="text-xs text-gray-400">
+              Choose your preferred characteristics for your care provider
+            </p>
 
-        <div className="border border-gray-300 rounded-lg p-4 mt-5">
-          <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
-            <IconUserQuestion color="black" stroke={2} size={16} />
-            &nbsp;&nbsp;&nbsp;Staff Preferences
-          </p>
-          <p className="text-xs text-gray-400">
-            Choose your preferred characteristics for your care provider
-          </p>
+            <FormControl fullWidth sx={{ mt: 2 }}>
+              <InputLabel id="demo2-simple-select-label">Age Range</InputLabel>
+              <Select
+                displayEmpty
+                labelId="demo2-simple-select-label"
+                id="demo-simple-select"
+                value={customerRequest.employeeAgeRange}
+                label="Age Range"
+                required
+                onChange={(event: SelectChangeEvent) => {
+                  setCustomerRequest({
+                    ...customerRequest,
+                    employeeAgeRange: event.target.value,
+                  });
+                }}
+              >
+                <MenuItem value="18-22">18-22</MenuItem>
+                <MenuItem value="23-27">23-27</MenuItem>
+                <MenuItem value="28-32">28-32</MenuItem>
+                <MenuItem value="33-37">33-37</MenuItem>
+                <MenuItem value="38-42">38-42</MenuItem>
+                <MenuItem value="43-47">43-47</MenuItem>
+                <MenuItem value="46-51">46-51</MenuItem>
+                <MenuItem value="50+">50+</MenuItem>
+              </Select>
+            </FormControl>
 
-          <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="demo2-simple-select-label">Age Range</InputLabel>
-            <Select
-              displayEmpty
-              labelId="demo2-simple-select-label"
-              id="demo-simple-select"
-              value={customerRequest.employeeAgeRange}
-              label="Age Range"
-              onChange={(event: SelectChangeEvent) => {
+            <FormControl fullWidth sx={{ mt: 2 }}>
+              <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+              <Select
+                displayEmpty
+                required
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={customerRequest.employeeGender}
+                label="Age Range"
+                onChange={(event: SelectChangeEvent) => {
+                  setCustomerRequest({
+                    ...customerRequest,
+                    employeeGender: event.target.value,
+                  });
+                }}
+              >
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="No Preference">
+                  No Preference (Any gender is fine)
+                </MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth sx={{ mt: 2 }}>
+              <InputLabel id="demo-simple-select-label">
+                Religion Preference
+              </InputLabel>
+              <Select
+                displayEmpty
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={customerRequest.employeeReligionPreference}
+                label="Age Range"
+                onChange={(event: SelectChangeEvent) => {
+                  setCustomerRequest({
+                    ...customerRequest,
+                    employeeReligionPreference: event.target.value,
+                  });
+                }}
+              >
+                <MenuItem value="christianity">Christianity</MenuItem>
+                <MenuItem value="islam">Islam</MenuItem>
+                <MenuItem value="none">
+                  No Preference (Any Religion is fine)
+                </MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth sx={{ mt: 2 }}>
+              <InputLabel id="demo-simple-select-label">
+                Tribe Preference
+              </InputLabel>
+              <Select
+                displayEmpty
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={customerRequest.employeeTribePreference}
+                aria-placeholder="Age Range"
+                onChange={(event: SelectChangeEvent) => {
+                  setCustomerRequest({
+                    ...customerRequest,
+                    employeeTribePreference: event.target.value,
+                  });
+                }}
+              >
+                <MenuItem value="north">Northerners/Hausa</MenuItem>
+                <MenuItem value="igbo">Igbo</MenuItem>
+                <MenuItem value="yoruba">Yoruba/Edo</MenuItem>
+                <MenuItem value="benue">Idoma/Igede</MenuItem>
+                <MenuItem value="efik">Efik/Ibibio</MenuItem>
+                <MenuItem value="none">
+                  No Preference (Any Tribe is fine)
+                </MenuItem>
+              </Select>
+            </FormControl>
+
+            <TextField
+              value={customerRequest.extraComment}
+              onChange={(e) =>
                 setCustomerRequest({
                   ...customerRequest,
-                  employeeAgeRange: event.target.value,
-                });
-              }}
-            >
-              <MenuItem value="18-22">18-22</MenuItem>
-              <MenuItem value="23-27">23-27</MenuItem>
-              <MenuItem value="28-32">28-32</MenuItem>
-              <MenuItem value="33-37">33-37</MenuItem>
-              <MenuItem value="38-42">38-42</MenuItem>
-              <MenuItem value="43-47">43-47</MenuItem>
-              <MenuItem value="46-51">46-51</MenuItem>
-              <MenuItem value="50+">50+</MenuItem>
-            </Select>
-          </FormControl>
+                  extraComment: e.target.value,
+                })
+              }
+              fullWidth
+              sx={{ mt: 2 }}
+              id="filled-multiline-static"
+              placeholder="Other Preferences"
+              multiline
+              rows={4}
+            />
+          </div>
 
-          <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-            <Select
-              displayEmpty
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={customerRequest.employeeGender}
-              label="Age Range"
-              onChange={(event: SelectChangeEvent) => {
-                setCustomerRequest({
-                  ...customerRequest,
-                  employeeGender: event.target.value,
-                });
-              }}
-            >
-              <MenuItem value="Female">Female</MenuItem>
-              <MenuItem value="Male">Male</MenuItem>
-              <MenuItem value="No Preference">
-                No Preference (Any is fine)
-              </MenuItem>
-            </Select>
-          </FormControl>
+          <div className="border border-gray-300 rounded-lg p-4 mt-5">
+            <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
+              <IconHomeQuestion color="black" stroke={2} size={18} />
+              &nbsp;&nbsp;&nbsp;Home/Family Details
+            </p>
+            <p className="text-xs text-gray-400">
+              Tell us about your household to better match our services
+            </p>
+            {customerRequest.serviceType !== "Live-in Housekeeper Services" &&
+              customerRequest.serviceType !==
+                ("Live-in Help Services" as ServiceType) && (
+                <>
+                  <FormControl fullWidth sx={{ mt: 2 }}>
+                    <InputLabel id="demo-simple-select-label">
+                      Number of Kids to be cared for
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      required
+                      value={customerRequest.numberOfKids.toString()}
+                      onChange={(event: SelectChangeEvent) => {
+                        setCustomerRequest({
+                          ...customerRequest,
+                          numberOfKids: Number(event.target.value),
+                        });
+                      }}
+                    >
+                      <MenuItem value={1}>1</MenuItem>
+                      <MenuItem value={2}>2</MenuItem>
+                      <MenuItem value={3}>3</MenuItem>
+                      <MenuItem value={4}>4</MenuItem>
+                      <MenuItem value={5}>5</MenuItem>
+                      <MenuItem value={6}>6</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth>
+                    <TextField
+                      value={customerRequest.agesOfKids}
+                      required
+                      error={customerRequest.agesOfKids === ""}
+                      onChange={(e) => {
+                        setCustomerRequest({
+                          ...customerRequest,
+                          agesOfKids: e.target.value, // Convert to numbers
+                        });
+                      }}
+                      placeholder="Ages of Kids"
+                      sx={{ mt: 2 }}
+                    />
+                    <FormHelperText>
+                      Separate with commas, e.g 15 months,2 years,1 year and 3
+                      months
+                    </FormHelperText>
+                  </FormControl>
+                </>
+              )}
 
-          <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="demo-simple-select-label">
-              Religion Preference
-            </InputLabel>
-            <Select
-              displayEmpty
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={customerRequest.employeeReligionPreference}
-              label="Age Range"
-              onChange={(event: SelectChangeEvent) => {
-                setCustomerRequest({
-                  ...customerRequest,
-                  employeeReligionPreference: event.target.value,
-                });
-              }}
-            >
-              <MenuItem value="Christian">Christian</MenuItem>
-              <MenuItem value="Islam">Islam</MenuItem>
-              <MenuItem value="No Preference">
-                No Preference (Any is fine)
-              </MenuItem>
-            </Select>
-          </FormControl>
-
-          <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="demo-simple-select-label">
-              Tribe Preference
-            </InputLabel>
-            <Select
-              displayEmpty
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={customerRequest.employeeTribePreference}
-              aria-placeholder="Age Range"
-              onChange={(event: SelectChangeEvent) => {
-                setCustomerRequest({
-                  ...customerRequest,
-                  employeeTribePreference: event.target.value,
-                });
-              }}
-            >
-              <MenuItem value="north">Northerners/Hausa</MenuItem>
-              <MenuItem value="igbo">Igbo</MenuItem>
-              <MenuItem value="yoruba">Yoruba/Edo</MenuItem>
-              <MenuItem value="benue">Idoma/Igede</MenuItem>
-              <MenuItem value="efik">Efik/Ibibio</MenuItem>
-              <MenuItem value="none">No Preference</MenuItem>
-            </Select>
-          </FormControl>
-
-          <TextField
-            value={customerRequest.extraComment}
-            onChange={(e) =>
-              setCustomerRequest({
-                ...customerRequest,
-                extraComment: e.target.value,
-              })
-            }
-            fullWidth
-            sx={{ mt: 2 }}
-            id="filled-multiline-static"
-            placeholder="Other Preferences"
-            multiline
-            rows={4}
-          />
-        </div>
-
-        <div className="border border-gray-300 rounded-lg p-4 mt-5">
-          <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
-            <IconHomeQuestion color="black" stroke={2} size={18} />
-            &nbsp;&nbsp;&nbsp;Home/Family Details
-          </p>
-          <p className="text-xs text-gray-400">
-            Tell us about your household to better match our services
-          </p>
-          {customerRequest.serviceType !== "Live-in Housekeeper Services" &&
-            customerRequest.serviceType !==
-              ("Live-in Help Services" as ServiceType) && (
+            {customerRequest.serviceType !== "Live-in Nanny Services" && (
               <>
                 <FormControl fullWidth sx={{ mt: 2 }}>
                   <InputLabel id="demo-simple-select-label">
-                    Number of Kids to be cared for
+                    Number of Rooms
                   </InputLabel>
                   <Select
+                    error={customerRequest.numberOfRooms === ""}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={customerRequest.employeeAgeRange}
+                    required
+                    value={customerRequest.numberOfRooms}
                     onChange={(event: SelectChangeEvent) => {
                       setCustomerRequest({
                         ...customerRequest,
-                        employeeAgeRange: event.target.value,
+                        numberOfRooms: event.target.value,
                       });
                     }}
                   >
-                    <MenuItem value={10}>1</MenuItem>
-                    <MenuItem value={20}>2</MenuItem>
-                    <MenuItem value={20}>3</MenuItem>
-                    <MenuItem value={20}>4</MenuItem>
-                    <MenuItem value={20}>5</MenuItem>
-                    <MenuItem value={20}>6</MenuItem>
+                    <MenuItem value="1 Bedroom">1 Bedroom</MenuItem>
+                    <MenuItem value="2 Bedroom">2 Bedroom</MenuItem>
+                    <MenuItem value="3 Bedroom">3 Bedroom</MenuItem>
+                    <MenuItem value="4 Bedroom">4 Bedroom</MenuItem>
+                    <MenuItem value="5 Bedroom">5 Bedroom</MenuItem>
+                    <MenuItem value="6 Bedroom">6 Bedroom</MenuItem>
                   </Select>
                 </FormControl>
-                <FormControl fullWidth>
-                  <TextField
-                    value={customerRequest.agesOfKids}
-                    onChange={(e) => {
+
+                <FormControl fullWidth sx={{ mt: 2 }}>
+                  <InputLabel id="demo-simple-select-label">
+                    Type of house
+                  </InputLabel>
+                  <Select
+                    required
+                    error={customerRequest.typeOfHouse === ""}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={customerRequest.typeOfHouse}
+                    onChange={(event: SelectChangeEvent) => {
                       setCustomerRequest({
                         ...customerRequest,
-                        agesOfKids: e.target.value, // Convert to numbers
+                        typeOfHouse: event.target.value,
                       });
                     }}
-                    placeholder="Ages of Kids"
-                    sx={{ mt: 2 }}
-                  />
-                  <FormHelperText>
-                    Separate with commas, e.g 1,2,3,5
-                  </FormHelperText>
+                  >
+                    <MenuItem value="bungalow">Bungalow</MenuItem>
+                    <MenuItem value="1 storey">1 storey</MenuItem>
+                    <MenuItem value="2 storey">2 storey</MenuItem>
+                    <MenuItem value="3 storey">3 storey</MenuItem>
+                    <MenuItem value="4 storey">4 storey</MenuItem>
+                    <MenuItem value="4 storey">4 storey</MenuItem>
+                  </Select>
                 </FormControl>
               </>
             )}
 
-          {customerRequest.serviceType !== "Live-in Nanny Services" && (
-            <>
-              <FormControl fullWidth sx={{ mt: 2 }}>
-                <InputLabel id="demo-simple-select-label">
-                  Number of Rooms
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={customerRequest.numberOfRooms}
-                  onChange={(event: SelectChangeEvent) => {
-                    setCustomerRequest({
-                      ...customerRequest,
-                      numberOfRooms: event.target.value,
-                    });
-                  }}
-                >
-                  <MenuItem value="1 Bedroom">1 Bedroom</MenuItem>
-                  <MenuItem value="2 Bedroom">2 Bedroom</MenuItem>
-                  <MenuItem value="3 Bedroom">3 Bedroom</MenuItem>
-                  <MenuItem value="4 Bedroom">4 Bedroom</MenuItem>
-                  <MenuItem value="5 Bedroom">5 Bedroom</MenuItem>
-                  <MenuItem value="6 Bedroom">6 Bedroom</MenuItem>
-                </Select>
-              </FormControl>
+            <FormControl fullWidth>
+              <TextField
+                value={customerRequest.extraHomeInformation}
+                multiline
+                rows={4}
+                onChange={(e) => {
+                  setCustomerRequest({
+                    ...customerRequest,
+                    extraHomeInformation: e.target.value, // Convert to numbers
+                  });
+                }}
+                placeholder="Other Information"
+                sx={{ mt: 2 }}
+              />
+              <FormHelperText>
+                Any extra important information as regards the above
+              </FormHelperText>
+            </FormControl>
+          </div>
 
-              <FormControl fullWidth sx={{ mt: 2 }}>
-                <InputLabel id="demo-simple-select-label">
-                  Type of house
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={customerRequest.typeOfHouse}
-                  onChange={(event: SelectChangeEvent) => {
-                    setCustomerRequest({
-                      ...customerRequest,
-                      typeOfHouse: event.target.value,
-                    });
-                  }}
-                >
-                  <MenuItem value="bungalow">Bungalow</MenuItem>
-                  <MenuItem value="1 storey">1 storey</MenuItem>
-                  <MenuItem value="2 storey">2 storey</MenuItem>
-                  <MenuItem value="3 storey">3 storey</MenuItem>
-                  <MenuItem value="4 storey">4 storey</MenuItem>
-                  <MenuItem value="4 storey">4 storey</MenuItem>
-                </Select>
-              </FormControl>
-            </>
-          )}
-        </div>
+          <div className="h-[0.9px] bg-gray-300 mt-3"></div>
 
-        <div className="h-[0.9px] bg-gray-300 mt-3"></div>
+          <p className="text-sm text-gray-600">
+            Kindly review the information your provided before clicking
+            `Continue`
+          </p>
 
-        <p className="text-sm text-gray-600">
-          Kindly review the information your provided before clicking `Continue`
-        </p>
+          <Button
+            disabled={disableButton()}
+            onClick={() => {
+              setRequestStage(2);
 
-        <Button
-          onClick={() => {
-            setRequestStage(2);
-
-            setTimeout(() => {
-              document
-                .getElementById("payment-section")
-                ?.scrollIntoView({ behavior: "smooth" });
-            }, 0);
-          }}
-          style={{ width: "150px", alignSelf: "end" }}
-          buttonName="Continue"
-        />
+              setTimeout(() => {
+                document
+                  .getElementById("payment-section")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }, 0);
+            }}
+            style={{ width: "150px", alignSelf: "end" }}
+            buttonName="Continue"
+          />
       </section>
 
       {/* PAYMENT PLANS SECTION */}

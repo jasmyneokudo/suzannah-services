@@ -20,6 +20,7 @@
     agesOfKids: string;
     numberOfRooms: string;
     typeOfHouse: string;
+    extraHomeInformation: string;
     numberOfBathrooms: number;
     mustBeAbleToCook: boolean;
     mustBeAbleToIron: boolean;

@@ -13,7 +13,7 @@ const StyledRating = styled(Rating)({
 
 const ReviewCard = (props: any) => {
   return (
-    <div className="self-center max-sm:h-[280px] bg-white shadow-md bg-clip-border px-4 pt-4 rounded-xl">
+    <div className="self-center max-sm:h-[280px] bg-white shadow-md bg-clip-border px-4 py-5 rounded-xl">
       <StyledRating
         name="customized-color"
         defaultValue={5}
@@ -21,8 +21,8 @@ const ReviewCard = (props: any) => {
           `${value} Heart${value !== 1 ? "s" : ""}`
         }
         precision={0.5}
-        icon={<IconHeartFilled size="30" />}
-        emptyIcon={<IconHeart size="30" />}
+        icon={<IconHeartFilled size="25" />}
+        emptyIcon={<IconHeart size="25" />}
       />
       <p className="text-gray-600 text-lg">&quot;{props.review}&quot;</p>
 
