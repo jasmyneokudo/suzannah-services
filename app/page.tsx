@@ -102,7 +102,11 @@ export default function Home() {
       ],
     },
     publicKey,
-    text: `Pay Now (₦${customerRequest.paymentPlan === 'one-off' ? customerRequest.bookingFee.toLocaleString() : '10,000'})`,
+    text: `Pay Now (₦${
+      customerRequest.paymentPlan === "one-off"
+        ? customerRequest.bookingFee.toLocaleString()
+        : "10,000"
+    })`,
     onSuccess: async () => {
       await sendRequestDetails();
       alert("Thanks for doing business with us! Come back soon!!");
@@ -256,7 +260,7 @@ export default function Home() {
           CUSTOMIZE YOUR SERVICE
         </h1>
         <p className="text-gray-600 mt-5 text-base">
-          Step 1 of 2: Tell us about your preferences and home details
+          Step 1 of 3: Tell us about your preferences and home details
         </p>
         <div className="border border-gray-300 rounded-lg p-4 mt-5">
           <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
@@ -524,24 +528,34 @@ export default function Home() {
 
         <div className="h-[0.9px] bg-gray-300 mt-3"></div>
 
-        <p className="text-sm text-gray-600">
-          Kindly review the information your provided before clicking `Continue`
+        <p className="text-sm text-gray-600 mt-2">
+          Kindly review the information you provided before clicking `Continue`
         </p>
 
-        <Button
-          disabled={disableButton()}
-          onClick={() => {
-            setRequestStage(2);
+        <div className="flex justify-between items-center mt-2">
+          <Link
+            onClick={() => setRequestStage(0)}
+            href="#"
+            className="text-start text-blue-950"
+          >
+            &larr; Back To Services
+          </Link>
 
-            setTimeout(() => {
-              document
-                .getElementById("payment-section")
-                ?.scrollIntoView({ behavior: "smooth" });
-            }, 0);
-          }}
-          style={{ width: "150px", alignSelf: "end" }}
-          buttonName="Continue"
-        />
+          <Button
+            disabled={disableButton()}
+            onClick={() => {
+              setRequestStage(2);
+
+              setTimeout(() => {
+                document
+                  .getElementById("payment-section")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }, 0);
+            }}
+            style={{ width: "150px", alignSelf: "end" }}
+            buttonName="Continue"
+          />
+        </div>
       </section>
 
       {/* PAYMENT PLANS SECTION */}
@@ -562,7 +576,7 @@ export default function Home() {
           CHOOSE YOUR PLAN
         </h1>
         <p className="text-gray-600 mt-5 text-base">
-          Step 3 of 3: Choose your payment plan
+          Step 2 of 3: Choose your payment plan
         </p>
 
         <div className="border border-gray-300 rounded-lg p-4 mt-5 text-black dark:text-gray-900">
@@ -735,6 +749,14 @@ export default function Home() {
             buttonName="Select Plan"
           />
         </div>
+
+        <Link
+            onClick={() => setRequestStage(1)}
+            href="#"
+            className="text-start text-blue-950 mt-3"
+          >
+            &larr; Back To Preferences
+          </Link>
       </section>
 
       {/* FINAL SECTION */}
@@ -755,7 +777,7 @@ export default function Home() {
           COMPLETE YOUR REQUEST
         </h1>
         <p className="text-gray-600 mt-5 text-base">
-          Step 4 of 4: Fill in your contact details and make payment
+          Step 3 of 3: Fill in your contact details and make payment
         </p>
 
         <div className="border border-gray-300 rounded-lg p-4 mt-5">
@@ -778,10 +800,10 @@ export default function Home() {
               "Live-in Nanny + Help Services") && (
             <>
               <span className="flex items-center justify-between mt-2 gap-3">
-                <p className="font-semibold text-black text-sm">
+                <p className="font-semibold text-black text-xs">
                   Kids Details:
                 </p>
-                <p className="text-xs text-gray-700">
+                <p className="text-xs text-gray-700 text-end">
                   {customerRequest.numberOfKids} kid(s) of age(s):{" "}
                   {customerRequest.agesOfKids}
                 </p>
@@ -926,6 +948,14 @@ export default function Home() {
           />
           <PaystackButton className="paystack-button" {...componentProps} />
         </div>
+
+        <Link
+            onClick={() => setRequestStage(2)}
+            href="#"
+            className="text-start text-blue-950 mt-3"
+          >
+            &larr; Back To Plans
+          </Link>
       </section>
 
       {/* CLIENT REVIEWS SECTION STARTS */}
