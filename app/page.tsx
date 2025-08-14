@@ -252,7 +252,7 @@ export default function Home() {
         <Link
           onClick={() => setRequestStage(0)}
           href="#"
-          className="text-start text-blue-950"
+          className="text-start text-blue-950 items-center"
         >
           &larr; Back
         </Link>
@@ -536,7 +536,7 @@ export default function Home() {
           <Link
             onClick={() => setRequestStage(0)}
             href="#"
-            className="text-start text-blue-950"
+            className="text-start text-blue-950 items-center"
           >
             &larr; Back To Services
           </Link>
@@ -568,7 +568,7 @@ export default function Home() {
         <Link
           onClick={() => setRequestStage(1)}
           href="#"
-          className="text-start text-blue-950"
+          className="text-start text-blue-950 items-center"
         >
           &larr; Back
         </Link>
@@ -753,7 +753,7 @@ export default function Home() {
         <Link
             onClick={() => setRequestStage(1)}
             href="#"
-            className="text-start text-blue-950 mt-3"
+            className="text-start text-blue-950 mt-3 items-center"
           >
             &larr; Back To Preferences
           </Link>
@@ -769,7 +769,7 @@ export default function Home() {
         <Link
           onClick={() => setRequestStage(2)}
           href="#"
-          className="text-start text-blue-950"
+          className="text-start text-blue-950 items-center"
         >
           &larr; Back
         </Link>
@@ -800,7 +800,7 @@ export default function Home() {
               "Live-in Nanny + Help Services") && (
             <>
               <span className="flex items-center justify-between mt-2 gap-3">
-                <p className="font-semibold text-black text-xs">
+                <p className="font-semibold text-black text-sm">
                   Kids Details:
                 </p>
                 <p className="text-xs text-gray-700 text-end">
@@ -952,9 +952,9 @@ export default function Home() {
         <Link
             onClick={() => setRequestStage(2)}
             href="#"
-            className="text-start text-blue-950 mt-3"
+            className="text-start text-blue-950 mt-3 items-center"
           >
-            &larr; Back To Plans
+            &larr; Back To Payment Plans
           </Link>
       </section>
 
