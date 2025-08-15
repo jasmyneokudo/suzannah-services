@@ -37,7 +37,7 @@ export default function AlertDialogSlide(props: DialogProps) {
       >
         <DialogTitle className='text-sm'>{"Customer Service Policy (For Monthly Management Plan Users)"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
+          {/* <DialogContentText id="alert-dialog-slide-description"> */}
             <ol className='text-xs list-disc'>
                 <li>At the end of each month, we will send you an invoice along with the company’s account number for payment. Please note that all payments should be made directly to the company and not to staff members.</li>
                 <li>We periodically request feedback to ensure that you are satisfied with the service. Your input helps us maintain high standards and address any concerns quickly.</li>
@@ -46,7 +46,7 @@ export default function AlertDialogSlide(props: DialogProps) {
                 <li>All staff are employed and managed directly by the company. If a replacement is needed, we will arrange one efficiently.</li>
             </ol>
             <p className="mt-3 text-sm text-gray-800 dark:text-gray-900">By clicking `PROCEED`, you agree to the above terms of service.</p>
-          </DialogContentText>
+          {/* </DialogContentText> */}
         </DialogContent>
         <DialogActions>
           <Button onClick={props.onClose}>Cancel</Button>

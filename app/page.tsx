@@ -45,7 +45,6 @@ import {
   IconQuestionMark,
   IconUserQuestion,
 } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 
@@ -60,48 +59,11 @@ export default function Home() {
     nextArrow: <SampleNextArrow />,
   };
 
-
-// const router = useRouter();
-// router.beforePopState(() => {
-//   console.log("Back button pressed");
-//   return true; // return false to cancel navigation
-// });
-
-window.addEventListener("beforeunload", (e) => {
-  e.preventDefault();
-   console.log("User pressed back button in window");
-   alert('checking 1')
-  e.returnValue = ""; // Shows a confirmation dialog in some browsers
-});
-
-const router = useRouter();
-
- useEffect(() => {
-    const handleBackButton = (event: PopStateEvent) => {
-      event.preventDefault();
-
-      const confirmLeave = window.confirm(
-        'You have unsaved changes. Are you sure you want to leave?'
-      );
-
-      if (!confirmLeave) {
-        // Stay on the page
-        router.push(window.location.pathname); // force re-navigation to cancel back
-      }
-    };
-
-    window.addEventListener('popstate', handleBackButton);
-
-    return () => {
-      window.removeEventListener("popstate", handleBackButton);
-    };
-  }, []);
-
   const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(0);
   const [isCustomerServicePolicyOpen, setIsCustomerServicePolicyOpen] =
     useState(false);
 
-  const [customerRequest, setCustomerRequest] = useState<CustomerRequest>({
+  const defaultCustomerRequest: CustomerRequest = {
     serviceType: "Live-in Nanny Services",
     employeeGender: "",
     employeeAgeRange: "",
@@ -124,7 +86,15 @@ const router = useRouter();
     otherMustBes: "",
     bookingFee: 500000,
     paymentPlan: "monthly",
-  });
+  };
+
+  const [customerRequest, setCustomerRequest] = useState<CustomerRequest>(
+    defaultCustomerRequest
+  );
+
+  const resetCustomerRequest = () => {
+    setCustomerRequest(defaultCustomerRequest);
+  };
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
   const componentProps = {
@@ -147,9 +117,13 @@ const router = useRouter();
     })`,
     onSuccess: async () => {
       await sendRequestDetails();
-      alert("Thanks for doing business with us! Come back soon!!");
+      resetCustomerRequest();
+      setRequestStage(0);
+      alert(
+        "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly."
+      );
     },
-    onClose: () => alert("Wait! Don't leave :("),
+    onClose: () => alert("Are you sure?"),
   };
 
   function disableButton(): boolean {
@@ -298,13 +272,17 @@ const router = useRouter();
         } mt-20 max-sm:mt-10 flex flex-col bg-white max-sm:px-8`}
       >
         <Link
-          onClick={() => setRequestStage(0)}
+          onClick={() => {
+            setRequestStage(0);
+          }}
           href="#"
           className="text-start text-blue-950 items-center"
         >
           &larr; Back
         </Link>
-        <p className="mt-4 text-blue-950 text-sm text-center font-bold">{customerRequest.serviceType}</p>
+        <p className="mt-4 text-blue-950 text-sm text-center font-bold">
+          {customerRequest.serviceType}
+        </p>
         <h1 className="font-extralight text-center text-3xl mt-2 text-black dark:text-gray-800">
           CUSTOMIZE YOUR SERVICE
         </h1>
@@ -588,7 +566,10 @@ const router = useRouter();
 
         <div className="flex justify-between items-center mt-2">
           <Link
-            onClick={() => setRequestStage(0)}
+            onClick={() => {
+              setRequestStage(0);
+              resetCustomerRequest();
+            }}
             href="#"
             className="text-start text-blue-950 items-center"
           >
@@ -1074,10 +1055,10 @@ const router = useRouter();
 
       <section className="py-10 max-sm:px-10 w-full">
         <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700">
-          SPECIAL REQUEST
+          OTHER SERVICES
         </h1>
 
-        <div className="shadow-md shadow-stone-300 w-full rounded-lg p-4 mt-5">
+        <div className="shadow-md shadow-stone-300 w-full p-4 mt-5">
           <FormControl fullWidth sx={{ mt: 3 }}>
             <InputLabel id="demo2-simple-select-label">Service Type</InputLabel>
             <Select
@@ -1094,16 +1075,101 @@ const router = useRouter();
                 });
               }}
             >
-              <MenuItem value="18-22">Industrial Home Cleaning</MenuItem>
-              <MenuItem value="23-27">23-27</MenuItem>
-              <MenuItem value="28-32">28-32</MenuItem>
-              <MenuItem value="33-37">33-37</MenuItem>
-              <MenuItem value="38-42">38-42</MenuItem>
-              <MenuItem value="43-47">43-47</MenuItem>
-              <MenuItem value="46-51">46-51</MenuItem>
-              <MenuItem value="50+">50+</MenuItem>
+              <MenuItem value="Weekly Nanny Services">
+                Daily/Weekly Babysitting Service
+              </MenuItem>
+              <MenuItem value="Weekly Housekeeping">
+                Weekly Housekeeping
+              </MenuItem>
+              <MenuItem value="Weekly Home">Weekly Home Cooking</MenuItem>
+              <MenuItem value="Weekly Market Runs">
+                Weekly Market Runs/Errands
+              </MenuItem>
+              <MenuItem value="Industrial Home/Office Cleaning">
+                Industrial Home/Office Cleaning
+              </MenuItem>
+              <MenuItem value="Industrial Home/Office Cleaning">Other</MenuItem>
             </Select>
           </FormControl>
+
+          <TextField
+            label="Address (Where Service will be rendered)"
+            value={customerRequest.extraComment}
+            onChange={(e) =>
+              setCustomerRequest({
+                ...customerRequest,
+                extraComment: e.target.value,
+              })
+            }
+            fullWidth
+            sx={{ mt: 2 }}
+            id="filled-multiline-static"
+            placeholder="Address (Where Service will be rendered)"
+          />
+
+          <TextField
+            label="Additional Comment/Description"
+            value={customerRequest.extraComment}
+            onChange={(e) =>
+              setCustomerRequest({
+                ...customerRequest,
+                extraComment: e.target.value,
+              })
+            }
+            fullWidth
+            sx={{ mt: 2 }}
+            id="filled-multiline-static"
+            placeholder="Additional Comment/Description"
+            multiline
+            rows={4}
+          />
+
+          <TextField
+            label="Name"
+            value={customerRequest.extraComment}
+            onChange={(e) =>
+              setCustomerRequest({
+                ...customerRequest,
+                extraComment: e.target.value,
+              })
+            }
+            fullWidth
+            sx={{ mt: 2 }}
+            id="filled-multiline-static"
+            placeholder="Address (Where Service will be rendered)"
+          />
+
+          <TextField
+            label="Email"
+            value={customerRequest.extraComment}
+            onChange={(e) =>
+              setCustomerRequest({
+                ...customerRequest,
+                extraComment: e.target.value,
+              })
+            }
+            fullWidth
+            sx={{ mt: 2 }}
+            id="filled-multiline-static"
+            placeholder="Email"
+          />
+
+          <TextField
+            label="WhatsApp Number"
+            value={customerRequest.extraComment}
+            onChange={(e) =>
+              setCustomerRequest({
+                ...customerRequest,
+                extraComment: e.target.value,
+              })
+            }
+            fullWidth
+            sx={{ mt: 2 }}
+            id="filled-multiline-static"
+            placeholder="Address (Where Service will be rendered)"
+          />
+
+          <Button buttonName="Submit" />
         </div>
       </section>
 
@@ -1118,7 +1184,7 @@ const router = useRouter();
           priority
         />
 
-        <div className="flex-col justify-center grid-cols-3 w-1/2 text-white grid-flow-row grid place-items-center">
+        <div className="max-sm:hidden flex-col justify-center grid-cols-3 w-1/2 text-white grid-flow-row grid place-items-center">
           <div>
             <a href="#">
               <p>Resources</p>
@@ -1171,8 +1237,7 @@ const router = useRouter();
           alt="Vercel Logo"
           width="300"
           height="300"
-          // sizes="100vw"
-          className="absolute left-0 bottom-0 opacity-30"
+          className="absolute max-sm:w-[400px] left-0 max-sm:left-1/2 max-sm:-translate-x-1/2 bottom-0 opacity-30"
           priority
         />
 
@@ -1181,12 +1246,11 @@ const router = useRouter();
           alt="Vercel Logo"
           width="300"
           height="300"
-          // sizes="100vw"
-          className="absolute bottom-0 right-0 opacity-30"
+          className="max-sm:hidden absolute bottom-0 right-0 opacity-30"
           priority
         />
 
-        <div className="flex flex-col items-center absolute bottom-14 text-white">
+        <div className="flex flex-col items-center absolute bottom-14 max-sm:bottom-5 text-white">
           <p className="text-4xl">
             <span className="font-edu-sa">The </span>BRAND{" "}
             <span className="font-edu-sa">for</span>
@@ -1208,7 +1272,7 @@ const router = useRouter();
           priority
         /> */}
 
-        <div className="flex absolute bottom-16 right-16 justify-between w-1/6 px-10">
+        <div className="flex absolute bottom-16 max-sm:top-16 right-16 max-sm:right-10 justify-between w-1/6 max-sm:w-1/5 px-10 max-sm:px-0">
           <a href="https://www.facebook.com">
             <IconBrandFacebook fill="white" color="white" stroke={1} />
           </a>
