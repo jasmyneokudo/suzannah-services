@@ -144,9 +144,12 @@ export default function Home() {
       Phone number: ${customerRequest.clientPhoneNumber},
       Address: ${customerRequest.clientAddress},
       Home/Family Details
-      Number of Kids: ${customerRequest.numberOfKids},
-      Ages of Kids: ${customerRequest.agesOfKids},
-      House Type: ${customerRequest.typeOfHouse},
+      ${(customerRequest.serviceType === "Live-in Nanny Services" || customerRequest.serviceType === "Live-in Nanny + Help Services") &&
+      `Number of Kids: ${customerRequest.numberOfKids},
+      Ages of Kids: ${customerRequest.agesOfKids},`}
+      ${(customerRequest.serviceType === "Live-in Housekeeper Services" || customerRequest.serviceType === "Live-in Nanny + Help Services" || customerRequest.serviceType === 'Live-in Help Services') &&
+      `House Type: ${customerRequest.typeOfHouse},
+      Number of Rooms: ${customerRequest.numberOfRooms},`}
       Candidate Preferences
       Gender: ${customerRequest.employeeGender},
       Age Range: ${customerRequest.employeeAgeRange},
@@ -413,6 +416,7 @@ export default function Home() {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     required
+                    label="Number of Kids to be cared for"
                     value={customerRequest.numberOfKids.toString()}
                     onChange={(event: SelectChangeEvent) => {
                       setCustomerRequest({
@@ -459,6 +463,7 @@ export default function Home() {
                 </InputLabel>
                 <Select
                   error={customerRequest.numberOfRooms === ""}
+                  label="Number of Rooms"
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   required
@@ -485,6 +490,7 @@ export default function Home() {
                 </InputLabel>
                 <Select
                   required
+                  label="Type of House"
                   error={customerRequest.typeOfHouse === ""}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
@@ -511,18 +517,19 @@ export default function Home() {
             <TextField
               value={customerRequest.extraHomeInformation}
               multiline
+              label="Other Information"
               rows={4}
               onChange={(e) => {
                 setCustomerRequest({
                   ...customerRequest,
-                  extraHomeInformation: e.target.value, // Convert to numbers
+                  extraHomeInformation: e.target.value,
                 });
               }}
               placeholder="Other Information"
               sx={{ mt: 2 }}
             />
             <FormHelperText>
-              Any extra important information as regards the above
+              Extra relevant information as regards the above
             </FormHelperText>
           </FormControl>
         </div>
@@ -908,6 +915,7 @@ export default function Home() {
             fullWidth
             sx={{ mt: 2 }}
             id="client-phone-number"
+            type="number"
             label="Whatsapp Number"
             variant="outlined"
             value={customerRequest.clientPhoneNumber}
@@ -922,6 +930,7 @@ export default function Home() {
             fullWidth
             sx={{ mt: 2 }}
             id="client-email"
+            type="text"
             label="Email Address"
             variant="outlined"
             value={customerRequest.clientEmail}
@@ -936,7 +945,8 @@ export default function Home() {
           <TextField
             fullWidth
             sx={{ mt: 2 }}
-            id="client-email"
+            id="client-address"
+            type="text"
             label="Address (Where Staff will work)"
             variant="outlined"
             value={customerRequest.clientAddress}
