@@ -306,7 +306,7 @@ export default function Home() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={customerRequest.employeeGender}
-              label="Age Range"
+              label="Gender"
               onChange={(event: SelectChangeEvent) => {
                 setCustomerRequest({
                   ...customerRequest,
@@ -331,7 +331,7 @@ export default function Home() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={customerRequest.employeeReligionPreference}
-              label="Age Range"
+              label="Religion Preference"
               onChange={(event: SelectChangeEvent) => {
                 setCustomerRequest({
                   ...customerRequest,
@@ -355,8 +355,8 @@ export default function Home() {
               displayEmpty
               labelId="demo-simple-select-label"
               id="demo-simple-select"
+              label="Tribe Preference"
               value={customerRequest.employeeTribePreference}
-              aria-placeholder="Age Range"
               onChange={(event: SelectChangeEvent) => {
                 setCustomerRequest({
                   ...customerRequest,
@@ -376,6 +376,7 @@ export default function Home() {
           </FormControl>
 
           <TextField
+            label="Other Preferences"
             value={customerRequest.extraComment}
             onChange={(e) =>
               setCustomerRequest({
@@ -751,12 +752,12 @@ export default function Home() {
         </div>
 
         <Link
-            onClick={() => setRequestStage(1)}
-            href="#"
-            className="text-start text-blue-950 mt-3 items-center"
-          >
-            &larr; Back To Preferences
-          </Link>
+          onClick={() => setRequestStage(1)}
+          href="#"
+          className="text-start text-blue-950 mt-3 items-center"
+        >
+          &larr; Back To Preferences
+        </Link>
       </section>
 
       {/* FINAL SECTION */}
@@ -950,12 +951,12 @@ export default function Home() {
         </div>
 
         <Link
-            onClick={() => setRequestStage(2)}
-            href="#"
-            className="text-start text-blue-950 mt-3 items-center"
-          >
-            &larr; Back To Payment Plans
-          </Link>
+          onClick={() => setRequestStage(2)}
+          href="#"
+          className="text-start text-blue-950 mt-3 items-center"
+        >
+          &larr; Back To Payment Plans
+        </Link>
       </section>
 
       {/* CLIENT REVIEWS SECTION STARTS */}
@@ -1003,7 +1004,7 @@ export default function Home() {
       </div>
 
       {/* FAQs SECTION STARTS */}
-      <section className="flex flex-col justify-center mx-10 h-[400px]">
+      <section className="hidden flex-col justify-center mx-10 h-[400px]">
         <h1 className="max-sm:hidden font-extralight text-3xl mt-20 mb-20 self-center">
           FREQUENTLY ASKED QUESTIONS
         </h1>
@@ -1013,6 +1014,39 @@ export default function Home() {
             <FAQBox key={faq.id} question={faq.question} answer={faq.answer} />
           ))}
         </div>
+      </section>
+
+      <section className="py-10 max-sm:px-10">
+        <h1 className="font-extralight text-3xl text-black dark:text-gray-700">
+          SPECIAL REQUEST
+        </h1>
+
+        <FormControl fullWidth sx={{ mt: 3 }}>
+          <InputLabel id="demo2-simple-select-label">Age Range</InputLabel>
+          <Select
+            displayEmpty
+            labelId="demo2-simple-select-label"
+            id="demo-simple-select"
+            value={customerRequest.employeeAgeRange}
+            label="Age Range"
+            required
+            onChange={(event: SelectChangeEvent) => {
+              setCustomerRequest({
+                ...customerRequest,
+                employeeAgeRange: event.target.value,
+              });
+            }}
+          >
+            <MenuItem value="18-22">18-22</MenuItem>
+            <MenuItem value="23-27">23-27</MenuItem>
+            <MenuItem value="28-32">28-32</MenuItem>
+            <MenuItem value="33-37">33-37</MenuItem>
+            <MenuItem value="38-42">38-42</MenuItem>
+            <MenuItem value="43-47">43-47</MenuItem>
+            <MenuItem value="46-51">46-51</MenuItem>
+            <MenuItem value="50+">50+</MenuItem>
+          </Select>
+        </FormControl>
       </section>
 
       {/* FOOTER SECTION STARTS */}
