@@ -60,18 +60,40 @@ export default function Home() {
     nextArrow: <SampleNextArrow />,
   };
 
+
+// const router = useRouter();
+// router.beforePopState(() => {
+//   console.log("Back button pressed");
+//   return true; // return false to cancel navigation
+// });
+
+window.addEventListener("beforeunload", (e) => {
+  e.preventDefault();
+   console.log("User pressed back button in window");
+   alert('checking 1')
+  e.returnValue = ""; // Shows a confirmation dialog in some browsers
+});
+
+const router = useRouter();
+
  useEffect(() => {
-    const handleBack = (event: PopStateEvent) => {
-      console.log("User pressed back button");
-      alert('checking 2')
-      // Example: Show confirmation or custom action
-      // event.preventDefault(); ❌ (won't actually stop it)
+    const handleBackButton = (event: PopStateEvent) => {
+      event.preventDefault();
+
+      const confirmLeave = window.confirm(
+        'You have unsaved changes. Are you sure you want to leave?'
+      );
+
+      if (!confirmLeave) {
+        // Stay on the page
+        router.push(window.location.pathname); // force re-navigation to cancel back
+      }
     };
 
-    window.addEventListener("popstate", handleBack);
+    window.addEventListener('popstate', handleBackButton);
 
     return () => {
-      window.removeEventListener("popstate", handleBack);
+      window.removeEventListener("popstate", handleBackButton);
     };
   }, []);
 
