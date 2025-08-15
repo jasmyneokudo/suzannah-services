@@ -22,7 +22,7 @@ import { FormHelperText, TextField } from "@mui/material";
 import { Hero } from "./components/Hero";
 import { SampleNextArrow } from "./components/NextArrow";
 import { services } from "@/data/services";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import dynamic from "next/dynamic";
@@ -45,6 +45,7 @@ import {
   IconQuestionMark,
   IconUserQuestion,
 } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 
@@ -58,6 +59,21 @@ export default function Home() {
     swipeToSlide: true,
     nextArrow: <SampleNextArrow />,
   };
+
+ useEffect(() => {
+    const handleBack = (event: PopStateEvent) => {
+      console.log("User pressed back button");
+      alert('checking 2')
+      // Example: Show confirmation or custom action
+      // event.preventDefault(); ❌ (won't actually stop it)
+    };
+
+    window.addEventListener("popstate", handleBack);
+
+    return () => {
+      window.removeEventListener("popstate", handleBack);
+    };
+  }, []);
 
   const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(0);
   const [isCustomerServicePolicyOpen, setIsCustomerServicePolicyOpen] =
@@ -144,12 +160,19 @@ export default function Home() {
       Phone number: ${customerRequest.clientPhoneNumber},
       Address: ${customerRequest.clientAddress},
       Home/Family Details
-      ${(customerRequest.serviceType === "Live-in Nanny Services" || customerRequest.serviceType === "Live-in Nanny + Help Services") &&
-      `Number of Kids: ${customerRequest.numberOfKids},
-      Ages of Kids: ${customerRequest.agesOfKids},`}
-      ${(customerRequest.serviceType === "Live-in Housekeeper Services" || customerRequest.serviceType === "Live-in Nanny + Help Services" || customerRequest.serviceType === 'Live-in Help Services') &&
-      `House Type: ${customerRequest.typeOfHouse},
-      Number of Rooms: ${customerRequest.numberOfRooms},`}
+      ${
+        (customerRequest.serviceType === "Live-in Nanny Services" ||
+          customerRequest.serviceType === "Live-in Nanny + Help Services") &&
+        `Number of Kids: ${customerRequest.numberOfKids},
+      Ages of Kids: ${customerRequest.agesOfKids},`
+      }
+      ${
+        (customerRequest.serviceType === "Live-in Housekeeper Services" ||
+          customerRequest.serviceType === "Live-in Nanny + Help Services" ||
+          customerRequest.serviceType === "Live-in Help Services") &&
+        `House Type: ${customerRequest.typeOfHouse},
+      Number of Rooms: ${customerRequest.numberOfRooms},`
+      }
       Candidate Preferences
       Gender: ${customerRequest.employeeGender},
       Age Range: ${customerRequest.employeeAgeRange},
@@ -259,6 +282,7 @@ export default function Home() {
         >
           &larr; Back
         </Link>
+        <p className="mt-4 text-blue-950 text-sm text-center font-bold">{customerRequest.serviceType}</p>
         <h1 className="font-extralight text-center text-3xl mt-2 text-black dark:text-gray-800">
           CUSTOMIZE YOUR SERVICE
         </h1>
@@ -1026,37 +1050,39 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-10 max-sm:px-10">
-        <h1 className="font-extralight text-3xl text-black dark:text-gray-700">
+      <section className="py-10 max-sm:px-10 w-full">
+        <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700">
           SPECIAL REQUEST
         </h1>
 
-        <FormControl fullWidth sx={{ mt: 3 }}>
-          <InputLabel id="demo2-simple-select-label">Age Range</InputLabel>
-          <Select
-            displayEmpty
-            labelId="demo2-simple-select-label"
-            id="demo-simple-select"
-            value={customerRequest.employeeAgeRange}
-            label="Age Range"
-            required
-            onChange={(event: SelectChangeEvent) => {
-              setCustomerRequest({
-                ...customerRequest,
-                employeeAgeRange: event.target.value,
-              });
-            }}
-          >
-            <MenuItem value="18-22">18-22</MenuItem>
-            <MenuItem value="23-27">23-27</MenuItem>
-            <MenuItem value="28-32">28-32</MenuItem>
-            <MenuItem value="33-37">33-37</MenuItem>
-            <MenuItem value="38-42">38-42</MenuItem>
-            <MenuItem value="43-47">43-47</MenuItem>
-            <MenuItem value="46-51">46-51</MenuItem>
-            <MenuItem value="50+">50+</MenuItem>
-          </Select>
-        </FormControl>
+        <div className="shadow-md shadow-stone-300 w-full rounded-lg p-4 mt-5">
+          <FormControl fullWidth sx={{ mt: 3 }}>
+            <InputLabel id="demo2-simple-select-label">Service Type</InputLabel>
+            <Select
+              displayEmpty
+              labelId="demo2-simple-select-label"
+              id="demo-simple-select"
+              value={customerRequest.employeeAgeRange}
+              label="Service Type"
+              required
+              onChange={(event: SelectChangeEvent) => {
+                setCustomerRequest({
+                  ...customerRequest,
+                  employeeAgeRange: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value="18-22">Industrial Home Cleaning</MenuItem>
+              <MenuItem value="23-27">23-27</MenuItem>
+              <MenuItem value="28-32">28-32</MenuItem>
+              <MenuItem value="33-37">33-37</MenuItem>
+              <MenuItem value="38-42">38-42</MenuItem>
+              <MenuItem value="43-47">43-47</MenuItem>
+              <MenuItem value="46-51">46-51</MenuItem>
+              <MenuItem value="50+">50+</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
       </section>
 
       {/* FOOTER SECTION STARTS */}
