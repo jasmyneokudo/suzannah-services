@@ -134,3 +134,9 @@ body {
   height: 45px;
   margin-top: 40px;
 }
+
+.paystack-button:disabled {
+  cursor: not-allowed;
+  background-color: gray;
+  opacity: 0.6;
+}

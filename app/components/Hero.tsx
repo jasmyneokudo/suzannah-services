@@ -49,7 +49,7 @@ export const Hero = (props: any) => {
         </a>
       </div>
       <Image
-        src="/images/suzannah-large.png"
+        src="/images/suzannah-large-white.png"
         alt="Logo"
         width="80"
         height="30"

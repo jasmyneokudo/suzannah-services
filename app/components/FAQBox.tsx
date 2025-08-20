@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { IconPlus, IconX } from "@tabler/icons-react";
+import { IconChevronDown, IconPlus, IconX } from "@tabler/icons-react";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
 
 type FAQType = {
   question: string;
@@ -7,30 +10,24 @@ type FAQType = {
 };
 
 const FAQBox = (props: FAQType) => {
-  const [clicked, setClicked] = useState(false);
   return (
     <div className="align-middle text-center w-10/12">
-      <button
-        className="font-semibold bg-blue-950 text-white py-1 px-2 rounded"
-        onClick={() => {
-          setClicked(!clicked);
-        }}
-      >
-        <div className="flex justify-center items-center">
-          {props.question}
-          {
-            clicked ? <IconX className="ml-2" color="white" stroke={5} size={15} />
-            : <IconPlus className="ml-2" color="white" stroke={5} size={15} />
-          }
-          
-          
-        </div>
-      </button>
-      <div>
-        <p className={`p-4 ${clicked ? "visible" : "collapse"}`}>
-          {props.answer}
-        </p>
-      </div>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<IconChevronDown stroke={2} color="#172554" />}
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+          <div className="flex justify-center items-center">
+            {props.question}
+          </div>
+        </AccordionSummary>
+        <AccordionDetails>
+          <p className="text-gray-500 text-start text-sm">
+            {props.answer}
+          </p>
+        </AccordionDetails>
+      </Accordion>
     </div>
   );
 };

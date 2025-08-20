@@ -37,16 +37,18 @@ import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandWhatsapp,
-  IconCheck,
   IconFileDescription,
   IconHomeQuestion,
-  IconMoodCheck,
-  IconProgressCheck,
   IconQuestionMark,
   IconUserQuestion,
 } from "@tabler/icons-react";
+import { paymentPlans } from "@/data/paymentPlans";
+import PaymentPlanCard from "./components/PaymentPlanCard";
+import { usePaymentPlan } from "@/hooks/usePaymentPlan";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
+const BOOKING_FEE = 10000;
+const ONE_OFF_FEE = 120000;
 
 export default function Home() {
   const settings = {
@@ -74,7 +76,7 @@ export default function Home() {
     clientPhoneNumber: "",
     clientEmail: "",
     clientAddress: "",
-    numberOfKids: 1,
+    numberOfKids: 0,
     agesOfKids: "",
     numberOfRooms: "",
     typeOfHouse: "",
@@ -84,7 +86,7 @@ export default function Home() {
     mustBeAbleToIron: false,
     mustBeAbleToTeachKids: false,
     otherMustBes: "",
-    bookingFee: 500000,
+    bookingFee: 0,
     paymentPlan: "monthly",
   };
 
@@ -96,10 +98,28 @@ export default function Home() {
     setCustomerRequest(defaultCustomerRequest);
   };
 
+  console.log(
+    "number of rooms",
+    customerRequest.numberOfRooms,
+    Number(customerRequest.numberOfRooms)
+  );
+  console.log(
+    "number of kids",
+    customerRequest.numberOfKids,
+    Number(customerRequest.numberOfKids)
+  );
+
+  const { clientPrice } = usePaymentPlan(customerRequest.serviceType, {
+    extraChildren: Number(customerRequest.numberOfKids),
+    extraRooms: Number(customerRequest.numberOfRooms[0]),
+  });
+
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
+  const bookingFee =
+    customerRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE;
   const componentProps = {
     email: customerRequest.clientEmail,
-    amount: customerRequest.bookingFee,
+    amount: bookingFee * 100, // Paystack expects amount in kobo
     metadata: {
       custom_fields: [
         {
@@ -110,11 +130,7 @@ export default function Home() {
       ],
     },
     publicKey,
-    text: `Pay Now (₦${
-      customerRequest.paymentPlan === "one-off"
-        ? customerRequest.bookingFee.toLocaleString()
-        : "10,000"
-    })`,
+    text: `Pay Now (₦${bookingFee.toLocaleString()})`,
     onSuccess: async () => {
       await sendRequestDetails();
       resetCustomerRequest();
@@ -241,7 +257,12 @@ export default function Home() {
           closeCustomerServicePolicy(e)
         }
       />
-      <Hero bookAServiceNow={() => requestStage !== 0 && setRequestStage(0)} />
+      <Hero
+        bookAServiceNow={() => {
+          setRequestStage(0);
+          resetCustomerRequest();
+        }}
+      />
 
       {/* SERVICES SECTION */}
       <section
@@ -273,6 +294,7 @@ export default function Home() {
       >
         <Link
           onClick={() => {
+            resetCustomerRequest();
             setRequestStage(0);
           }}
           href="#"
@@ -449,6 +471,7 @@ export default function Home() {
                       });
                     }}
                   >
+                    <MenuItem value={0}>0</MenuItem>
                     <MenuItem value={1}>1</MenuItem>
                     <MenuItem value={2}>2</MenuItem>
                     <MenuItem value={3}>3</MenuItem>
@@ -579,6 +602,10 @@ export default function Home() {
           <Button
             disabled={disableButton()}
             onClick={() => {
+              setCustomerRequest({
+                ...customerRequest,
+                bookingFee: clientPrice,
+              });
               setRequestStage(2);
 
               setTimeout(() => {
@@ -614,176 +641,18 @@ export default function Home() {
           Step 2 of 3: Choose your payment plan
         </p>
 
-        <div className="border border-gray-300 rounded-lg p-4 mt-5 text-black dark:text-gray-900">
-          <h1 className="font-semibold text-xl">Monthly Management Plan</h1>
-          <p className="text-xs text-gray-600 mt-1">
-            Ideal for clients who want convenience and full staff management.
-          </p>
-          <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
-            <IconProgressCheck color="#172554" stroke={2} size={20} />
-            How It works
-          </h3>
-          <ol className="text-sm list-inside mt-2 text-black dark:text-gray-900">
-            <li className="flex items-start gap-2">
-              <span className="flex-shrink-0 text-bold text-blue-950">1.</span>
-              Within 24 hours of booking this payment plan, we send 1-3
-              available staff profiles for selection.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
-                2.
-              </span>
-              Once selected, the staff resumes work promptly.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
-                3.
-              </span>
-              We manage the staff’s performance.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
-                4.
-              </span>
-              Client pays a monthly service fee to the company and need not pay
-              staff directly.
-            </li>
-          </ol>
-
-          <h3 className="text-xl mt-3 font-medium flex items-center gap-1 text-black dark:text-gray-900">
-            <IconMoodCheck color="#172554" stroke={2} size={20} />
-            Benefits
-          </h3>
-          <ol className="mt-1 text-sm list-none text-black dark:text-gray-900">
-            <li className="flex">
-              <IconCheck
-                color="green"
-                stroke={2}
-                size={20}
-                className="mr-2 shrink-0"
-              />{" "}
-              We manage the staff’s performance and payroll.
-            </li>
-            <li className="flex">
-              <IconCheck
-                color="green"
-                stroke={2}
-                size={20}
-                className="mr-2 shrink-0"
-              />{" "}
-              Guaranteed replacement policy throughout your subscription.
-            </li>
-          </ol>
-
-          <span className="flex mt-4 items-baseline">
-            <h1 className="text-2xl font-bold text-blue-950">₦80,000</h1>
-            <span className="text-black dark:text-gray-900">/month</span>
-          </span>
-
-          <Button
-            onClick={() => selectPlan("monthly")}
-            style={{ width: "100%" }}
-            buttonName="Select Plan"
+        {paymentPlans.map((paymentPlan, index) => (
+          <PaymentPlanCard
+            key={index}
+            nameOfPlan={paymentPlan.name}
+            description={paymentPlan.description}
+            benefits={paymentPlan.benefits}
+            howItWorks={paymentPlan.howItWorks}
+            price={clientPrice.toLocaleString()}
+            type={paymentPlan.type}
+            selectPlan={() => selectPlan(paymentPlan.type)}
           />
-        </div>
-
-        <div className="border border-gray-300 rounded-lg p-4 mt-5">
-          <h1 className="font-semibold text-xl text-black dark:text-gray-900">
-            One-off Placement Plan
-          </h1>
-
-          <p className="text-xs text-gray-600 mt-1">
-            Perfect for clients who prefer to employ and manage staff directly.
-          </p>
-
-          <h3 className="text-xl mt-3 font-medium flex items-center gap-1 text-black dark:text-gray-900">
-            <IconProgressCheck color="#172554" stroke={2} size={20} />
-            How It works
-          </h3>
-          <ol className="text-sm list-inside mt-2 text-black dark:text-gray-900">
-            <li className="flex items-start gap-2">
-              <span className="flex-shrink-0 text-bold text-blue-950">1.</span>
-              Client makes a one-time payment for recruitment & screening.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
-                2.
-              </span>
-              We conduct interviews and shortlist 2 competent candidates within
-              48 hours and send their profiles to client.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
-                3.
-              </span>
-              We bring the candidates over to client&apos;s selected location
-              for physical interview
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
-                4.
-              </span>
-              Client discusses and agrees on salary directly with their chosen
-              candidate (starting from ₦60,000 monthly).
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
-                5.
-              </span>
-              We run medical tests before the staff resumes.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="flex-shrink-0 text-bold text-black dark:text-gray-900">
-                6.
-              </span>
-              Replacement is only valid for one month after initial placemment
-            </li>
-          </ol>
-
-          <h3 className="text-xl mt-3 font-medium flex items-center gap-1 text-black dark:text-gray-900">
-            <IconMoodCheck color="#172554" stroke={2} size={20} />
-            Benefits
-          </h3>
-          <ul className="mt-1 text-sm list-none text-black dark:text-gray-900">
-            <li className="flex">
-              <IconCheck
-                color="green"
-                stroke={2}
-                size={20}
-                className="mr-2 shrink-0"
-              />{" "}
-              Opportunity to interview up to 2 candidates and select your
-              preferred candidate.
-            </li>
-            <li className="flex">
-              <IconCheck
-                color="green"
-                stroke={2}
-                size={20}
-                className="mr-2 shrink-0"
-              />
-              Free Medical Test for selected candidate
-            </li>
-            <li className="flex">
-              <IconCheck
-                color="green"
-                stroke={2}
-                size={20}
-                className="mr-2 shrink-0"
-              />
-              Manage your own staff directly without external inteference and
-              any monthly service fee
-            </li>
-          </ul>
-          <span className="flex mt-4 items-baseline">
-            <h1 className="text-2xl font-bold text-blue-950">₦120,000</h1>
-          </span>
-          <Button
-            onClick={() => selectPlan("one-off" as PaymentPlan)}
-            style={{ width: "100%" }}
-            buttonName="Select Plan"
-          />
-        </div>
+        ))}
 
         <Link
           onClick={() => setRequestStage(1)}
@@ -906,19 +775,21 @@ export default function Home() {
           <span className="flex items-center justify-between mt-2 gap-3">
             <p className="font-bold text-black text-sm">Service Fee:</p>
             <p className="text-sm text-red-700 text-end">
-              ₦{customerRequest.bookingFee.toLocaleString()}{" "}
+              ₦
+              {customerRequest.paymentPlan === "monthly"
+                ? customerRequest.bookingFee.toLocaleString()
+                : ONE_OFF_FEE.toLocaleString()}{" "}
               {customerRequest.paymentPlan === "monthly" && "/month"}
             </p>
           </span>
           {customerRequest.paymentPlan === "monthly" && (
             <span className="flex items-center justify-between mt-2 gap-3">
               <p className="font-bold text-black text-sm flex">
-                Booking Fee:{" "}
-                <Tooltip title="To be paid now">
-                  <IconQuestionMark color="#a0a0a0" stroke={2} size={20} />
-                </Tooltip>
+                Booking Fee:
               </p>
-              <p className="text-sm text-red-700 text-end">₦10,000</p>
+              <p className="text-sm text-red-700 text-end">
+                ₦{BOOKING_FEE.toLocaleString()}
+              </p>
             </span>
           )}
         </div>
@@ -984,7 +855,10 @@ export default function Home() {
               })
             }
           />
-          <PaystackButton className="paystack-button" {...componentProps} />
+          <p className="text-sm text-gray-600 mt-2">
+            Kindly review the contact details provided before making payment
+          </p>
+          <PaystackButton disabled={customerRequest.clientEmail === "" || customerRequest.clientPhoneNumber === ""} className="paystack-button" {...componentProps} />
         </div>
 
         <Link
@@ -1041,12 +915,12 @@ export default function Home() {
       </div>
 
       {/* FAQs SECTION STARTS */}
-      <section className="hidden flex-col justify-center mx-10 h-[400px]">
-        <h1 className="max-sm:hidden font-extralight text-3xl mt-20 mb-20 self-center">
+      <section className="flex-col justify-center mx-10 max-sm:mx-5">
+        <h1 className="font-extralight text-center text-3xl mt-20 mb-20 max-sm:mb-10 self-center">
           FREQUENTLY ASKED QUESTIONS
         </h1>
 
-        <div className="max-sm:hidden  grid-cols-3 grid-flow-row grid place-items-center">
+        <div className="max-sm:flex max-sm:flex-col grid-cols-3 grid-flow-row grid place-items-center">
           {faqs.map((faq) => (
             <FAQBox key={faq.id} question={faq.question} answer={faq.answer} />
           ))}
@@ -1054,11 +928,12 @@ export default function Home() {
       </section>
 
       <section className="py-10 max-sm:px-10 w-full">
-        <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700">
-          OTHER SERVICES
+        <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700 mt-10">
+          CUSTOM REQUEST
         </h1>
+        <p className="text-sm text-gray-600 text-start w-1/2 max-sm:w-full ml-auto mr-auto mt-3">Need something specific? Submit your custom requirements and our team will reach out to you.</p>
 
-        <div className="shadow-md shadow-stone-300 w-full p-4 mt-5">
+        <div className="shadow-md w-1/2 ml-auto mr-auto shadow-stone-300 max-sm:w-full p-4 mt-5">
           <FormControl fullWidth sx={{ mt: 3 }}>
             <InputLabel id="demo2-simple-select-label">Service Type</InputLabel>
             <Select
@@ -1176,7 +1051,7 @@ export default function Home() {
       {/* FOOTER SECTION STARTS */}
       <footer className="p-5 h-full py-52 bg-gradient-to-b relative from-blue-950 to-[#0D98BA] w-full flex flex-col justify-center items-center ">
         <Image
-          src="/images/suzannah-large.png"
+          src="/images/suzannah-large-white.png"
           alt="Vercel Logo"
           width="80"
           height="30"
@@ -1207,17 +1082,16 @@ export default function Home() {
             <a href="#">
               <p>Social</p>
             </a>
-            <a href="#">
+            <a href="https://www.facebook.com/share/1A1j127rsf/">
               <p className="font-thin">Facebook</p>
             </a>
-            <a href="#">
+            <a href="https://www.instagram.com/suzannahservices?igsh=eThnNzExZnd6NHpu">
               <p className="font-thin">Instagram</p>
             </a>
-            <a href="#">
+            <a href="https://wa.me/message/WSKBWTOOI3UPE1">
               <p className="font-thin">Whatsapp</p>
             </a>
           </div>
-
           <div>
             <p>More</p>
             <a href="#">

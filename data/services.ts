@@ -24,8 +24,9 @@ export const services = [
   {
     serviceName: "Live-in Nanny + Help Services",
     serviceDescription:
-      "An experienced and caring Nanny-Helo who lives in your home to provide loving childcare and assist with essential household duties.",
+      "An experienced and caring Nanny-Help who lives in your home to provide loving childcare and assist with essential household duties.",
     whatsIncluded: [
+      "Daily childcare, including feeding, bathing, and dressing.",
       "Assistance with meal preparation and basic cooking.",
       "General home organization and tidiness.",
       "Accompanying children to school, activities, or appointments (if required).",
