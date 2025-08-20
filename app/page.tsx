@@ -876,7 +876,7 @@ export default function Home() {
           WHAT OUR FAMILIES SAY
         </h1>
         <div className="relative ">
-          <div className="absolute z-50 bg-[#EFF2F2] max-sm:bg-transparent w-full h-72 rounded-br-[400px] max-sm:"></div>
+          <div className="absolute z-50 bg-white max-sm:bg-transparent w-full h-72 rounded-br-[400px] max-sm:"></div>
           <Image
             src="/images/reviews-bg2.jpg"
             alt="Vercel Logo"
