@@ -1147,15 +1147,15 @@ export default function Home() {
         /> */}
 
         <div className="flex absolute bottom-16 max-sm:top-16 right-16 max-sm:right-10 justify-between w-1/6 max-sm:w-1/5 px-10 max-sm:px-0">
-          <a href="https://www.facebook.com">
+          <a href="https://www.facebook.com/share/1A1j127rsf/">
             <IconBrandFacebook fill="white" color="white" stroke={1} />
           </a>
 
-          <a href="https://www.instagram.com">
+          <a href="https://www.instagram.com/suzannahservices?igsh=eThnNzExZnd6NHpu">
             <IconBrandInstagram color="white" stroke={2} />
           </a>
 
-          <a href="https://www.whatsapp.com">
+          <a href="https://wa.me/message/WSKBWTOOI3UPE1">
             <IconBrandWhatsapp color="white" stroke={2} />
           </a>
         </div>
