@@ -916,7 +916,7 @@ export default function Home() {
 
       {/* FAQs SECTION STARTS */}
       <section className="flex-col justify-center mx-10 max-sm:mx-5">
-        <h1 className="font-extralight text-center text-3xl mt-20 mb-20 max-sm:mb-10 self-center">
+        <h1 className="font-extralight text-black dark:text-gray-900 text-center text-3xl mt-20 mb-20 max-sm:mb-10 self-center">
           FREQUENTLY ASKED QUESTIONS
         </h1>
 
