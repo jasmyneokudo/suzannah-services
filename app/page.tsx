@@ -22,11 +22,10 @@ import { FormHelperText, TextField } from "@mui/material";
 import { Hero } from "./components/Hero";
 import { SampleNextArrow } from "./components/NextArrow";
 import { services } from "@/data/services";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import dynamic from "next/dynamic";
-import Tooltip from "@mui/material/Tooltip";
 
 const PaystackButton = dynamic(
   () => import("react-paystack").then((mod) => mod.PaystackButton),
@@ -39,12 +38,12 @@ import {
   IconBrandWhatsapp,
   IconFileDescription,
   IconHomeQuestion,
-  IconQuestionMark,
   IconUserQuestion,
 } from "@tabler/icons-react";
 import { paymentPlans } from "@/data/paymentPlans";
 import PaymentPlanCard from "./components/PaymentPlanCard";
 import { usePaymentPlan } from "@/hooks/usePaymentPlan";
+import { useGoogleSheets } from "@/hooks/useGoogleSheets";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 const BOOKING_FEE = 10000;
@@ -60,6 +59,8 @@ export default function Home() {
     swipeToSlide: true,
     nextArrow: <SampleNextArrow />,
   };
+
+  const { updateValues } = useGoogleSheets();
 
   const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(0);
   const [isCustomerServicePolicyOpen, setIsCustomerServicePolicyOpen] =
@@ -97,17 +98,6 @@ export default function Home() {
   const resetCustomerRequest = () => {
     setCustomerRequest(defaultCustomerRequest);
   };
-
-  console.log(
-    "number of rooms",
-    customerRequest.numberOfRooms,
-    Number(customerRequest.numberOfRooms)
-  );
-  console.log(
-    "number of kids",
-    customerRequest.numberOfKids,
-    Number(customerRequest.numberOfKids)
-  );
 
   const { clientPrice } = usePaymentPlan(customerRequest.serviceType, {
     extraChildren: Number(customerRequest.numberOfKids),
@@ -164,7 +154,7 @@ export default function Home() {
 
   async function sendRequestDetails() {
     const requestBody = `
-      Incoming Client Request ${new Date(Date.now())}\n:
+      Incoming Client Request ${new Date(Date.now()).toLocaleString()}\n:
       Service Type: ${customerRequest.serviceType},
       Client's Particulars
       Name: ${customerRequest.clientName},
@@ -183,17 +173,45 @@ export default function Home() {
           customerRequest.serviceType === "Live-in Nanny + Help Services" ||
           customerRequest.serviceType === "Live-in Help Services") &&
         `House Type: ${customerRequest.typeOfHouse},
-      Number of Rooms: ${customerRequest.numberOfRooms},`
+      Number of Rooms: ${customerRequest.numberOfRooms},
+      Extra Home Info: ${customerRequest.extraHomeInformation},`
       }
       Candidate Preferences
       Gender: ${customerRequest.employeeGender},
       Age Range: ${customerRequest.employeeAgeRange},
       Tribe Preference: ${customerRequest.employeeTribePreference},
       Religion Preference: ${customerRequest.employeeReligionPreference},
-      Other Preferences: ${customerRequest.extraComment},
-      Amount Paid: ${customerRequest.bookingFee}
+      Other Staff Preferences: ${customerRequest.extraComment},
+      Amount Paid: ${
+        customerRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE
+      },
+      Service Fee: ${customerRequest.bookingFee}
     `;
+    // update excel sheet
+    await updateValues([
+      [
+        new Date(Date.now()).toLocaleString(),
+        customerRequest.serviceType,
+        customerRequest.clientName,
+        customerRequest.clientEmail,
+        customerRequest.clientPhoneNumber,
+        customerRequest.clientAddress,
+        customerRequest.numberOfKids,
+        customerRequest.agesOfKids,
+        customerRequest.typeOfHouse,
+        customerRequest.numberOfRooms,
+        customerRequest.extraHomeInformation,
+        customerRequest.employeeGender,
+        customerRequest.employeeAgeRange,
+        customerRequest.employeeTribePreference,
+        customerRequest.employeeReligionPreference,
+        customerRequest.extraComment,
+        customerRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
+        customerRequest.bookingFee,
+      ],
+    ]);
 
+    // send order details to whatsapp number
     try {
       const res = await fetch("/api/createRequest", {
         method: "POST",
@@ -263,7 +281,6 @@ export default function Home() {
           resetCustomerRequest();
         }}
       />
-
       {/* SERVICES SECTION */}
       <section
         id="services-section"
@@ -662,7 +679,6 @@ export default function Home() {
           &larr; Back To Preferences
         </Link>
       </section>
-
       {/* FINAL SECTION */}
       <section
         id="final-section"
@@ -784,9 +800,7 @@ export default function Home() {
           </span>
           {customerRequest.paymentPlan === "monthly" && (
             <span className="flex items-center justify-between mt-2 gap-3">
-              <p className="font-bold text-black text-sm flex">
-                Booking Fee:
-              </p>
+              <p className="font-bold text-black text-sm flex">Booking Fee:</p>
               <p className="text-sm text-red-700 text-end">
                 ₦{BOOKING_FEE.toLocaleString()}
               </p>
@@ -858,7 +872,14 @@ export default function Home() {
           <p className="text-sm text-gray-600 mt-2">
             Kindly review the contact details provided before making payment
           </p>
-          <PaystackButton disabled={customerRequest.clientEmail === "" || customerRequest.clientPhoneNumber === ""} className="paystack-button" {...componentProps} />
+          <PaystackButton
+            disabled={
+              customerRequest.clientEmail === "" ||
+              customerRequest.clientPhoneNumber === ""
+            }
+            className="paystack-button"
+            {...componentProps}
+          />
         </div>
 
         <Link
@@ -869,7 +890,6 @@ export default function Home() {
           &larr; Back To Payment Plans
         </Link>
       </section>
-
       {/* CLIENT REVIEWS SECTION STARTS */}
       <div className="z-50 relative h-3/4 w-full mt-10 flex flex-col bg-gradient-to-b from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90">
         <h1 className="absolute z-50 top-72 max-sm:top-[10%] font-extralight text-3xl max-sm:text-2xl mt-5 mb-20 self-center text-white">
@@ -913,7 +933,6 @@ export default function Home() {
           </SliderTyped>
         </div>
       </div>
-
       {/* FAQs SECTION STARTS */}
       <section className="flex-col justify-center mx-10 max-sm:mx-5">
         <h1 className="font-extralight text-black dark:text-gray-900 text-center text-3xl mt-20 mb-20 max-sm:mb-10 self-center">
@@ -926,12 +945,14 @@ export default function Home() {
           ))}
         </div>
       </section>
-
       <section className="py-10 max-sm:px-10 w-full">
         <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700 mt-10">
           CUSTOM REQUEST
         </h1>
-        <p className="text-sm text-gray-600 text-start w-1/2 max-sm:w-full ml-auto mr-auto mt-3">Need something specific? Submit your custom requirements and our team will reach out to you.</p>
+        <p className="text-sm text-gray-600 text-start w-1/2 max-sm:w-full ml-auto mr-auto mt-3">
+          Need something specific? Submit your custom requirements and our team
+          will reach out to you.
+        </p>
 
         <div className="shadow-md w-1/2 ml-auto mr-auto shadow-stone-300 max-sm:w-full p-4 mt-5">
           <FormControl fullWidth sx={{ mt: 3 }}>
@@ -1047,7 +1068,6 @@ export default function Home() {
           <Button buttonName="Submit" />
         </div>
       </section>
-
       {/* FOOTER SECTION STARTS */}
       <footer className="p-5 h-full py-52 bg-gradient-to-b relative from-blue-950 to-[#0D98BA] w-full flex flex-col justify-center items-center ">
         <Image
