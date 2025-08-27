@@ -18,7 +18,7 @@ import {
   ServiceType,
 } from "@/types/ClientRequest";
 import { faqs } from "@/data/faqs";
-import { FormHelperText, TextField } from "@mui/material";
+import { Fab, FormHelperText, TextField } from "@mui/material";
 import { Hero } from "./components/Hero";
 import { SampleNextArrow } from "./components/NextArrow";
 import { services } from "@/data/services";
@@ -65,6 +65,16 @@ export default function Home() {
   const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(0);
   const [isCustomerServicePolicyOpen, setIsCustomerServicePolicyOpen] =
     useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const defaultCustomRequest = {
+    serviceName: "",
+    serviceLocation: "",
+    serviceDescription: "",
+    name: "",
+    emailAddress: "",
+    whatsappNumber: "",
+  };
 
   const defaultCustomerRequest: CustomerRequest = {
     serviceType: "Live-in Nanny Services",
@@ -94,6 +104,8 @@ export default function Home() {
   const [customerRequest, setCustomerRequest] = useState<CustomerRequest>(
     defaultCustomerRequest
   );
+
+  const [customRequest, setCustomRequest] = useState(defaultCustomRequest);
 
   const resetCustomerRequest = () => {
     setCustomerRequest(defaultCustomerRequest);
@@ -275,6 +287,24 @@ export default function Home() {
           closeCustomerServicePolicy(e)
         }
       />
+      <Fab
+        variant="extended"
+        sx={{
+          position: "fixed",
+          bottom: 16,
+          right: 16,
+          backgroundColor: "#25D366",
+          color: "white",
+        }}
+      >
+        <Link
+          className="flex items-center"
+          href="https://wa.me/message/WSKBWTOOI3UPE1"
+        >
+          <IconBrandWhatsapp size={20} />
+          &nbsp;Chat With Us
+        </Link>
+      </Fab>
       <Hero
         bookAServiceNow={() => {
           setRequestStage(0);
@@ -951,7 +981,7 @@ export default function Home() {
         </h1>
         <p className="text-sm text-gray-600 text-start w-1/2 max-sm:w-full ml-auto mr-auto mt-3">
           Need something specific? Submit your custom requirements and our team
-          will reach out to you.
+          will reach out to you promptly.
         </p>
 
         <div className="shadow-md w-1/2 ml-auto mr-auto shadow-stone-300 max-sm:w-full p-4 mt-5">
@@ -961,13 +991,13 @@ export default function Home() {
               displayEmpty
               labelId="demo2-simple-select-label"
               id="demo-simple-select"
-              value={customerRequest.employeeAgeRange}
+              value={customRequest.serviceName}
               label="Service Type"
               required
               onChange={(event: SelectChangeEvent) => {
-                setCustomerRequest({
-                  ...customerRequest,
-                  employeeAgeRange: event.target.value,
+                setCustomRequest({
+                  ...customRequest,
+                  serviceName: event.target.value,
                 });
               }}
             >
@@ -990,11 +1020,11 @@ export default function Home() {
 
           <TextField
             label="Address (Where Service will be rendered)"
-            value={customerRequest.extraComment}
+            value={customRequest.serviceLocation}
             onChange={(e) =>
-              setCustomerRequest({
-                ...customerRequest,
-                extraComment: e.target.value,
+              setCustomRequest({
+                ...customRequest,
+                serviceLocation: e.target.value,
               })
             }
             fullWidth
@@ -1005,11 +1035,11 @@ export default function Home() {
 
           <TextField
             label="Additional Comment/Description"
-            value={customerRequest.extraComment}
+            value={customRequest.serviceDescription}
             onChange={(e) =>
-              setCustomerRequest({
-                ...customerRequest,
-                extraComment: e.target.value,
+              setCustomRequest({
+                ...customRequest,
+                serviceDescription: e.target.value,
               })
             }
             fullWidth
@@ -1022,11 +1052,11 @@ export default function Home() {
 
           <TextField
             label="Name"
-            value={customerRequest.extraComment}
+            value={customRequest.name}
             onChange={(e) =>
-              setCustomerRequest({
-                ...customerRequest,
-                extraComment: e.target.value,
+              setCustomRequest({
+                ...customRequest,
+                name: e.target.value,
               })
             }
             fullWidth
@@ -1037,11 +1067,11 @@ export default function Home() {
 
           <TextField
             label="Email"
-            value={customerRequest.extraComment}
+            value={customRequest.emailAddress}
             onChange={(e) =>
-              setCustomerRequest({
-                ...customerRequest,
-                extraComment: e.target.value,
+              setCustomRequest({
+                ...customRequest,
+                emailAddress: e.target.value,
               })
             }
             fullWidth
@@ -1052,11 +1082,11 @@ export default function Home() {
 
           <TextField
             label="WhatsApp Number"
-            value={customerRequest.extraComment}
+            value={customRequest.whatsappNumber}
             onChange={(e) =>
-              setCustomerRequest({
-                ...customerRequest,
-                extraComment: e.target.value,
+              setCustomRequest({
+                ...customRequest,
+                whatsappNumber: e.target.value,
               })
             }
             fullWidth
@@ -1065,7 +1095,40 @@ export default function Home() {
             placeholder="Address (Where Service will be rendered)"
           />
 
-          <Button buttonName="Submit" />
+          <Button
+            onClick={async () => {
+              // update excel sheet
+              setLoading(true);
+              try {
+                await updateValues([
+                  [
+                    new Date(Date.now()).toLocaleString(),
+                    customRequest.serviceName,
+                    customRequest.serviceLocation,
+                    customRequest.serviceDescription,
+                    customRequest.name,
+                    customRequest.emailAddress,
+                    customRequest.whatsappNumber,
+                  ],
+                ]);
+
+                alert(
+                  "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly."
+                );
+                setCustomRequest(defaultCustomRequest);
+              } catch (e) {
+                alert(
+                  "An error occurred, please check your internet connection and retry"
+                );
+              }
+            }}
+            disabled={
+              customRequest.emailAddress === "" ||
+              customRequest.serviceLocation === "" ||
+              customRequest.serviceName === ""
+            }
+            buttonName="Submit"
+          />
         </div>
       </section>
       {/* FOOTER SECTION STARTS */}
@@ -1144,7 +1207,7 @@ export default function Home() {
           priority
         />
 
-        <div className="flex flex-col items-center absolute bottom-14 max-sm:bottom-5 text-white">
+        <div className="flex flex-col items-center absolute bottom-14 max-sm:bottom-9 text-white">
           <p className="text-4xl">
             <span className="font-edu-sa">The </span>BRAND{" "}
             <span className="font-edu-sa">for</span>
@@ -1179,6 +1242,9 @@ export default function Home() {
             <IconBrandWhatsapp color="white" stroke={2} />
           </a>
         </div>
+        <p className="text-xs font-light text-gray-200 absolute bottom-1">
+          © {new Date().getFullYear()} Suzannah Home & Care Services
+        </p>
       </footer>
     </main>
   );
