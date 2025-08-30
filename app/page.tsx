@@ -1120,14 +1120,16 @@ export default function Home() {
                 alert(
                   "An error occurred, please check your internet connection and retry"
                 );
+              } finally {
+                setLoading(false);
               }
             }}
             disabled={
               customRequest.emailAddress === "" ||
               customRequest.serviceLocation === "" ||
-              customRequest.serviceName === ""
+              customRequest.serviceName === "" || loading
             }
-            buttonName="Submit"
+            buttonName={loading ? "Submitting..." : "Submit"}
           />
         </div>
       </section>
