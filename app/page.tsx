@@ -485,11 +485,11 @@ export default function Home() {
                 });
               }}
             >
-              <MenuItem value="north">Northerners/Hausa</MenuItem>
-              <MenuItem value="igbo">Igbo</MenuItem>
-              <MenuItem value="yoruba">Yoruba/Edo</MenuItem>
-              <MenuItem value="benue">Idoma/Igede</MenuItem>
-              <MenuItem value="efik">Efik/Ibibio</MenuItem>
+              <MenuItem value="north">North - Hausa/Fulani</MenuItem>
+              <MenuItem value="igbo">Southeast - Igbo</MenuItem>
+              <MenuItem value="yoruba">Southwest - Yoruba/Edo</MenuItem>
+              <MenuItem value="benue">North Central - Idoma/Igede/Tiv/Ebira</MenuItem>
+              <MenuItem value="efik">South-South - Efik/Ibibio</MenuItem>
               <MenuItem value="any tribe">
                 No Preference (Any Tribe is fine)
               </MenuItem>
