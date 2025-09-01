@@ -44,4 +44,15 @@ export const services = [
       "Seasonal deep cleaning tasks (as agreed).",
     ],
   },
+  {
+    serviceName: "Live-out Housekeeper Services",
+    serviceDescription:
+      "Weekly/daily housekeeper for a consistently clean, well-maintained, and beautifully arranged home, so you never have to worry about the details.",
+    whatsIncluded: [
+      "Cleaning and tidying of all rooms.",
+      "Organization of closets, shelves, and storage areas.",
+      "Bed-making and linen changes on schedule.",
+      "Seasonal deep cleaning tasks (as agreed).",
+    ],
+  },
 ];

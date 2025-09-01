@@ -3,6 +3,7 @@
     | "Live-in Nanny Services"
     | "Live-in Help Services"
     | "Live-in Nanny + Help Services"
+    | "Live-out Housekeeper Services"
     | "Live-in Housekeeper Services";
 
   export type PaymentPlan = "monthly" | "one-off";
@@ -13,6 +14,7 @@
     employeeAgeRange: string;
     employeeTribePreference: string;
     employeeReligionPreference: string;
+    workingDays: string[];
     extraComment: string;
     clientName: string;
     clientPhoneNumber: string;

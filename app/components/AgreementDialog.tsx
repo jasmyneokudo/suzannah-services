@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
@@ -21,9 +20,10 @@ const Transition = React.forwardRef(function Transition(
 type DialogProps = {
   open: boolean;
   onClose: (e: React.MouseEvent<HTMLElement>) => void;
+  liveIn: boolean;
 };
 
-export default function AlertDialogSlide(props: DialogProps) {
+export default function AgreementDialog(props: DialogProps) {
 
   return (
       <Dialog
@@ -44,6 +44,7 @@ export default function AlertDialogSlide(props: DialogProps) {
                 <li>If any issues arise, please contact us directly. Whether it’s performance concerns or misunderstandings, we are committed to resolving them promptly and professionally.</li>
                 <li>Matters such as salary, employment terms, and other internal arrangements are strictly between the company and our staff. We kindly ask that these issues not be discussed directly with the staff. If there are any concerns, we encourage you to reach out to us directly so we can address them promptly and professionally.</li>
                 <li>All staff are employed and managed directly by the company. If a replacement is needed, we will arrange one efficiently.</li>
+                {props.liveIn && <li>Our off-days for live-in staff are the last weekend of every month but this is still subject to client preferences</li>}
             </ol>
             <p className="mt-3 text-sm text-gray-800 dark:text-gray-900">By clicking `PROCEED`, you agree to the above terms of service.</p>
           {/* </DialogContentText> */}

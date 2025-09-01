@@ -1,6 +1,6 @@
 "use client";
 
-import AlertDialogSlide from "./components/Dialog";
+import AgreementDialog from "./components/AgreementDialog";
 import Button from "./components/Button";
 import FAQBox from "./components/FAQBox";
 import FormControl from "@mui/material/FormControl";
@@ -18,7 +18,7 @@ import {
   ServiceType,
 } from "@/types/ClientRequest";
 import { faqs } from "@/data/faqs";
-import { Fab, FormHelperText, TextField } from "@mui/material";
+import { Fab, FormHelperText, FormLabel, TextField } from "@mui/material";
 import { Hero } from "./components/Hero";
 import { SampleNextArrow } from "./components/NextArrow";
 import { services } from "@/data/services";
@@ -26,6 +26,8 @@ import { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import dynamic from "next/dynamic";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 const PaystackButton = dynamic(
   () => import("react-paystack").then((mod) => mod.PaystackButton),
@@ -66,6 +68,15 @@ export default function Home() {
   const [isCustomerServicePolicyOpen, setIsCustomerServicePolicyOpen] =
     useState(false);
   const [loading, setLoading] = useState<boolean>(false);
+  // const [days, setDays] = useState<string[]>(() => []);
+
+  const handleSelectDays = (
+    event: React.MouseEvent<HTMLElement>,
+    newDays: string[]
+  ) => {
+    // setDays(newDays);
+    setCustomerRequest({ ...customerRequest, workingDays: newDays });
+  };
 
   const defaultCustomRequest = {
     serviceName: "",
@@ -88,6 +99,7 @@ export default function Home() {
     clientEmail: "",
     clientAddress: "",
     numberOfKids: 0,
+    workingDays: [],
     agesOfKids: "",
     numberOfRooms: "",
     typeOfHouse: "",
@@ -109,11 +121,13 @@ export default function Home() {
 
   const resetCustomerRequest = () => {
     setCustomerRequest(defaultCustomerRequest);
+    // setDays([])
   };
 
   const { clientPrice } = usePaymentPlan(customerRequest.serviceType, {
-    extraChildren: Number(customerRequest.numberOfKids),
+    extraChildren: customerRequest.numberOfKids,
     extraRooms: Number(customerRequest.numberOfRooms[0]),
+    extraDays: customerRequest.workingDays.length,
   });
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
@@ -150,15 +164,21 @@ export default function Home() {
       customerRequest.serviceType === "Live-in Housekeeper Services"
     ) {
       return (
-        customerRequest.typeOfHouse === "" &&
+        customerRequest.typeOfHouse === "" ||
         customerRequest.numberOfRooms === ""
       );
     } else if (customerRequest.serviceType === "Live-in Nanny Services") {
       return customerRequest.agesOfKids === "";
+    } else if (customerRequest.serviceType === "Live-out Housekeeper Services" ){
+      return (
+        customerRequest.typeOfHouse === "" ||
+        customerRequest.numberOfRooms === "" ||
+        customerRequest.workingDays.length === 0
+      );
     } else {
       return (
-        customerRequest.typeOfHouse === "" &&
-        customerRequest.numberOfRooms === "" &&
+        customerRequest.typeOfHouse === "" ||
+        customerRequest.numberOfRooms === "" ||
         customerRequest.agesOfKids === ""
       );
     }
@@ -193,6 +213,9 @@ export default function Home() {
       Age Range: ${customerRequest.employeeAgeRange},
       Tribe Preference: ${customerRequest.employeeTribePreference},
       Religion Preference: ${customerRequest.employeeReligionPreference},
+      ${customerRequest.serviceType === "Live-out Housekeeper Services" && 
+        `Working Days: ${customerRequest.workingDays.join(', ')}`
+      },
       Other Staff Preferences: ${customerRequest.extraComment},
       Amount Paid: ${
         customerRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE
@@ -217,6 +240,7 @@ export default function Home() {
         customerRequest.employeeAgeRange,
         customerRequest.employeeTribePreference,
         customerRequest.employeeReligionPreference,
+        customerRequest.workingDays.join(', '),
         customerRequest.extraComment,
         customerRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
         customerRequest.bookingFee,
@@ -281,7 +305,8 @@ export default function Home() {
 
   return (
     <main className="flex bg-white min-h-screen w-full flex-col items-center justify-between overflow-clip">
-      <AlertDialogSlide
+      <AgreementDialog
+        liveIn={customerRequest.serviceType !== "Live-out Housekeeper Services"}
         open={isCustomerServicePolicyOpen}
         onClose={(e: React.MouseEvent<HTMLElement>) =>
           closeCustomerServicePolicy(e)
@@ -471,6 +496,47 @@ export default function Home() {
             </Select>
           </FormControl>
 
+          {customerRequest.serviceType === "Live-out Housekeeper Services" && (
+            <FormControl fullWidth sx={{ mt: 2 }}>
+              <FormLabel id="demo-simple-select-label">
+                Select preferred staff working days
+              </FormLabel>
+              <ToggleButtonGroup
+                color="primary"
+                value={customerRequest.workingDays}
+                sx={{ mt: 2 }}
+                onChange={handleSelectDays}
+                aria-label="text formatting"
+              >
+                <ToggleButton value="Mon" aria-label="Mon">
+                  Mon
+                </ToggleButton>
+                <ToggleButton value="Tue" aria-label="Tue">
+                  Tue
+                </ToggleButton>
+                <ToggleButton value="Wed" aria-label="Wed">
+                  Wed
+                </ToggleButton>
+                <ToggleButton value="Thu" aria-label="Thu">
+                  Thu
+                </ToggleButton>
+                <ToggleButton value="Fri" aria-label="Fri">
+                  Fri
+                </ToggleButton>
+                <ToggleButton value="Sat" aria-label="Sat">
+                  Sat
+                </ToggleButton>
+              </ToggleButtonGroup>
+
+              {customerRequest.workingDays.length !== 0 && (
+                <FormHelperText>
+                  {customerRequest.workingDays.length > 1 ? customerRequest.workingDays.length : "Once"}{" "}
+                  {customerRequest.workingDays.length > 1 && "times"} a week
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+
           <TextField
             label="Other Preferences"
             value={customerRequest.extraComment}
@@ -498,8 +564,8 @@ export default function Home() {
             Tell us about your household to better match our services
           </p>
           {customerRequest.serviceType !== "Live-in Housekeeper Services" &&
-            customerRequest.serviceType !==
-              ("Live-in Help Services" as ServiceType) && (
+            customerRequest.serviceType !== "Live-out Housekeeper Services" &&
+            customerRequest.serviceType !== "Live-in Help Services" && (
               <>
                 <FormControl fullWidth sx={{ mt: 2 }}>
                   <InputLabel id="demo-simple-select-label">
@@ -762,6 +828,7 @@ export default function Home() {
           )}
 
           {(customerRequest.serviceType === "Live-in Housekeeper Services" ||
+            customerRequest.serviceType === "Live-out Housekeeper Services" ||
             customerRequest.serviceType === "Live-in Help Services" ||
             customerRequest.serviceType ===
               "Live-in Nanny + Help Services") && (
@@ -771,7 +838,7 @@ export default function Home() {
                   Home Details:
                 </p>
                 <p className="text-xs text-gray-700 text-end">
-                  {customerRequest.typeOfHouse} home of &nbsp;
+                  {customerRequest.typeOfHouse} home with&nbsp;
                   {customerRequest.numberOfRooms}
                 </p>
               </span>
@@ -794,6 +861,15 @@ export default function Home() {
               ${customerRequest.employeeReligionPreference}`}
             </p>
           </span>
+
+          {customerRequest.serviceType === "Live-out Housekeeper Services" && (
+            <span className="flex items-center justify-between mt-2 gap-3">
+              <p className="font-semibold text-black text-sm">Working Days:</p>
+              <p className="text-xs text-gray-700 text-end">
+                {customerRequest.workingDays.length} day{customerRequest.workingDays.length > 1 && '(s)'} a week; ({customerRequest.workingDays.join(', ')})
+              </p>
+            </span>
+          )}
 
           <span className="flex items-center justify-between mt-2 gap-3">
             <p className="font-semibold text-black text-sm">
@@ -1127,7 +1203,8 @@ export default function Home() {
             disabled={
               customRequest.emailAddress === "" ||
               customRequest.serviceLocation === "" ||
-              customRequest.serviceName === "" || loading
+              customRequest.serviceName === "" ||
+              loading
             }
             buttonName={loading ? "Submitting..." : "Submit"}
           />
