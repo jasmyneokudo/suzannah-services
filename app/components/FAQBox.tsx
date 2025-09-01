@@ -12,7 +12,13 @@ type FAQType = {
 const FAQBox = (props: FAQType) => {
   return (
     <div className="align-middle text-center w-10/12">
-      <Accordion>
+      <Accordion
+        sx={{
+          // border: 0.4, 
+          // borderColor: '#172554',
+          // borderRadius: '20%',
+          mt: 2
+        }}>
         <AccordionSummary
           expandIcon={<IconChevronDown stroke={2} color="#172554" />}
           aria-controls="panel1-content"

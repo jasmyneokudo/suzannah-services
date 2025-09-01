@@ -485,11 +485,11 @@ export default function Home() {
                 });
               }}
             >
-              <MenuItem value="north">North - Hausa/Fulani</MenuItem>
-              <MenuItem value="igbo">Southeast - Igbo</MenuItem>
-              <MenuItem value="yoruba">Southwest - Yoruba/Edo</MenuItem>
-              <MenuItem value="benue">North Central - Idoma/Igede/Tiv/Ebira</MenuItem>
-              <MenuItem value="efik">South-South - Efik/Ibibio</MenuItem>
+              <MenuItem value="North - Hausa/Fulani">North - Hausa/Fulani</MenuItem>
+              <MenuItem value="Southeast - Igbo">Southeast - Igbo</MenuItem>
+              <MenuItem value="Southwest - Yoruba">Southwest - Yoruba</MenuItem>
+              <MenuItem value="North Central - Idoma/Igede/Tiv/Ebira">North Central - Idoma/Igede/Tiv/Ebira</MenuItem>
+              <MenuItem value="South-South - Efik/Ibibio">South-South - Efik/Ibibio</MenuItem>
               <MenuItem value="any tribe">
                 No Preference (Any Tribe is fine)
               </MenuItem>
@@ -806,7 +806,7 @@ export default function Home() {
 
           <span className="flex items-center justify-between mt-2 gap-3">
             <p className="font-semibold text-black text-sm">Service Type:</p>
-            <p className="text-xs text-gray-700">
+            <p className="text-xs text-gray-700 text-end">
               {customerRequest.serviceType}
             </p>
           </span>
@@ -820,7 +820,7 @@ export default function Home() {
                   Kids Details:
                 </p>
                 <p className="text-xs text-gray-700 text-end">
-                  {customerRequest.numberOfKids} kid(s) of age(s):{" "}
+                  {customerRequest.numberOfKids} kid{customerRequest.numberOfKids > 1 && 's'} of age(s):{" "}
                   {customerRequest.agesOfKids}
                 </p>
               </span>
@@ -866,7 +866,7 @@ export default function Home() {
             <span className="flex items-center justify-between mt-2 gap-3">
               <p className="font-semibold text-black text-sm">Working Days:</p>
               <p className="text-xs text-gray-700 text-end">
-                {customerRequest.workingDays.length} day{customerRequest.workingDays.length > 1 && '(s)'} a week; ({customerRequest.workingDays.join(', ')})
+                {customerRequest.workingDays.length} day{customerRequest.workingDays.length > 1 && 's'} a week; ({customerRequest.workingDays.join(', ')})
               </p>
             </span>
           )}

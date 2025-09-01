@@ -20,7 +20,7 @@ export const PaymentPlanCard = (props: PaymentPlanCardProps) => {
   return (
     <div className="border border-gray-300 rounded-lg p-4 mt-5 text-black dark:text-gray-900">
       <h1 className="font-semibold text-xl">{props.nameOfPlan}</h1>
-      <p className="text-xs text-gray-600 mt-1">{props.description}</p>
+      <p className="text-sm text-gray-600 mt-1">{props.description}</p>
       <h3 className="text-xl mt-3 font-medium flex items-center gap-1">
         <IconProgressCheck color="#172554" stroke={2} size={20} />
         How It works

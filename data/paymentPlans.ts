@@ -6,7 +6,7 @@ export const paymentPlans = [
     description:
       "Ideal for clients who want convenience and full staff management.",
     howItWorks: [
-      "Within 1 working day of booking this payment plan, we send 1-3 available staff profiles for selection.",
+      "Within 1 working day of booking this payment plan, we send 1-3 available candidates profiles for selection.",
       "Once selected, the staff resumes work promptly.",
       "We manage the staff’s performance.",
       "Client pays a monthly service fee to the company and need not pay the staff directly.",
