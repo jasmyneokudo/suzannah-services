@@ -47,7 +47,7 @@ import { paymentPlans } from "@/data/paymentPlans";
 import PaymentPlanCard from "./components/PaymentPlanCard";
 import { usePaymentPlan } from "@/hooks/usePaymentPlan";
 import { useGoogleSheets } from "@/hooks/useGoogleSheets";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 const BOOKING_FEE = 10000;
