@@ -53,7 +53,13 @@ const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 const BOOKING_FEE = 10000;
 const ONE_OFF_FEE = 120000;
 
-export default function Home() {
+type HomeProps = {
+  searchParams?: {
+    [key: string]: string | string[] | undefined;
+  };
+};
+
+export default function Home({ searchParams }: HomeProps) {
   const settings = {
     dots: true,
     infinite: true,
@@ -66,10 +72,10 @@ export default function Home() {
 
   const { updateValues } = useGoogleSheets();
 
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
- 
+  const router = useRouter();
+  const pathname = usePathname();
+  // const searchParams = useSearchParams()
+
   const [requestStage, setRequestStage] = useState<Number>(0);
   const [isCustomerServicePolicyOpen, setIsCustomerServicePolicyOpen] =
     useState(false);
@@ -156,6 +162,7 @@ export default function Home() {
     onSuccess: async () => {
       await sendRequestDetails();
       resetCustomerRequest();
+      router.push(pathname);
       setRequestStage(0);
       alert(
         "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly."
@@ -163,13 +170,14 @@ export default function Home() {
     },
     onClose: () => alert("Are you sure?"),
   };
-  const step: number = Number(searchParams.get('step')) ?? 0 
+  const step: number =
+    Number(searchParams?.step) || 0;
 
   useEffect(() => {
     if (requestStage !== step) {
-      setRequestStage(step)
+      setRequestStage(step);
     }
-  }, [step])
+  }, [step]);
 
   function disableButton(): boolean {
     if (
@@ -181,8 +189,10 @@ export default function Home() {
         customerRequest.numberOfRooms === ""
       );
     } else if (customerRequest.serviceType === "Live-in Nanny Services") {
-      return customerRequest.agesOfKids === "";
-    } else if (customerRequest.serviceType === "Live-out Housekeeper Services" ){
+      return (customerRequest.agesOfKids === "" || customerRequest.numberOfKids === 0);
+    } else if (
+      customerRequest.serviceType === "Live-out Housekeeper Services"
+    ) {
       return (
         customerRequest.typeOfHouse === "" ||
         customerRequest.numberOfRooms === "" ||
@@ -192,7 +202,8 @@ export default function Home() {
       return (
         customerRequest.typeOfHouse === "" ||
         customerRequest.numberOfRooms === "" ||
-        customerRequest.agesOfKids === ""
+        customerRequest.agesOfKids === "" ||
+        customerRequest.numberOfKids === 0
       );
     }
   }
@@ -226,8 +237,9 @@ export default function Home() {
       Age Range: ${customerRequest.employeeAgeRange},
       Tribe Preference: ${customerRequest.employeeTribePreference},
       Religion Preference: ${customerRequest.employeeReligionPreference},
-      ${customerRequest.serviceType === "Live-out Housekeeper Services" && 
-        `Working Days: ${customerRequest.workingDays.join(', ')}`
+      ${
+        customerRequest.serviceType === "Live-out Housekeeper Services" &&
+        `Working Days: ${customerRequest.workingDays.join(", ")}`
       },
       Other Staff Preferences: ${customerRequest.extraComment},
       Amount Paid: ${
@@ -253,7 +265,7 @@ export default function Home() {
         customerRequest.employeeAgeRange,
         customerRequest.employeeTribePreference,
         customerRequest.employeeReligionPreference,
-        customerRequest.workingDays.join(', '),
+        customerRequest.workingDays.join(", "),
         customerRequest.extraComment,
         customerRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
         customerRequest.bookingFee,
@@ -281,7 +293,7 @@ export default function Home() {
   }
 
   function selectService(serviceType: ServiceType) {
-    router.push(pathname + "?step=1")
+    router.push(pathname + "?step=1");
     setCustomerRequest({ ...customerRequest, serviceType: serviceType });
     setRequestStage(1);
 
@@ -294,8 +306,9 @@ export default function Home() {
     setIsCustomerServicePolicyOpen(false);
 
     if (target.textContent === "Proceed") {
+      router.push(pathname + "?step=3");
       setRequestStage(3);
-      router.push(pathname + "?step=3")
+      router.push(pathname + "?step=3");
       setTimeout(() => {
         document
           .getElementById("final-section")
@@ -309,7 +322,7 @@ export default function Home() {
     if (paymentPlan === "monthly") {
       setIsCustomerServicePolicyOpen(true);
     } else {
-      router.push(pathname + "?step=3")
+      router.push(pathname + "?step=3");
       setRequestStage(3);
       setTimeout(() => {
         document
@@ -348,7 +361,6 @@ export default function Home() {
       </Fab>
       <Hero
         bookAServiceNow={() => {
-          router.push(pathname)
           setRequestStage(0);
           resetCustomerRequest();
         }}
@@ -386,7 +398,7 @@ export default function Home() {
             resetCustomerRequest();
             setRequestStage(0);
           }}
-          href="#"
+          href="/#"
           className="text-start text-blue-950 items-center"
         >
           &larr; Back
@@ -502,11 +514,17 @@ export default function Home() {
                 });
               }}
             >
-              <MenuItem value="North - Hausa/Fulani">North - Hausa/Fulani</MenuItem>
+              <MenuItem value="North - Hausa/Fulani">
+                North - Hausa/Fulani
+              </MenuItem>
               <MenuItem value="Southeast - Igbo">Southeast - Igbo</MenuItem>
               <MenuItem value="Southwest - Yoruba">Southwest - Yoruba</MenuItem>
-              <MenuItem value="North Central - Idoma/Igede/Tiv/Ebira">North Central - Idoma/Igede/Tiv/Ebira</MenuItem>
-              <MenuItem value="South-South - Efik/Ibibio">South-South - Efik/Ibibio</MenuItem>
+              <MenuItem value="North Central - Idoma/Igede/Tiv/Ebira">
+                North Central - Idoma/Igede/Tiv/Ebira
+              </MenuItem>
+              <MenuItem value="South-South - Efik/Ibibio">
+                South-South - Efik/Ibibio
+              </MenuItem>
               <MenuItem value="any tribe">
                 No Preference (Any Tribe is fine)
               </MenuItem>
@@ -547,7 +565,9 @@ export default function Home() {
 
               {customerRequest.workingDays.length !== 0 && (
                 <FormHelperText>
-                  {customerRequest.workingDays.length > 1 ? customerRequest.workingDays.length : "Once"}{" "}
+                  {customerRequest.workingDays.length > 1
+                    ? customerRequest.workingDays.length
+                    : "Once"}{" "}
                   {customerRequest.workingDays.length > 1 && "times"} a week
                 </FormHelperText>
               )}
@@ -720,10 +740,11 @@ export default function Home() {
         <div className="flex justify-between items-center mt-2">
           <Link
             onClick={() => {
+              router.push(pathname);
               setRequestStage(0);
               resetCustomerRequest();
             }}
-            href="#"
+            href="/"
             className="text-start text-blue-950 items-center"
           >
             &larr; Back To Services
@@ -736,7 +757,7 @@ export default function Home() {
                 ...customerRequest,
                 bookingFee: clientPrice,
               });
-              router.push(pathname + "?step=2")
+              router.push(pathname + "?step=2");
               setRequestStage(2);
 
               setTimeout(() => {
@@ -760,7 +781,7 @@ export default function Home() {
       >
         <Link
           onClick={() => setRequestStage(1)}
-          href="#"
+          href="/?step=1"
           className="text-start text-blue-950 items-center"
         >
           &larr; Back
@@ -787,10 +808,9 @@ export default function Home() {
 
         <Link
           onClick={() =>{
-            router.push(pathname + "?step=1")
              setRequestStage(1)
           }}
-          href="#"
+          href="/?step=1"
           className="text-start text-blue-950 mt-3 items-center"
         >
           &larr; Back To Preferences
@@ -805,10 +825,9 @@ export default function Home() {
       >
         <Link
           onClick={() => {
-            router.push(pathname + "?step=2")
-            setRequestStage(2)
+            setRequestStage(2);
           }}
-          href="#"
+          href="/?step=2"
           className="text-start text-blue-950 items-center"
         >
           &larr; Back
@@ -844,7 +863,8 @@ export default function Home() {
                   Kids Details:
                 </p>
                 <p className="text-xs text-gray-700 text-end">
-                  {customerRequest.numberOfKids} kid{customerRequest.numberOfKids > 1 && 's'} of age(s):{" "}
+                  {customerRequest.numberOfKids} kid
+                  {customerRequest.numberOfKids > 1 && "s"} of age(s):{" "}
                   {customerRequest.agesOfKids}
                 </p>
               </span>
@@ -890,7 +910,9 @@ export default function Home() {
             <span className="flex items-center justify-between mt-2 gap-3">
               <p className="font-semibold text-black text-sm">Working Days:</p>
               <p className="text-xs text-gray-700 text-end">
-                {customerRequest.workingDays.length} day{customerRequest.workingDays.length > 1 && 's'} a week; ({customerRequest.workingDays.join(', ')})
+                {customerRequest.workingDays.length} day
+                {customerRequest.workingDays.length > 1 && "s"} a week; (
+                {customerRequest.workingDays.join(", ")})
               </p>
             </span>
           )}
@@ -1014,7 +1036,7 @@ export default function Home() {
 
         <Link
           onClick={() => setRequestStage(2)}
-          href="#"
+          href="/?step=2"
           className="text-start text-blue-950 mt-3 items-center"
         >
           &larr; Back To Payment Plans

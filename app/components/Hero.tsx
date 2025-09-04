@@ -72,7 +72,7 @@ export const Hero = (props: any) => {
 
       <Link
         className="hidden font-bold max-sm:flex max-sm:absolute max-sm:top-[75%] left-1/2 -translate-x-1/2 hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-sm"
-        href="#services-section"
+        href="/#services-section"
         onClick={() => props.bookAServiceNow()}
       >
         Book A Service Now
