@@ -28,6 +28,7 @@ import "slick-carousel/slick/slick-theme.css";
 import dynamic from "next/dynamic";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { useEffect } from "react";
 
 const PaystackButton = dynamic(
   () => import("react-paystack").then((mod) => mod.PaystackButton),
@@ -46,6 +47,7 @@ import { paymentPlans } from "@/data/paymentPlans";
 import PaymentPlanCard from "./components/PaymentPlanCard";
 import { usePaymentPlan } from "@/hooks/usePaymentPlan";
 import { useGoogleSheets } from "@/hooks/useGoogleSheets";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 const BOOKING_FEE = 10000;
@@ -64,7 +66,11 @@ export default function Home() {
 
   const { updateValues } = useGoogleSheets();
 
-  const [requestStage, setRequestStage] = useState<0 | 1 | 2 | 3>(0);
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+ 
+  const [requestStage, setRequestStage] = useState<Number>(0);
   const [isCustomerServicePolicyOpen, setIsCustomerServicePolicyOpen] =
     useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -157,6 +163,13 @@ export default function Home() {
     },
     onClose: () => alert("Are you sure?"),
   };
+  const step: number = Number(searchParams.get('step')) ?? 0 
+
+  useEffect(() => {
+    if (requestStage !== step) {
+      setRequestStage(step)
+    }
+  }, [step])
 
   function disableButton(): boolean {
     if (
@@ -268,6 +281,7 @@ export default function Home() {
   }
 
   function selectService(serviceType: ServiceType) {
+    router.push(pathname + "?step=1")
     setCustomerRequest({ ...customerRequest, serviceType: serviceType });
     setRequestStage(1);
 
@@ -281,6 +295,7 @@ export default function Home() {
 
     if (target.textContent === "Proceed") {
       setRequestStage(3);
+      router.push(pathname + "?step=3")
       setTimeout(() => {
         document
           .getElementById("final-section")
@@ -294,6 +309,7 @@ export default function Home() {
     if (paymentPlan === "monthly") {
       setIsCustomerServicePolicyOpen(true);
     } else {
+      router.push(pathname + "?step=3")
       setRequestStage(3);
       setTimeout(() => {
         document
@@ -332,6 +348,7 @@ export default function Home() {
       </Fab>
       <Hero
         bookAServiceNow={() => {
+          router.push(pathname)
           setRequestStage(0);
           resetCustomerRequest();
         }}
@@ -719,6 +736,7 @@ export default function Home() {
                 ...customerRequest,
                 bookingFee: clientPrice,
               });
+              router.push(pathname + "?step=2")
               setRequestStage(2);
 
               setTimeout(() => {
@@ -768,7 +786,10 @@ export default function Home() {
         ))}
 
         <Link
-          onClick={() => setRequestStage(1)}
+          onClick={() =>{
+            router.push(pathname + "?step=1")
+             setRequestStage(1)
+          }}
           href="#"
           className="text-start text-blue-950 mt-3 items-center"
         >
@@ -783,7 +804,10 @@ export default function Home() {
         } mt-20 max-sm:mt-10 flex flex-col bg-white max-sm:px-8`}
       >
         <Link
-          onClick={() => setRequestStage(2)}
+          onClick={() => {
+            router.push(pathname + "?step=2")
+            setRequestStage(2)
+          }}
           href="#"
           className="text-start text-blue-950 items-center"
         >
