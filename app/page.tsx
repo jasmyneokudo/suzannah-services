@@ -50,8 +50,8 @@ import { useGoogleSheets } from "@/hooks/useGoogleSheets";
 import { usePathname, useRouter } from "next/navigation";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
-const BOOKING_FEE = 10000;
-const ONE_OFF_FEE = 120000;
+const BOOKING_FEE = 10250;
+const ONE_OFF_FEE = 120500;
 
 type HomeProps = {
   searchParams?: {

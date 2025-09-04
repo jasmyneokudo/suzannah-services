@@ -16,11 +16,11 @@ interface Options {
 const BASE_STAFF_PAY = 50000;
 
 const PRICING: Record<ServiceType, number> = {
-  "Live-in Nanny Services": 70000,
-  "Live-in Help Services": 70000,
-  "Live-in Nanny + Help Services": 80000,
-  "Live-in Housekeeper Services": 70000,
-  "Live-out Housekeeper Services": 60000
+  "Live-in Nanny Services": 70500,
+  "Live-in Help Services": 70500,
+  "Live-in Nanny + Help Services": 80500,
+  "Live-in Housekeeper Services": 70500,
+  "Live-out Housekeeper Services": 60500
 };
 
 export function usePaymentPlan(
