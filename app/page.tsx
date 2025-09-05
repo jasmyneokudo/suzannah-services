@@ -87,7 +87,7 @@ export default function Home({ searchParams }: HomeProps) {
     newDays: string[]
   ) => {
     // setDays(newDays);
-    setCustomerRequest({ ...customerRequest, workingDays: newDays });
+    setClientRequest({ ...clientRequest, workingDays: newDays });
   };
 
   const defaultCustomRequest = {
@@ -125,28 +125,28 @@ export default function Home({ searchParams }: HomeProps) {
     paymentPlan: "monthly",
   };
 
-  const [customerRequest, setCustomerRequest] = useState<CustomerRequest>(
+  const [clientRequest, setClientRequest] = useState<CustomerRequest>(
     defaultCustomerRequest
   );
 
   const [customRequest, setCustomRequest] = useState(defaultCustomRequest);
 
   const resetCustomerRequest = () => {
-    setCustomerRequest(defaultCustomerRequest);
+    setClientRequest(defaultCustomerRequest);
     // setDays([])
   };
 
-  const { clientPrice } = usePaymentPlan(customerRequest.serviceType, {
-    extraChildren: customerRequest.numberOfKids,
-    extraRooms: Number(customerRequest.numberOfRooms[0]),
-    extraDays: customerRequest.workingDays.length,
+  const { clientPrice } = usePaymentPlan(clientRequest.serviceType, {
+    extraChildren: clientRequest.numberOfKids,
+    extraRooms: Number(clientRequest.numberOfRooms[0]),
+    extraDays: clientRequest.workingDays.length,
   });
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
   const bookingFee =
-    customerRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE;
+    clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE;
   const componentProps = {
-    email: customerRequest.clientEmail,
+    email: clientRequest.clientEmail,
     amount: bookingFee * 100, // Paystack expects amount in kobo
     metadata: {
       custom_fields: [
@@ -181,29 +181,29 @@ export default function Home({ searchParams }: HomeProps) {
 
   function disableButton(): boolean {
     if (
-      customerRequest.serviceType === "Live-in Help Services" ||
-      customerRequest.serviceType === "Live-in Housekeeper Services"
+      clientRequest.serviceType === "Live-in Help Services" ||
+      clientRequest.serviceType === "Live-in Housekeeper Services"
     ) {
       return (
-        customerRequest.typeOfHouse === "" ||
-        customerRequest.numberOfRooms === ""
+        clientRequest.typeOfHouse === "" ||
+        clientRequest.numberOfRooms === ""
       );
-    } else if (customerRequest.serviceType === "Live-in Nanny Services") {
-      return (customerRequest.agesOfKids === "" || customerRequest.numberOfKids === 0);
+    } else if (clientRequest.serviceType === "Live-in Nanny Services") {
+      return (clientRequest.agesOfKids === "" || clientRequest.numberOfKids === 0);
     } else if (
-      customerRequest.serviceType === "Live-out Housekeeper Services"
+      clientRequest.serviceType === "Live-out Housekeeper Services"
     ) {
       return (
-        customerRequest.typeOfHouse === "" ||
-        customerRequest.numberOfRooms === "" ||
-        customerRequest.workingDays.length === 0
+        clientRequest.typeOfHouse === "" ||
+        clientRequest.numberOfRooms === "" ||
+        clientRequest.workingDays.length === 0
       );
     } else {
       return (
-        customerRequest.typeOfHouse === "" ||
-        customerRequest.numberOfRooms === "" ||
-        customerRequest.agesOfKids === "" ||
-        customerRequest.numberOfKids === 0
+        clientRequest.typeOfHouse === "" ||
+        clientRequest.numberOfRooms === "" ||
+        clientRequest.agesOfKids === "" ||
+        clientRequest.numberOfKids === 0
       );
     }
   }
@@ -211,64 +211,64 @@ export default function Home({ searchParams }: HomeProps) {
   async function sendRequestDetails() {
     const requestBody = `
       Incoming Client Request ${new Date(Date.now()).toLocaleString()}\n:
-      Service Type: ${customerRequest.serviceType},
+      Service Type: ${clientRequest.serviceType},
       Client's Particulars
-      Name: ${customerRequest.clientName},
-      Email address: ${customerRequest.clientEmail},
-      Phone number: ${customerRequest.clientPhoneNumber},
-      Address: ${customerRequest.clientAddress},
+      Name: ${clientRequest.clientName},
+      Email address: ${clientRequest.clientEmail},
+      Phone number: ${clientRequest.clientPhoneNumber},
+      Address: ${clientRequest.clientAddress},
       Home/Family Details
       ${
-        (customerRequest.serviceType === "Live-in Nanny Services" ||
-          customerRequest.serviceType === "Live-in Nanny + Help Services") &&
-        `Number of Kids: ${customerRequest.numberOfKids},
-      Ages of Kids: ${customerRequest.agesOfKids},`
+        (clientRequest.serviceType === "Live-in Nanny Services" ||
+          clientRequest.serviceType === "Live-in Nanny + Help Services") &&
+        `Number of Kids: ${clientRequest.numberOfKids},
+      Ages of Kids: ${clientRequest.agesOfKids},`
       }
       ${
-        (customerRequest.serviceType === "Live-in Housekeeper Services" ||
-          customerRequest.serviceType === "Live-in Nanny + Help Services" ||
-          customerRequest.serviceType === "Live-in Help Services") &&
-        `House Type: ${customerRequest.typeOfHouse},
-      Number of Rooms: ${customerRequest.numberOfRooms},
-      Extra Home Info: ${customerRequest.extraHomeInformation},`
+        (clientRequest.serviceType === "Live-in Housekeeper Services" ||
+          clientRequest.serviceType === "Live-in Nanny + Help Services" ||
+          clientRequest.serviceType === "Live-in Help Services") &&
+        `House Type: ${clientRequest.typeOfHouse},
+      Number of Rooms: ${clientRequest.numberOfRooms},
+      Extra Home Info: ${clientRequest.extraHomeInformation},`
       }
       Candidate Preferences
-      Gender: ${customerRequest.employeeGender},
-      Age Range: ${customerRequest.employeeAgeRange},
-      Tribe Preference: ${customerRequest.employeeTribePreference},
-      Religion Preference: ${customerRequest.employeeReligionPreference},
+      Gender: ${clientRequest.employeeGender},
+      Age Range: ${clientRequest.employeeAgeRange},
+      Tribe Preference: ${clientRequest.employeeTribePreference},
+      Religion Preference: ${clientRequest.employeeReligionPreference},
       ${
-        customerRequest.serviceType === "Live-out Housekeeper Services" &&
-        `Working Days: ${customerRequest.workingDays.join(", ")}`
+        clientRequest.serviceType === "Live-out Housekeeper Services" &&
+        `Working Days: ${clientRequest.workingDays.join(", ")}`
       },
-      Other Staff Preferences: ${customerRequest.extraComment},
+      Other Staff Preferences: ${clientRequest.extraComment},
       Amount Paid: ${
-        customerRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE
+        clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE
       },
-      Service Fee: ${customerRequest.bookingFee}
+      Service Fee: ${clientRequest.bookingFee}
     `;
     // update excel sheet
     await updateValues([
       [
         new Date(Date.now()).toLocaleString(),
-        customerRequest.serviceType,
-        customerRequest.clientName,
-        customerRequest.clientEmail,
-        customerRequest.clientPhoneNumber,
-        customerRequest.clientAddress,
-        customerRequest.numberOfKids,
-        customerRequest.agesOfKids,
-        customerRequest.typeOfHouse,
-        customerRequest.numberOfRooms,
-        customerRequest.extraHomeInformation,
-        customerRequest.employeeGender,
-        customerRequest.employeeAgeRange,
-        customerRequest.employeeTribePreference,
-        customerRequest.employeeReligionPreference,
-        customerRequest.workingDays.join(", "),
-        customerRequest.extraComment,
-        customerRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
-        customerRequest.bookingFee,
+        clientRequest.serviceType,
+        clientRequest.clientName,
+        clientRequest.clientEmail,
+        clientRequest.clientPhoneNumber,
+        clientRequest.clientAddress,
+        clientRequest.numberOfKids,
+        clientRequest.agesOfKids,
+        clientRequest.typeOfHouse,
+        clientRequest.numberOfRooms,
+        clientRequest.extraHomeInformation,
+        clientRequest.employeeGender,
+        clientRequest.employeeAgeRange,
+        clientRequest.employeeTribePreference,
+        clientRequest.employeeReligionPreference,
+        clientRequest.workingDays.join(", "),
+        clientRequest.extraComment,
+        clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
+        clientRequest.bookingFee,
       ],
     ]);
 
@@ -294,7 +294,7 @@ export default function Home({ searchParams }: HomeProps) {
 
   function selectService(serviceType: ServiceType) {
     router.push(pathname + "?step=1");
-    setCustomerRequest({ ...customerRequest, serviceType: serviceType });
+    setClientRequest({ ...clientRequest, serviceType: serviceType });
     setRequestStage(1);
 
     const section = document.getElementById("services-section");
@@ -318,7 +318,7 @@ export default function Home({ searchParams }: HomeProps) {
   }
 
   function selectPlan(paymentPlan: PaymentPlan): void {
-    setCustomerRequest({ ...customerRequest, paymentPlan });
+    setClientRequest({ ...clientRequest, paymentPlan });
     if (paymentPlan === "monthly") {
       setIsCustomerServicePolicyOpen(true);
     } else {
@@ -335,7 +335,7 @@ export default function Home({ searchParams }: HomeProps) {
   return (
     <main className="flex bg-white min-h-screen w-full flex-col items-center justify-between overflow-clip">
       <AgreementDialog
-        liveIn={customerRequest.serviceType !== "Live-out Housekeeper Services"}
+        liveIn={clientRequest.serviceType !== "Live-out Housekeeper Services"}
         open={isCustomerServicePolicyOpen}
         onClose={(e: React.MouseEvent<HTMLElement>) =>
           closeCustomerServicePolicy(e)
@@ -404,7 +404,7 @@ export default function Home({ searchParams }: HomeProps) {
           &larr; Back
         </Link>
         <p className="mt-4 text-blue-950 text-sm text-center font-bold">
-          {customerRequest.serviceType}
+          {clientRequest.serviceType}
         </p>
         <h1 className="font-extralight text-center text-3xl mt-2 text-black dark:text-gray-800">
           CUSTOMIZE YOUR SERVICE
@@ -427,12 +427,12 @@ export default function Home({ searchParams }: HomeProps) {
               displayEmpty
               labelId="demo2-simple-select-label"
               id="demo-simple-select"
-              value={customerRequest.employeeAgeRange}
+              value={clientRequest.employeeAgeRange}
               label="Age Range"
               required
               onChange={(event: SelectChangeEvent) => {
-                setCustomerRequest({
-                  ...customerRequest,
+                setClientRequest({
+                  ...clientRequest,
                   employeeAgeRange: event.target.value,
                 });
               }}
@@ -455,11 +455,11 @@ export default function Home({ searchParams }: HomeProps) {
               required
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={customerRequest.employeeGender}
+              value={clientRequest.employeeGender}
               label="Gender"
               onChange={(event: SelectChangeEvent) => {
-                setCustomerRequest({
-                  ...customerRequest,
+                setClientRequest({
+                  ...clientRequest,
                   employeeGender: event.target.value,
                 });
               }}
@@ -480,11 +480,11 @@ export default function Home({ searchParams }: HomeProps) {
               displayEmpty
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={customerRequest.employeeReligionPreference}
+              value={clientRequest.employeeReligionPreference}
               label="Religion Preference"
               onChange={(event: SelectChangeEvent) => {
-                setCustomerRequest({
-                  ...customerRequest,
+                setClientRequest({
+                  ...clientRequest,
                   employeeReligionPreference: event.target.value,
                 });
               }}
@@ -506,10 +506,10 @@ export default function Home({ searchParams }: HomeProps) {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Tribe Preference"
-              value={customerRequest.employeeTribePreference}
+              value={clientRequest.employeeTribePreference}
               onChange={(event: SelectChangeEvent) => {
-                setCustomerRequest({
-                  ...customerRequest,
+                setClientRequest({
+                  ...clientRequest,
                   employeeTribePreference: event.target.value,
                 });
               }}
@@ -531,14 +531,14 @@ export default function Home({ searchParams }: HomeProps) {
             </Select>
           </FormControl>
 
-          {customerRequest.serviceType === "Live-out Housekeeper Services" && (
+          {clientRequest.serviceType === "Live-out Housekeeper Services" && (
             <FormControl fullWidth sx={{ mt: 2 }}>
               <FormLabel id="demo-simple-select-label">
                 Select preferred staff working days
               </FormLabel>
               <ToggleButtonGroup
                 color="primary"
-                value={customerRequest.workingDays}
+                value={clientRequest.workingDays}
                 sx={{ mt: 2 }}
                 onChange={handleSelectDays}
                 aria-label="text formatting"
@@ -563,12 +563,12 @@ export default function Home({ searchParams }: HomeProps) {
                 </ToggleButton>
               </ToggleButtonGroup>
 
-              {customerRequest.workingDays.length !== 0 && (
+              {clientRequest.workingDays.length !== 0 && (
                 <FormHelperText>
-                  {customerRequest.workingDays.length > 1
-                    ? customerRequest.workingDays.length
+                  {clientRequest.workingDays.length > 1
+                    ? clientRequest.workingDays.length
                     : "Once"}{" "}
-                  {customerRequest.workingDays.length > 1 && "times"} a week
+                  {clientRequest.workingDays.length > 1 && "times"} a week
                 </FormHelperText>
               )}
             </FormControl>
@@ -576,10 +576,10 @@ export default function Home({ searchParams }: HomeProps) {
 
           <TextField
             label="Other Preferences"
-            value={customerRequest.extraComment}
+            value={clientRequest.extraComment}
             onChange={(e) =>
-              setCustomerRequest({
-                ...customerRequest,
+              setClientRequest({
+                ...clientRequest,
                 extraComment: e.target.value,
               })
             }
@@ -600,9 +600,9 @@ export default function Home({ searchParams }: HomeProps) {
           <p className="text-xs text-gray-400">
             Tell us about your household to better match our services
           </p>
-          {customerRequest.serviceType !== "Live-in Housekeeper Services" &&
-            customerRequest.serviceType !== "Live-out Housekeeper Services" &&
-            customerRequest.serviceType !== "Live-in Help Services" && (
+          {clientRequest.serviceType !== "Live-in Housekeeper Services" &&
+            clientRequest.serviceType !== "Live-out Housekeeper Services" &&
+            clientRequest.serviceType !== "Live-in Help Services" && (
               <>
                 <FormControl fullWidth sx={{ mt: 2 }}>
                   <InputLabel id="demo-simple-select-label">
@@ -613,10 +613,10 @@ export default function Home({ searchParams }: HomeProps) {
                     id="demo-simple-select"
                     required
                     label="Number of Kids to be cared for"
-                    value={customerRequest.numberOfKids.toString()}
+                    value={clientRequest.numberOfKids.toString()}
                     onChange={(event: SelectChangeEvent) => {
-                      setCustomerRequest({
-                        ...customerRequest,
+                      setClientRequest({
+                        ...clientRequest,
                         numberOfKids: Number(event.target.value),
                       });
                     }}
@@ -632,12 +632,12 @@ export default function Home({ searchParams }: HomeProps) {
                 </FormControl>
                 <FormControl fullWidth>
                   <TextField
-                    value={customerRequest.agesOfKids}
+                    value={clientRequest.agesOfKids}
                     required
-                    error={customerRequest.agesOfKids === ""}
+                    error={clientRequest.agesOfKids === ""}
                     onChange={(e) => {
-                      setCustomerRequest({
-                        ...customerRequest,
+                      setClientRequest({
+                        ...clientRequest,
                         agesOfKids: e.target.value, // Convert to numbers
                       });
                     }}
@@ -652,22 +652,22 @@ export default function Home({ searchParams }: HomeProps) {
               </>
             )}
 
-          {customerRequest.serviceType !== "Live-in Nanny Services" && (
+          {clientRequest.serviceType !== "Live-in Nanny Services" && (
             <>
               <FormControl fullWidth sx={{ mt: 2 }}>
                 <InputLabel id="demo-simple-select-label">
                   Number of Rooms
                 </InputLabel>
                 <Select
-                  error={customerRequest.numberOfRooms === ""}
+                  error={clientRequest.numberOfRooms === ""}
                   label="Number of Rooms"
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   required
-                  value={customerRequest.numberOfRooms}
+                  value={clientRequest.numberOfRooms}
                   onChange={(event: SelectChangeEvent) => {
-                    setCustomerRequest({
-                      ...customerRequest,
+                    setClientRequest({
+                      ...clientRequest,
                       numberOfRooms: event.target.value,
                     });
                   }}
@@ -688,13 +688,13 @@ export default function Home({ searchParams }: HomeProps) {
                 <Select
                   required
                   label="Type of House"
-                  error={customerRequest.typeOfHouse === ""}
+                  error={clientRequest.typeOfHouse === ""}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={customerRequest.typeOfHouse}
+                  value={clientRequest.typeOfHouse}
                   onChange={(event: SelectChangeEvent) => {
-                    setCustomerRequest({
-                      ...customerRequest,
+                    setClientRequest({
+                      ...clientRequest,
                       typeOfHouse: event.target.value,
                     });
                   }}
@@ -712,13 +712,13 @@ export default function Home({ searchParams }: HomeProps) {
 
           <FormControl fullWidth>
             <TextField
-              value={customerRequest.extraHomeInformation}
+              value={clientRequest.extraHomeInformation}
               multiline
               label="Other Information"
               rows={4}
               onChange={(e) => {
-                setCustomerRequest({
-                  ...customerRequest,
+                setClientRequest({
+                  ...clientRequest,
                   extraHomeInformation: e.target.value,
                 });
               }}
@@ -753,8 +753,8 @@ export default function Home({ searchParams }: HomeProps) {
           <Button
             disabled={disableButton()}
             onClick={() => {
-              setCustomerRequest({
-                ...customerRequest,
+              setClientRequest({
+                ...clientRequest,
                 bookingFee: clientPrice,
               });
               router.push(pathname + "?step=2");
@@ -850,12 +850,12 @@ export default function Home({ searchParams }: HomeProps) {
           <span className="flex items-center justify-between mt-2 gap-3">
             <p className="font-semibold text-black text-sm">Service Type:</p>
             <p className="text-xs text-gray-700 text-end">
-              {customerRequest.serviceType}
+              {clientRequest.serviceType}
             </p>
           </span>
 
-          {(customerRequest.serviceType === "Live-in Nanny Services" ||
-            customerRequest.serviceType ===
+          {(clientRequest.serviceType === "Live-in Nanny Services" ||
+            clientRequest.serviceType ===
               "Live-in Nanny + Help Services") && (
             <>
               <span className="flex items-center justify-between mt-2 gap-3">
@@ -863,18 +863,18 @@ export default function Home({ searchParams }: HomeProps) {
                   Kids Details:
                 </p>
                 <p className="text-xs text-gray-700 text-end">
-                  {customerRequest.numberOfKids} kid
-                  {customerRequest.numberOfKids > 1 && "s"} of age(s):{" "}
-                  {customerRequest.agesOfKids}
+                  {clientRequest.numberOfKids} kid
+                  {clientRequest.numberOfKids > 1 && "s"} of age(s):{" "}
+                  {clientRequest.agesOfKids}
                 </p>
               </span>
             </>
           )}
 
-          {(customerRequest.serviceType === "Live-in Housekeeper Services" ||
-            customerRequest.serviceType === "Live-out Housekeeper Services" ||
-            customerRequest.serviceType === "Live-in Help Services" ||
-            customerRequest.serviceType ===
+          {(clientRequest.serviceType === "Live-in Housekeeper Services" ||
+            clientRequest.serviceType === "Live-out Housekeeper Services" ||
+            clientRequest.serviceType === "Live-in Help Services" ||
+            clientRequest.serviceType ===
               "Live-in Nanny + Help Services") && (
             <>
               <span className="flex items-center justify-between mt-2 gap-3">
@@ -882,8 +882,8 @@ export default function Home({ searchParams }: HomeProps) {
                   Home Details:
                 </p>
                 <p className="text-xs text-gray-700 text-end">
-                  {customerRequest.typeOfHouse} home with&nbsp;
-                  {customerRequest.numberOfRooms}
+                  {clientRequest.typeOfHouse} home with&nbsp;
+                  {clientRequest.numberOfRooms}
                 </p>
               </span>
               <span className="flex items-center justify-between mt-2 gap-3">
@@ -891,7 +891,7 @@ export default function Home({ searchParams }: HomeProps) {
                   Additional Home Info:
                 </p>
                 <p className="text-xs text-gray-700">
-                  {customerRequest.extraHomeInformation || "nil"}
+                  {clientRequest.extraHomeInformation || "nil"}
                 </p>
               </span>
             </>
@@ -901,18 +901,18 @@ export default function Home({ searchParams }: HomeProps) {
             <p className="font-semibold text-black text-sm">Staff Details:</p>
             <p className="text-xs text-gray-700 text-end">
               Ages{" "}
-              {`${customerRequest.employeeAgeRange}, ${customerRequest.employeeGender}, ${customerRequest.employeeTribePreference},
-              ${customerRequest.employeeReligionPreference}`}
+              {`${clientRequest.employeeAgeRange}, ${clientRequest.employeeGender}, ${clientRequest.employeeTribePreference},
+              ${clientRequest.employeeReligionPreference}`}
             </p>
           </span>
 
-          {customerRequest.serviceType === "Live-out Housekeeper Services" && (
+          {clientRequest.serviceType === "Live-out Housekeeper Services" && (
             <span className="flex items-center justify-between mt-2 gap-3">
               <p className="font-semibold text-black text-sm">Working Days:</p>
               <p className="text-xs text-gray-700 text-end">
-                {customerRequest.workingDays.length} day
-                {customerRequest.workingDays.length > 1 && "s"} a week; (
-                {customerRequest.workingDays.join(", ")})
+                {clientRequest.workingDays.length} day
+                {clientRequest.workingDays.length > 1 && "s"} a week; (
+                {clientRequest.workingDays.join(", ")})
               </p>
             </span>
           )}
@@ -922,7 +922,7 @@ export default function Home({ searchParams }: HomeProps) {
               Additional Staff Details:
             </p>
             <p className="text-xs text-gray-700 text-end">
-              {customerRequest.extraComment || "nil"}
+              {clientRequest.extraComment || "nil"}
             </p>
           </span>
 
@@ -937,20 +937,20 @@ export default function Home({ searchParams }: HomeProps) {
           <span className="flex items-center justify-between mt-2 gap-3">
             <p className="font-semibold text-black text-sm">Payment Plan:</p>
             <p className="text-xs text-gray-700 text-end">
-              {customerRequest.paymentPlan}
+              {clientRequest.paymentPlan}
             </p>
           </span>
           <span className="flex items-center justify-between mt-2 gap-3">
             <p className="font-bold text-black text-sm">Service Fee:</p>
             <p className="text-sm text-red-700 text-end">
               ₦
-              {customerRequest.paymentPlan === "monthly"
-                ? customerRequest.bookingFee.toLocaleString()
+              {clientRequest.paymentPlan === "monthly"
+                ? clientRequest.bookingFee.toLocaleString()
                 : ONE_OFF_FEE.toLocaleString()}{" "}
-              {customerRequest.paymentPlan === "monthly" && "/month"}
+              {clientRequest.paymentPlan === "monthly" && "/month"}
             </p>
           </span>
-          {customerRequest.paymentPlan === "monthly" && (
+          {clientRequest.paymentPlan === "monthly" && (
             <span className="flex items-center justify-between mt-2 gap-3">
               <p className="font-bold text-black text-sm flex">Booking Fee:</p>
               <p className="text-sm text-red-700 text-end">
@@ -967,10 +967,10 @@ export default function Home({ searchParams }: HomeProps) {
             id="client-name"
             label="Your Name"
             variant="outlined"
-            value={customerRequest.clientName}
+            value={clientRequest.clientName}
             onChange={(e) =>
-              setCustomerRequest({
-                ...customerRequest,
+              setClientRequest({
+                ...clientRequest,
                 clientName: e.target.value,
               })
             }
@@ -982,10 +982,10 @@ export default function Home({ searchParams }: HomeProps) {
             type="number"
             label="Whatsapp Number"
             variant="outlined"
-            value={customerRequest.clientPhoneNumber}
+            value={clientRequest.clientPhoneNumber}
             onChange={(e) =>
-              setCustomerRequest({
-                ...customerRequest,
+              setClientRequest({
+                ...clientRequest,
                 clientPhoneNumber: e.target.value,
               })
             }
@@ -997,10 +997,10 @@ export default function Home({ searchParams }: HomeProps) {
             type="text"
             label="Email Address"
             variant="outlined"
-            value={customerRequest.clientEmail}
+            value={clientRequest.clientEmail}
             onChange={(e) =>
-              setCustomerRequest({
-                ...customerRequest,
+              setClientRequest({
+                ...clientRequest,
                 clientEmail: e.target.value,
               })
             }
@@ -1013,10 +1013,10 @@ export default function Home({ searchParams }: HomeProps) {
             type="text"
             label="Address (Where Staff will work)"
             variant="outlined"
-            value={customerRequest.clientAddress}
+            value={clientRequest.clientAddress}
             onChange={(e) =>
-              setCustomerRequest({
-                ...customerRequest,
+              setClientRequest({
+                ...clientRequest,
                 clientAddress: e.target.value,
               })
             }
@@ -1026,8 +1026,8 @@ export default function Home({ searchParams }: HomeProps) {
           </p>
           <PaystackButton
             disabled={
-              customerRequest.clientEmail === "" ||
-              customerRequest.clientPhoneNumber === ""
+              clientRequest.clientEmail === "" ||
+              clientRequest.clientPhoneNumber === ""
             }
             className="paystack-button"
             {...componentProps}
