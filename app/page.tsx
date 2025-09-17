@@ -35,6 +35,8 @@ import dynamic from "next/dynamic";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useEffect } from "react";
+// import Lottie from "lottie-react";
+// import groovyWalkAnimation from "../public/images/loader.json";
 
 const PaystackButton = dynamic(
   () => import("react-paystack").then((mod) => mod.PaystackButton),
@@ -148,7 +150,11 @@ export default function Home({ searchParams }: HomeProps) {
     extraChildren: clientRequest.numberOfKids,
     extraRooms: Number(clientRequest.numberOfRooms[0]),
     extraDays: clientRequest.workingDays.length,
+    extraFloors:  Number(clientRequest.typeOfHouse[0]) + 1 || 1
   });
+
+  console.log('extrafloors---->', Number(clientRequest.typeOfHouse[0]) + 1 || 1);
+  
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
   const bookingFee =
@@ -353,6 +359,7 @@ export default function Home({ searchParams }: HomeProps) {
           className="top-1/2 max-sm:-translate-x-72 z-10  w-56 absolute"
           size={100}
         />
+        // <Lottie className="top-1/2 max-sm:-translate-x-0 z-10  w-56 absolute" animationData={groovyWalkAnimation} loop={true} />
       )}
       <div className={`w-full ${pageLoading && "opacity-20"} `}>
         <AgreementDialog
@@ -723,12 +730,13 @@ export default function Home({ searchParams }: HomeProps) {
                       });
                     }}
                   >
-                    <MenuItem value="bungalow">Bungalow</MenuItem>
+                    <MenuItem value="bungalow">Bungalow/Flat</MenuItem>
                     <MenuItem value="1 storey">1 storey</MenuItem>
                     <MenuItem value="2 storey">2 storey</MenuItem>
                     <MenuItem value="3 storey">3 storey</MenuItem>
                     <MenuItem value="4 storey">4 storey</MenuItem>
-                    <MenuItem value="4 storey">4 storey</MenuItem>
+                    <MenuItem value="5 storey">5 storey</MenuItem>
+                    <MenuItem value="6 storey">6 storey</MenuItem>
                   </Select>
                 </FormControl>
               </>

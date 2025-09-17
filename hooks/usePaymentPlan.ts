@@ -11,6 +11,7 @@ interface Options {
   extraChildren?: number;
   extraRooms?: number;
   extraDays?: number;
+  extraFloors?: number;
 }
 
 const BASE_STAFF_PAY = 50000;
@@ -42,6 +43,10 @@ export function usePaymentPlan(
 
     if (options.extraDays && options.extraDays > 0) {
       clientPrice += (options.extraDays <= 2 ? 1 : options.extraDays/2) * 12000;
+    }
+
+    if (options.extraFloors && options.extraFloors > 0) {
+      clientPrice += (options.extraFloors < 2 ? 1 : options.extraFloors/2) * 12000;
     }
 
     // round to nearest 100
