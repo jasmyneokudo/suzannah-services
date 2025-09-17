@@ -1,0 +1,16 @@
+.logo {
+  width: 200px;
+    position: absolute;
+  top: 60%;
+      left: 50%;
+      background-color: 'red';
+      border-width: '1px';
+      transform: translate(-50%, -50%);
+  animation: float 1s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-30px); }
+}
+

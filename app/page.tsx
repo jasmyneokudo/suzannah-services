@@ -19,7 +19,7 @@ import {
 } from "@/types/ClientRequest";
 import { faqs } from "@/data/faqs";
 import {
-  CircularProgress,
+  // CircularProgress,
   Fab,
   FormHelperText,
   FormLabel,
@@ -35,8 +35,7 @@ import dynamic from "next/dynamic";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useEffect } from "react";
-// import Lottie from "lottie-react";
-// import groovyWalkAnimation from "../public/images/loader.json";
+import "./loader.css";
 
 const PaystackButton = dynamic(
   () => import("react-paystack").then((mod) => mod.PaystackButton),
@@ -58,7 +57,7 @@ import { useGoogleSheets } from "@/hooks/useGoogleSheets";
 import { usePathname, useRouter } from "next/navigation";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
-const BOOKING_FEE = 10250;
+const BOOKING_FEE = 12250;
 const ONE_OFF_FEE = 120500;
 
 type HomeProps = {
@@ -150,11 +149,8 @@ export default function Home({ searchParams }: HomeProps) {
     extraChildren: clientRequest.numberOfKids,
     extraRooms: Number(clientRequest.numberOfRooms[0]),
     extraDays: clientRequest.workingDays.length,
-    extraFloors:  Number(clientRequest.typeOfHouse[0]) + 1 || 1
+    extraFloors: Number(clientRequest.typeOfHouse[0]) + 1 || 1,
   });
-
-  console.log('extrafloors---->', Number(clientRequest.typeOfHouse[0]) + 1 || 1);
-  
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
   const bookingFee =
@@ -355,11 +351,19 @@ export default function Home({ searchParams }: HomeProps) {
   return (
     <main className="flex  bg-white min-h-screen w-full flex-col items-center justify-between overflow-clip">
       {pageLoading && (
-        <CircularProgress
-          className="top-1/2 max-sm:-translate-x-72 z-10  w-56 absolute"
-          size={100}
+        // <CircularProgress
+        //   className="top-1/2 max-sm:-translate-x-72 z-10  w-56 absolute"
+        //   size={100}
+        // />
+        // <div className="loader"></div>
+        <Image
+          src="/images/suzannah-drop.png"
+          alt="Vercel Logo"
+          width="200"
+          height="200"
+          className="logo"
+          priority
         />
-        // <Lottie className="top-1/2 max-sm:-translate-x-0 z-10  w-56 absolute" animationData={groovyWalkAnimation} loop={true} />
       )}
       <div className={`w-full ${pageLoading && "opacity-20"} `}>
         <AgreementDialog
