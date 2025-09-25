@@ -58,7 +58,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 const BOOKING_FEE = 15250;
-export const ONE_OFF_FEE = 120500;
+const ONE_OFF_FEE = 120500;
 
 type HomeProps = {
   searchParams?: {
