@@ -654,20 +654,21 @@ export default function Home({ searchParams }: HomeProps) {
                       value={clientRequest.numberOfKids.toString()}
                       onChange={(event: SelectChangeEvent) => {
                         const ages = clientRequest.agesOfKids.split(",");
+                        let error = ""
                         
                         for (let i = 0; i < ages.length; i++) {                          
                           if (ages[i].trim().length <= 2) {
-                            setAgesOfKidsError("Please enter a valid age for the next age")
+                            error = "Please enter a valid age for the next age"
                           } else {
-                            setAgesOfKidsError("")
+                            error = ""
                           }
                         }
+                                                
+                        if (Number(event.target.value) !== ages.length ) {
+                          error = "Ages of Kids does not correspond with numbers of Kids";
+                        } 
 
-                        if (Number(event.target.value) !== ages.length) {
-                          setAgesOfKidsError("Ages of Kids does not correspond with numbers of Kids");
-                        } else {
-                          setAgesOfKidsError(agesOfKidsError);
-                        }
+                        setAgesOfKidsError(error)
                         setClientRequest({
                           ...clientRequest,
                           numberOfKids: Number(event.target.value),
@@ -711,6 +712,7 @@ export default function Home({ searchParams }: HomeProps) {
                         });
                       }}
                       placeholder="Ages of Kids"
+                      label="Ages of Kids"
                       sx={{ mt: 2 }}
                     />
                     <FormHelperText>
