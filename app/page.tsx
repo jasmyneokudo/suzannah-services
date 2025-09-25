@@ -57,7 +57,7 @@ import { useGoogleSheets } from "@/hooks/useGoogleSheets";
 import { usePathname, useRouter } from "next/navigation";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
-const BOOKING_FEE = 12250;
+const BOOKING_FEE = 15250;
 const ONE_OFF_FEE = 120500;
 
 type HomeProps = {
@@ -140,6 +140,7 @@ export default function Home({ searchParams }: HomeProps) {
 
   const [customRequest, setCustomRequest] = useState(defaultCustomRequest);
 
+  const [agesOfKidsError, setAgesOfKidsError] = useState("");
   const resetCustomerRequest = () => {
     setClientRequest(defaultCustomerRequest);
     // setDays([])
@@ -150,6 +151,7 @@ export default function Home({ searchParams }: HomeProps) {
     extraRooms: Number(clientRequest.numberOfRooms[0]),
     extraDays: clientRequest.workingDays.length,
     extraFloors: Number(clientRequest.typeOfHouse[0]) + 1 || 1,
+    newBorns: (clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks)\b/gi) || []).length // check how many times the word week or weeks appear
   });
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
@@ -198,7 +200,7 @@ export default function Home({ searchParams }: HomeProps) {
       );
     } else if (clientRequest.serviceType === "Live-in Nanny Services") {
       return (
-        clientRequest.agesOfKids === "" || clientRequest.numberOfKids === 0
+        clientRequest.agesOfKids === "" || clientRequest.numberOfKids === 0 || agesOfKidsError !== ""
       );
     } else if (clientRequest.serviceType === "Live-out Housekeeper Services") {
       return (
@@ -211,7 +213,8 @@ export default function Home({ searchParams }: HomeProps) {
         clientRequest.typeOfHouse === "" ||
         clientRequest.numberOfRooms === "" ||
         clientRequest.agesOfKids === "" ||
-        clientRequest.numberOfKids === 0
+        clientRequest.numberOfKids === 0 || 
+        agesOfKidsError !== ""
       );
     }
   }
@@ -650,6 +653,11 @@ export default function Home({ searchParams }: HomeProps) {
                       label="Number of Kids to be cared for"
                       value={clientRequest.numberOfKids.toString()}
                       onChange={(event: SelectChangeEvent) => {
+                        if (Number(event.target.value) === clientRequest.agesOfKids.split(",").length) {
+                          setAgesOfKidsError("");
+                        } else {
+                          setAgesOfKidsError("Ages of Kids does not correspond with numbers of Kids");
+                        }
                         setClientRequest({
                           ...clientRequest,
                           numberOfKids: Number(event.target.value),
@@ -669,19 +677,35 @@ export default function Home({ searchParams }: HomeProps) {
                     <TextField
                       value={clientRequest.agesOfKids}
                       required
-                      error={clientRequest.agesOfKids === ""}
+                      error={clientRequest.agesOfKids === "" || agesOfKidsError !== ""}
+                      helperText={agesOfKidsError}
                       onChange={(e) => {
+                        const agesOfKids = e.target.value;
+                        const ages = agesOfKids.split(",");
+                        
+                        for (let i = 0; i < ages.length; i++) {                          
+                          if (ages[i].trim().length <= 2) {
+                            setAgesOfKidsError("Please enter a valid age for the next age")
+                          } else {
+                            setAgesOfKidsError("")
+                          }
+                        }
+
+                        clientRequest.numberOfKids !== ages.length 
+                        ? setAgesOfKidsError("Ages of Kids does not correspond with numbers of Kids")
+                        : agesOfKidsError
+                      
                         setClientRequest({
                           ...clientRequest,
-                          agesOfKids: e.target.value, // Convert to numbers
+                          agesOfKids
                         });
                       }}
                       placeholder="Ages of Kids"
                       sx={{ mt: 2 }}
                     />
                     <FormHelperText>
-                      Separate with commas, e.g 15 months,2 years,1 year and 3
-                      months
+                      Separate ages with commas, e.g: 15 months,2 years,1 year and 3
+                      months, 4 weeks
                     </FormHelperText>
                   </FormControl>
                 </>

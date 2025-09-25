@@ -12,12 +12,13 @@ interface Options {
   extraRooms?: number;
   extraDays?: number;
   extraFloors?: number;
+  newBorns?: number;
 }
 
 const BASE_STAFF_PAY = 50000;
 
 const PRICING: Record<ServiceType, number> = {
-  "Live-in Nanny Services": 70500,
+  "Live-in Nanny Services": 65500,
   "Live-in Help Services": 70500,
   "Live-in Nanny + Help Services": 80500,
   "Live-in Housekeeper Services": 70500,
@@ -34,7 +35,7 @@ export function usePaymentPlan(
 
     // ✅ Add-ons
     if (options.extraChildren && options.extraChildren > 0) {
-      clientPrice += (options.extraChildren < 3 ? 1 : options.extraChildren/3) * 10000;
+      clientPrice += (options.extraChildren < 3 ? 1 : options.extraChildren/3) * 12000;
     }
 
     if (options.extraRooms && options.extraRooms > 0) {
@@ -47,6 +48,11 @@ export function usePaymentPlan(
 
     if (options.extraFloors && options.extraFloors > 0) {
       clientPrice += (options.extraFloors < 2 ? 1 : options.extraFloors/2) * 12000;
+    }
+
+    // Add 12k per new born
+    if (options.newBorns && options.newBorns > 0) {
+      clientPrice += (options.newBorns) * 12000;
     }
 
     // round to nearest 100
