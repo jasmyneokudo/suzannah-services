@@ -58,7 +58,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 const BOOKING_FEE = 15250;
-const ONE_OFF_FEE = 120500;
+export const ONE_OFF_FEE = 120500;
 
 type HomeProps = {
   searchParams?: {
@@ -653,10 +653,20 @@ export default function Home({ searchParams }: HomeProps) {
                       label="Number of Kids to be cared for"
                       value={clientRequest.numberOfKids.toString()}
                       onChange={(event: SelectChangeEvent) => {
-                        if (Number(event.target.value) === clientRequest.agesOfKids.split(",").length) {
-                          setAgesOfKidsError("");
-                        } else {
+                        const ages = clientRequest.agesOfKids.split(",");
+                        
+                        for (let i = 0; i < ages.length; i++) {                          
+                          if (ages[i].trim().length <= 2) {
+                            setAgesOfKidsError("Please enter a valid age for the next age")
+                          } else {
+                            setAgesOfKidsError("")
+                          }
+                        }
+
+                        if (Number(event.target.value) !== ages.length) {
                           setAgesOfKidsError("Ages of Kids does not correspond with numbers of Kids");
+                        } else {
+                          setAgesOfKidsError(agesOfKidsError);
                         }
                         setClientRequest({
                           ...clientRequest,
@@ -1007,7 +1017,7 @@ export default function Home({ searchParams }: HomeProps) {
             </span>
             <span className="flex items-center justify-between mt-2 gap-3">
               <p className="font-bold text-black text-sm">Service Fee:</p>
-              <p className="text-sm text-red-700 text-end">
+              <p className="font-bold text-sm text-red-700 text-end">
                 ₦
                 {clientRequest.paymentPlan === "monthly"
                   ? clientRequest.bookingFee.toLocaleString()
@@ -1020,7 +1030,7 @@ export default function Home({ searchParams }: HomeProps) {
                 <p className="font-bold text-black text-sm flex">
                   Booking Fee:
                 </p>
-                <p className="text-sm text-red-700 text-end">
+                <p className="font-bold text-sm text-red-700 text-end">
                   ₦{BOOKING_FEE.toLocaleString()}
                 </p>
               </span>

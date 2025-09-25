@@ -35,7 +35,7 @@ export const paymentPlans = [
       "Free Medical Test for selected candidate",
       "Manage your own staff directly without external inteference.",
     ],
-    price: "120,000",
+    price: "120,500",
     type: "one-off" as PaymentPlan,
   },
 ];

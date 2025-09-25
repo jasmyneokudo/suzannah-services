@@ -48,14 +48,17 @@ export const Hero = (props: any) => {
           <p className="m-0 max-w-[30ch]">Contact Us</p>
         </a>
       </div>
-      <Image
-        src="/images/suzannah-large-white.png"
-        alt="Logo"
-        width="80"
-        height="30"
-        className="absolute top-2 left-2 z-20"
-        priority
-      />
+      <Link href="/">
+        <Image
+          src="/images/suzannah-large-white.png"
+          alt="Logo"
+          width="80"
+          height="30"
+          className="absolute top-2 left-2 z-20"
+          priority
+        />
+      </Link>
+
       <Image
         src="/images/background-image.jpg"
         alt="Background"
