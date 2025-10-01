@@ -309,13 +309,12 @@ export const CustomerPreferencesSection = ({
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <FormLabel>Select preferred staff working hours</FormLabel>
-              <div className="flex gap-2">
+              <div className="flex justify-between">
                 <FormControl
                   sx={{ mt: 2, display: "flex", flexDirection: "row" }}
                 >
-                  <FormLabel className="mt-3 mr-2">From</FormLabel>
                   <DigitalClock
-                    className="border-gray-400 border"
+                    className="border-gray-400 border-[0.8px]"
                     shouldDisableTime={(timeValue, clockType) => {
                       if (clockType === "hours") {
                         // disable 10 PM (22) to 11 PM (23)
@@ -342,11 +341,11 @@ export const CustomerPreferencesSection = ({
                   />
                 </FormControl>
                 <FormControl
-                  sx={{ mt: 2, display: "flex", flexDirection: "row" }}
+                  sx={{ mt: 2, display: "flex", alignContent: 'space-between', flexDirection: "row" }}
                 >
-                  <FormLabel className="mt-3 mr-2">To</FormLabel>
+                  <FormLabel className="mt-3 mr-5">to</FormLabel>
                   <DigitalClock
-                    className="border-gray-400 border"
+                    className="border-gray-400 border-[0.8px]"
                     shouldDisableTime={(timeValue, clockType) => {
                       if (clockType === "hours") {
                         // disable 10 PM (22) to 11 PM (23)
