@@ -10,7 +10,6 @@ import Link from "next/link";
 import MenuItem from "@mui/material/MenuItem";
 import ReviewCard from "./components/ReviewCard";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import ServiceCard from "./components/ServiceCard";
 import Slider, { Settings } from "react-slick";
 import {
   CustomerRequest,
@@ -21,19 +20,14 @@ import { faqs } from "@/data/faqs";
 import {
   // CircularProgress,
   Fab,
-  FormHelperText,
-  FormLabel,
   TextField,
 } from "@mui/material";
 import { Hero } from "./components/Hero";
 import { SampleNextArrow } from "./components/NextArrow";
-import { services } from "@/data/services";
 import { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import dynamic from "next/dynamic";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useEffect } from "react";
 import "./loader.css";
 
@@ -47,14 +41,14 @@ import {
   IconBrandInstagram,
   IconBrandWhatsapp,
   IconFileDescription,
-  IconHomeQuestion,
-  IconUserQuestion,
 } from "@tabler/icons-react";
 import { paymentPlans } from "@/data/paymentPlans";
 import PaymentPlanCard from "./components/PaymentPlanCard";
 import { usePaymentPlan } from "@/hooks/usePaymentPlan";
 import { useGoogleSheets } from "@/hooks/useGoogleSheets";
 import { usePathname, useRouter } from "next/navigation";
+import { ServicesSection } from "./sections/ServicesSection";
+import { CustomerPreferencesSection } from "./sections/CustomerPreferencesSection";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 const BOOKING_FEE = 15250;
@@ -91,14 +85,6 @@ export default function Home({ searchParams }: HomeProps) {
   const [loading, setLoading] = useState<boolean>(false);
   // const [days, setDays] = useState<string[]>(() => []);
 
-  const handleSelectDays = (
-    event: React.MouseEvent<HTMLElement>,
-    newDays: string[]
-  ) => {
-    // setDays(newDays);
-    setClientRequest({ ...clientRequest, workingDays: newDays });
-  };
-
   const defaultCustomRequest = {
     serviceName: "",
     serviceLocation: "",
@@ -109,9 +95,9 @@ export default function Home({ searchParams }: HomeProps) {
   };
 
   const defaultCustomerRequest: CustomerRequest = {
-    serviceType: "Live-in Nanny Services",
-    employeeGender: "",
-    employeeAgeRange: "",
+    serviceType: "Nanny Services",
+    employeeGender: "Female",
+    employeeAgeRange: "23-27",
     employeeTribePreference: "any tribe",
     employeeReligionPreference: "any religion",
     extraComment: "",
@@ -120,7 +106,10 @@ export default function Home({ searchParams }: HomeProps) {
     clientEmail: "",
     clientAddress: "",
     numberOfKids: 0,
+    numberOfDiners: 0,
+    workMode: "Live-in",
     workingDays: [],
+    workingHours: [],
     agesOfKids: "",
     numberOfRooms: "",
     typeOfHouse: "",
@@ -140,7 +129,6 @@ export default function Home({ searchParams }: HomeProps) {
 
   const [customRequest, setCustomRequest] = useState(defaultCustomRequest);
 
-  const [agesOfKidsError, setAgesOfKidsError] = useState("");
   const resetCustomerRequest = () => {
     setClientRequest(defaultCustomerRequest);
     // setDays([])
@@ -151,7 +139,10 @@ export default function Home({ searchParams }: HomeProps) {
     extraRooms: Number(clientRequest.numberOfRooms[0]),
     extraDays: clientRequest.workingDays.length,
     extraFloors: Number(clientRequest.typeOfHouse[0]) + 1 || 1,
-    newBorns: (clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks)\b/gi) || []).length // check how many times the word week or weeks appear
+    newBorns: (
+      clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks)\b/gi) || []
+    ).length, // check how many times the word week or weeks appear
+    extraDiners: clientRequest.numberOfDiners
   });
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
@@ -190,35 +181,6 @@ export default function Home({ searchParams }: HomeProps) {
     }
   }, [step]);
 
-  function disableButton(): boolean {
-    if (
-      clientRequest.serviceType === "Live-in Help Services" ||
-      clientRequest.serviceType === "Live-in Housekeeper Services"
-    ) {
-      return (
-        clientRequest.typeOfHouse === "" || clientRequest.numberOfRooms === ""
-      );
-    } else if (clientRequest.serviceType === "Live-in Nanny Services") {
-      return (
-        clientRequest.agesOfKids === "" || clientRequest.numberOfKids === 0 || agesOfKidsError !== ""
-      );
-    } else if (clientRequest.serviceType === "Live-out Housekeeper Services") {
-      return (
-        clientRequest.typeOfHouse === "" ||
-        clientRequest.numberOfRooms === "" ||
-        clientRequest.workingDays.length === 0
-      );
-    } else {
-      return (
-        clientRequest.typeOfHouse === "" ||
-        clientRequest.numberOfRooms === "" ||
-        clientRequest.agesOfKids === "" ||
-        clientRequest.numberOfKids === 0 || 
-        agesOfKidsError !== ""
-      );
-    }
-  }
-
   async function sendRequestDetails() {
     const requestBody = `
       Incoming Client Request ${new Date(Date.now()).toLocaleString()}\n:
@@ -230,15 +192,19 @@ export default function Home({ searchParams }: HomeProps) {
       Address: ${clientRequest.clientAddress},
       Home/Family Details
       ${
-        (clientRequest.serviceType === "Live-in Nanny Services" ||
-          clientRequest.serviceType === "Live-in Nanny + Help Services") &&
+        (clientRequest.serviceType === "Nanny Services" ||
+          clientRequest.serviceType === "Nanny + Help Services") &&
         `Number of Kids: ${clientRequest.numberOfKids},
       Ages of Kids: ${clientRequest.agesOfKids},`
       }
       ${
-        (clientRequest.serviceType === "Live-in Housekeeper Services" ||
-          clientRequest.serviceType === "Live-in Nanny + Help Services" ||
-          clientRequest.serviceType === "Live-in Help Services") &&
+        (clientRequest.serviceType === "Home Cook Services") &&
+        `Number of Diners: ${clientRequest.numberOfDiners},`
+      }
+      ${
+        (clientRequest.serviceType === "Housekeeper Services" ||
+          clientRequest.serviceType === "Nanny + Help Services" ||
+          clientRequest.serviceType === "General Help Services") &&
         `House Type: ${clientRequest.typeOfHouse},
       Number of Rooms: ${clientRequest.numberOfRooms},
       Extra Home Info: ${clientRequest.extraHomeInformation},`
@@ -249,9 +215,11 @@ export default function Home({ searchParams }: HomeProps) {
       Tribe Preference: ${clientRequest.employeeTribePreference},
       Religion Preference: ${clientRequest.employeeReligionPreference},
       ${
-        clientRequest.serviceType === "Live-out Housekeeper Services" &&
-        `Working Days: ${clientRequest.workingDays.join(", ")}`
+        clientRequest.workMode === "Live-out" &&
+        `Working Days: ${clientRequest.workingDays.join(", ")},
+         Working Hours: ${clientRequest.workingHours.join(", ")},`
       },
+      Work Mode: ${clientRequest.workMode},
       Other Staff Preferences: ${clientRequest.extraComment},
       Amount Paid: ${
         clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE
@@ -268,15 +236,18 @@ export default function Home({ searchParams }: HomeProps) {
         clientRequest.clientPhoneNumber,
         clientRequest.clientAddress,
         clientRequest.numberOfKids,
+        clientRequest.numberOfDiners,
         clientRequest.agesOfKids,
         clientRequest.typeOfHouse,
         clientRequest.numberOfRooms,
         clientRequest.extraHomeInformation,
+        clientRequest.workMode,
         clientRequest.employeeGender,
         clientRequest.employeeAgeRange,
         clientRequest.employeeTribePreference,
         clientRequest.employeeReligionPreference,
         clientRequest.workingDays.join(", "),
+        clientRequest.workingHours.join(", "),
         clientRequest.extraComment,
         clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
         clientRequest.bookingFee,
@@ -354,11 +325,6 @@ export default function Home({ searchParams }: HomeProps) {
   return (
     <main className="flex  bg-white min-h-screen w-full flex-col items-center justify-between overflow-clip">
       {pageLoading && (
-        // <CircularProgress
-        //   className="top-1/2 max-sm:-translate-x-72 z-10  w-56 absolute"
-        //   size={100}
-        // />
-        // <div className="loader"></div>
         <Image
           src="/images/suzannah-drop.png"
           alt="Vercel Logo"
@@ -370,7 +336,7 @@ export default function Home({ searchParams }: HomeProps) {
       )}
       <div className={`w-full ${pageLoading && "opacity-20"} `}>
         <AgreementDialog
-          liveIn={clientRequest.serviceType !== "Live-out Housekeeper Services"}
+          liveIn={clientRequest.workMode === "Live-in"}
           open={isCustomerServicePolicyOpen}
           onClose={(e: React.MouseEvent<HTMLElement>) =>
             closeCustomerServicePolicy(e)
@@ -401,451 +367,37 @@ export default function Home({ searchParams }: HomeProps) {
           }}
         />
         {/* SERVICES SECTION */}
-        <section
-          id="services-section"
-          className={`${
-            requestStage !== 0 && "hidden"
-          } mt-20 max-sm:mt-10 flex flex-col items-center bg-white max-sm:px-10`}
-        >
-          <h1 className="font-extralight text-3xl text-black dark:text-gray-700">
-            SERVICES
-          </h1>
-
-          {services.map((service, index) => (
-            <ServiceCard
-              whatsIncluded={service.whatsIncluded}
-              key={index}
-              serviceDescription={service.serviceDescription}
-              serviceName={service.serviceName}
-              onClick={() => selectService(service.serviceName as ServiceType)}
-            />
-          ))}
-        </section>
+        <ServicesSection
+          requestStage={requestStage}
+          onSelectService={selectService}
+        />
 
         {/* CUSTOMER PREFERENCES SECTION */}
-        <section
-          id="preferences-section"
-          className={`${
-            requestStage !== 1 && "hidden"
-          } mt-20 max-sm:mt-10 flex flex-col bg-white max-sm:px-8`}
-        >
-          <Link
-            onClick={() => {
-              resetCustomerRequest();
-              setRequestStage(0);
-            }}
-            href="/#"
-            className="text-start text-blue-950 items-center"
-          >
-            &larr; Back
-          </Link>
-          <p className="mt-4 text-blue-950 text-sm text-center font-bold">
-            {clientRequest.serviceType}
-          </p>
-          <h1 className="font-extralight text-center text-3xl mt-2 text-black dark:text-gray-800">
-            CUSTOMIZE YOUR SERVICE
-          </h1>
-          <p className="text-gray-600 mt-5 text-base">
-            Step 1 of 3: Tell us about your preferences and home details
-          </p>
-          <div className="border border-gray-300 rounded-lg p-4 mt-5">
-            <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
-              <IconUserQuestion color="black" stroke={2} size={16} />
-              &nbsp;&nbsp;&nbsp;Staff Preferences
-            </p>
-            <p className="text-xs text-gray-400">
-              Choose your preferred characteristics for your care provider
-            </p>
+        <CustomerPreferencesSection
+          goBack={() => {
+            resetCustomerRequest();
+            setRequestStage(0);
+          }}
+          onContinue={() => {
+            setClientRequest({
+              ...clientRequest,
+              bookingFee: clientPrice,
+            });
+            router.push(pathname + "?step=2");
+            setRequestStage(2);
+            setPageLoading(true);
 
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="demo2-simple-select-label">Age Range</InputLabel>
-              <Select
-                displayEmpty
-                labelId="demo2-simple-select-label"
-                id="demo-simple-select"
-                value={clientRequest.employeeAgeRange}
-                label="Age Range"
-                required
-                onChange={(event: SelectChangeEvent) => {
-                  setClientRequest({
-                    ...clientRequest,
-                    employeeAgeRange: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="18-22">18-22</MenuItem>
-                <MenuItem value="23-27">23-27</MenuItem>
-                <MenuItem value="28-32">28-32</MenuItem>
-                <MenuItem value="33-37">33-37</MenuItem>
-                <MenuItem value="38-42">38-42</MenuItem>
-                <MenuItem value="43-47">43-47</MenuItem>
-                <MenuItem value="46-51">46-51</MenuItem>
-                <MenuItem value="50+">50+</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-              <Select
-                displayEmpty
-                required
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={clientRequest.employeeGender}
-                label="Gender"
-                onChange={(event: SelectChangeEvent) => {
-                  setClientRequest({
-                    ...clientRequest,
-                    employeeGender: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="any gender">
-                  No Preference (Any gender is fine)
-                </MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="demo-simple-select-label">
-                Religion Preference
-              </InputLabel>
-              <Select
-                displayEmpty
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={clientRequest.employeeReligionPreference}
-                label="Religion Preference"
-                onChange={(event: SelectChangeEvent) => {
-                  setClientRequest({
-                    ...clientRequest,
-                    employeeReligionPreference: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="Christian">Christianity</MenuItem>
-                <MenuItem value="Muslim">Islam</MenuItem>
-                <MenuItem value="any religion">
-                  No Preference (Any Religion is fine)
-                </MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="demo-simple-select-label">
-                Tribe Preference
-              </InputLabel>
-              <Select
-                displayEmpty
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="Tribe Preference"
-                value={clientRequest.employeeTribePreference}
-                onChange={(event: SelectChangeEvent) => {
-                  setClientRequest({
-                    ...clientRequest,
-                    employeeTribePreference: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="North - Hausa/Fulani">
-                  North - Hausa/Fulani
-                </MenuItem>
-                <MenuItem value="Southeast - Igbo">Southeast - Igbo</MenuItem>
-                <MenuItem value="Southwest - Yoruba">
-                  Southwest - Yoruba
-                </MenuItem>
-                <MenuItem value="North Central - Idoma/Igede/Tiv/Ebira">
-                  North Central - Idoma/Igede/Tiv/Ebira
-                </MenuItem>
-                <MenuItem value="South-South - Efik/Ibibio">
-                  South-South - Efik/Ibibio
-                </MenuItem>
-                <MenuItem value="any tribe">
-                  No Preference (Any Tribe is fine)
-                </MenuItem>
-              </Select>
-            </FormControl>
-
-            {clientRequest.serviceType === "Live-out Housekeeper Services" && (
-              <FormControl fullWidth sx={{ mt: 2 }}>
-                <FormLabel id="demo-simple-select-label">
-                  Select preferred staff working days
-                </FormLabel>
-                <ToggleButtonGroup
-                  color="primary"
-                  value={clientRequest.workingDays}
-                  sx={{ mt: 2 }}
-                  onChange={handleSelectDays}
-                  aria-label="text formatting"
-                >
-                  <ToggleButton value="Mon" aria-label="Mon">
-                    Mon
-                  </ToggleButton>
-                  <ToggleButton value="Tue" aria-label="Tue">
-                    Tue
-                  </ToggleButton>
-                  <ToggleButton value="Wed" aria-label="Wed">
-                    Wed
-                  </ToggleButton>
-                  <ToggleButton value="Thu" aria-label="Thu">
-                    Thu
-                  </ToggleButton>
-                  <ToggleButton value="Fri" aria-label="Fri">
-                    Fri
-                  </ToggleButton>
-                  <ToggleButton value="Sat" aria-label="Sat">
-                    Sat
-                  </ToggleButton>
-                </ToggleButtonGroup>
-
-                {clientRequest.workingDays.length !== 0 && (
-                  <FormHelperText>
-                    {clientRequest.workingDays.length > 1
-                      ? clientRequest.workingDays.length
-                      : "Once"}{" "}
-                    {clientRequest.workingDays.length > 1 && "times"} a week
-                  </FormHelperText>
-                )}
-              </FormControl>
-            )}
-
-            <TextField
-              label="Other Preferences"
-              value={clientRequest.extraComment}
-              onChange={(e) =>
-                setClientRequest({
-                  ...clientRequest,
-                  extraComment: e.target.value,
-                })
-              }
-              fullWidth
-              sx={{ mt: 2 }}
-              id="filled-multiline-static"
-              placeholder="Other Preferences"
-              multiline
-              rows={4}
-            />
-          </div>
-
-          <div className="border border-gray-300 rounded-lg p-4 mt-5">
-            <p className="font-extralight flex text-1xl mt-2 text-black dark:text-gray-800">
-              <IconHomeQuestion color="black" stroke={2} size={18} />
-              &nbsp;&nbsp;&nbsp;Home/Family Details
-            </p>
-            <p className="text-xs text-gray-400">
-              Tell us about your household to better match our services
-            </p>
-            {clientRequest.serviceType !== "Live-in Housekeeper Services" &&
-              clientRequest.serviceType !== "Live-out Housekeeper Services" &&
-              clientRequest.serviceType !== "Live-in Help Services" && (
-                <>
-                  <FormControl fullWidth sx={{ mt: 2 }}>
-                    <InputLabel id="demo-simple-select-label">
-                      Number of Kids to be cared for
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      required
-                      label="Number of Kids to be cared for"
-                      value={clientRequest.numberOfKids.toString()}
-                      onChange={(event: SelectChangeEvent) => {
-                        const ages = clientRequest.agesOfKids.split(",");
-                        let error = ""
-                        
-                        for (let i = 0; i < ages.length; i++) {                          
-                          if (ages[i].trim().length <= 2) {
-                            error = "Please enter a valid age for the next age"
-                          } else {
-                            error = ""
-                          }
-                        }
-                                                
-                        if (Number(event.target.value) !== ages.length ) {
-                          error = "Ages of Kids does not correspond with numbers of Kids";
-                        } 
-
-                        setAgesOfKidsError(error)
-                        setClientRequest({
-                          ...clientRequest,
-                          numberOfKids: Number(event.target.value),
-                        });
-                      }}
-                    >
-                      <MenuItem value={0}>0</MenuItem>
-                      <MenuItem value={1}>1</MenuItem>
-                      <MenuItem value={2}>2</MenuItem>
-                      <MenuItem value={3}>3</MenuItem>
-                      <MenuItem value={4}>4</MenuItem>
-                      <MenuItem value={5}>5</MenuItem>
-                      <MenuItem value={6}>6</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <FormControl fullWidth>
-                    <TextField
-                      value={clientRequest.agesOfKids}
-                      required
-                      error={clientRequest.agesOfKids === "" || agesOfKidsError !== ""}
-                      helperText={agesOfKidsError}
-                      onChange={(e) => {
-                        const agesOfKids = e.target.value;
-                        const ages = agesOfKids.split(",");
-                        
-                        for (let i = 0; i < ages.length; i++) {                          
-                          if (ages[i].trim().length <= 2) {
-                            setAgesOfKidsError("Please enter a valid age for the next age")
-                          } else {
-                            setAgesOfKidsError("")
-                          }
-                        }
-
-                        clientRequest.numberOfKids !== ages.length 
-                        ? setAgesOfKidsError("Ages of Kids does not correspond with numbers of Kids")
-                        : agesOfKidsError
-                      
-                        setClientRequest({
-                          ...clientRequest,
-                          agesOfKids
-                        });
-                      }}
-                      placeholder="Ages of Kids"
-                      label="Ages of Kids"
-                      sx={{ mt: 2 }}
-                    />
-                    <FormHelperText>
-                      Separate ages with commas, e.g: 15 months,2 years,1 year and 3
-                      months, 4 weeks
-                    </FormHelperText>
-                  </FormControl>
-                </>
-              )}
-
-            {clientRequest.serviceType !== "Live-in Nanny Services" && (
-              <>
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                  <InputLabel id="demo-simple-select-label">
-                    Number of Rooms
-                  </InputLabel>
-                  <Select
-                    error={clientRequest.numberOfRooms === ""}
-                    label="Number of Rooms"
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    required
-                    value={clientRequest.numberOfRooms}
-                    onChange={(event: SelectChangeEvent) => {
-                      setClientRequest({
-                        ...clientRequest,
-                        numberOfRooms: event.target.value,
-                      });
-                    }}
-                  >
-                    <MenuItem value="1 Bedroom">1 Bedroom</MenuItem>
-                    <MenuItem value="2 Bedroom">2 Bedroom</MenuItem>
-                    <MenuItem value="3 Bedroom">3 Bedroom</MenuItem>
-                    <MenuItem value="4 Bedroom">4 Bedroom</MenuItem>
-                    <MenuItem value="5 Bedroom">5 Bedroom</MenuItem>
-                    <MenuItem value="6 Bedroom">6 Bedroom</MenuItem>
-                  </Select>
-                </FormControl>
-
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                  <InputLabel id="demo-simple-select-label">
-                    Type of house
-                  </InputLabel>
-                  <Select
-                    required
-                    label="Type of House"
-                    error={clientRequest.typeOfHouse === ""}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={clientRequest.typeOfHouse}
-                    onChange={(event: SelectChangeEvent) => {
-                      setClientRequest({
-                        ...clientRequest,
-                        typeOfHouse: event.target.value,
-                      });
-                    }}
-                  >
-                    <MenuItem value="bungalow">Bungalow/Flat</MenuItem>
-                    <MenuItem value="1 storey">1 storey</MenuItem>
-                    <MenuItem value="2 storey">2 storey</MenuItem>
-                    <MenuItem value="3 storey">3 storey</MenuItem>
-                    <MenuItem value="4 storey">4 storey</MenuItem>
-                    <MenuItem value="5 storey">5 storey</MenuItem>
-                    <MenuItem value="6 storey">6 storey</MenuItem>
-                  </Select>
-                </FormControl>
-              </>
-            )}
-
-            <FormControl fullWidth>
-              <TextField
-                value={clientRequest.extraHomeInformation}
-                multiline
-                label="Other Information"
-                rows={4}
-                onChange={(e) => {
-                  setClientRequest({
-                    ...clientRequest,
-                    extraHomeInformation: e.target.value,
-                  });
-                }}
-                placeholder="Other Information"
-                sx={{ mt: 2 }}
-              />
-              <FormHelperText>
-                Extra relevant information as regards the above
-              </FormHelperText>
-            </FormControl>
-          </div>
-
-          <div className="h-[0.9px] bg-gray-300 mt-3"></div>
-
-          <p className="text-sm text-gray-600 mt-2">
-            Kindly review the information you provided before clicking
-            `Continue`
-          </p>
-
-          <div className="flex justify-between items-center mt-2">
-            <Link
-              onClick={() => {
-                router.push(pathname);
-                setRequestStage(0);
-                resetCustomerRequest();
-              }}
-              href="/"
-              className="text-start text-blue-950 items-center"
-            >
-              &larr; Back To Services
-            </Link>
-
-            <Button
-              disabled={disableButton()}
-              onClick={() => {
-                setClientRequest({
-                  ...clientRequest,
-                  bookingFee: clientPrice,
-                });
-                router.push(pathname + "?step=2");
-                setRequestStage(2);
-                setPageLoading(true);
-
-                setTimeout(() => {
-                  document
-                    .getElementById("payment-section")
-                    ?.scrollIntoView({ behavior: "smooth" });
-                  setPageLoading(false);
-                }, 1000);
-              }}
-              style={{ width: "150px", alignSelf: "end" }}
-              buttonName="Continue"
-            />
-          </div>
-        </section>
+            setTimeout(() => {
+              document
+                .getElementById("payment-section")
+                ?.scrollIntoView({ behavior: "smooth" });
+              setPageLoading(false);
+            }, 1000);
+          }}
+          setClientRequest={setClientRequest}
+          clientRequest={clientRequest}
+          requestStage={requestStage}
+        />
 
         {/* PAYMENT PLANS SECTION */}
         <section
@@ -929,9 +481,8 @@ export default function Home({ searchParams }: HomeProps) {
               </p>
             </span>
 
-            {(clientRequest.serviceType === "Live-in Nanny Services" ||
-              clientRequest.serviceType ===
-                "Live-in Nanny + Help Services") && (
+            {(clientRequest.serviceType === "Nanny Services" ||
+              clientRequest.serviceType === "Nanny + Help Services") && (
               <>
                 <span className="flex items-center justify-between mt-2 gap-3">
                   <p className="font-semibold text-black text-sm">
@@ -946,19 +497,19 @@ export default function Home({ searchParams }: HomeProps) {
               </>
             )}
 
-            {(clientRequest.serviceType === "Live-in Housekeeper Services" ||
-              clientRequest.serviceType === "Live-out Housekeeper Services" ||
-              clientRequest.serviceType === "Live-in Help Services" ||
-              clientRequest.serviceType ===
-                "Live-in Nanny + Help Services") && (
+            {(clientRequest.serviceType === "Housekeeper Services" ||
+              clientRequest.serviceType === "General Help Services" ||
+              clientRequest.serviceType === "Home Cook Services" ||
+              clientRequest.serviceType === "Nanny + Help Services") && (
               <>
                 <span className="flex items-center justify-between mt-2 gap-3">
                   <p className="font-semibold text-black text-sm">
                     Home Details:
                   </p>
                   <p className="text-xs text-gray-700 text-end">
-                    {clientRequest.typeOfHouse} home with&nbsp;
-                    {clientRequest.numberOfRooms}
+                    {clientRequest.serviceType === "Home Cook Services"
+                      ? `${clientRequest.numberOfDiners} people to be cooked for`
+                      : `${clientRequest.typeOfHouse} home with ${clientRequest.numberOfRooms}`}
                   </p>
                 </span>
                 <span className="flex items-center justify-between mt-2 gap-3">
@@ -976,22 +527,44 @@ export default function Home({ searchParams }: HomeProps) {
               <p className="font-semibold text-black text-sm">Staff Details:</p>
               <p className="text-xs text-gray-700 text-end">
                 Ages{" "}
-                {`${clientRequest.employeeAgeRange}, ${clientRequest.employeeGender}, ${clientRequest.employeeTribePreference},
+                {`${clientRequest.employeeAgeRange}, ${
+                  clientRequest.employeeGender === ""
+                    ? "Any Gender"
+                    : clientRequest.employeeGender
+                }, ${clientRequest.employeeTribePreference},
               ${clientRequest.employeeReligionPreference}`}
               </p>
             </span>
 
-            {clientRequest.serviceType === "Live-out Housekeeper Services" && (
-              <span className="flex items-center justify-between mt-2 gap-3">
-                <p className="font-semibold text-black text-sm">
-                  Working Days:
-                </p>
-                <p className="text-xs text-gray-700 text-end">
-                  {clientRequest.workingDays.length} day
-                  {clientRequest.workingDays.length > 1 && "s"} a week; (
-                  {clientRequest.workingDays.join(", ")})
-                </p>
-              </span>
+            <span className="flex items-center justify-between mt-2 gap-3">
+              <p className="font-semibold text-black text-sm">Work Mode:</p>
+              <p className="text-xs text-gray-700 text-end">
+                {clientRequest.workMode} option
+              </p>
+            </span>
+
+            {clientRequest.workMode === "Live-out" && (
+              <>
+                <span className="flex items-center justify-between mt-2 gap-3">
+                  <p className="font-semibold text-black text-sm">
+                    Working Days:
+                  </p>
+                  <p className="text-xs text-gray-700 text-end">
+                    {clientRequest.workingDays.length} day
+                    {clientRequest.workingDays.length > 1 && "s"} a week (
+                    {clientRequest.workingDays.join(", ")})
+                  </p>
+                </span>
+                <span className="flex items-center justify-between mt-2 gap-3">
+                  <p className="font-semibold text-black text-sm">
+                    Working Hours:
+                  </p>
+                  <p className="text-xs text-gray-700 text-end">
+                    {clientRequest.workingHours[1]},{" "}
+                    {clientRequest.workingHours[0]}
+                  </p>
+                </span>
+              </>
             )}
 
             <span className="flex items-center justify-between mt-2 gap-3">
@@ -1187,6 +760,8 @@ export default function Home({ searchParams }: HomeProps) {
             ))}
           </div>
         </section>
+
+        {/* CUSTOM REQUEST SECTION */}
         <section className="py-10 max-sm:px-10 w-full">
           <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700 mt-10">
             CUSTOM REQUEST
@@ -1350,6 +925,7 @@ export default function Home({ searchParams }: HomeProps) {
             />
           </div>
         </section>
+
         {/* FOOTER SECTION STARTS */}
         <footer className="p-5 h-full py-52 bg-gradient-to-b relative from-blue-950 to-[#0D98BA] w-full flex flex-col justify-center items-center ">
           <Image

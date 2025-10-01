@@ -13,16 +13,17 @@ interface Options {
   extraDays?: number;
   extraFloors?: number;
   newBorns?: number;
+  extraDiners?: number;
 }
 
 const BASE_STAFF_PAY = 50000;
 
 const PRICING: Record<ServiceType, number> = {
-  "Live-in Nanny Services": 65500,
-  "Live-in Help Services": 70500,
-  "Live-in Nanny + Help Services": 80500,
-  "Live-in Housekeeper Services": 70500,
-  "Live-out Housekeeper Services": 60500
+  "Nanny Services": 65500,
+  "General Help Services": 70500,
+  "Nanny + Help Services": 80500,
+  "Housekeeper Services": 70500,
+  "Home Cook Services": 80500
 };
 
 export function usePaymentPlan(
@@ -48,6 +49,10 @@ export function usePaymentPlan(
 
     if (options.extraFloors && options.extraFloors > 0) {
       clientPrice += (options.extraFloors < 2 ? 1 : options.extraFloors/2) * 12000;
+    }
+
+    if (options.extraDiners && options.extraDiners > 0) {
+      clientPrice += (options.extraDiners <= 2 ? 1 : options.extraDiners/2) * 20000;
     }
 
     // Add 12k per new born
