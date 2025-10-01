@@ -13,12 +13,12 @@ export const services = [
   {
     serviceName: "General Help Services",
     serviceDescription:
-      "Your reliable extra pair of hands, from tidying up to managing household errands, our live-in helpers ensure your home is always at its best.",
+      "Your reliable extra pair of hands, from tidying up to managing household errands, our domestic Helps ensure your home is always at its best.",
     whatsIncluded: [
       "Daily cleaning of rooms and living spaces.",
       "Laundry, ironing, and wardrobe organization.",
       "Grocery assistance and household supply management.",
-      "Assistance with small household errands.",
+      "Assistance with meal prep and household errands",
     ],
   },
   {

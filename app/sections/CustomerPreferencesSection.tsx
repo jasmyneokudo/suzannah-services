@@ -87,9 +87,7 @@ export const CustomerPreferencesSection = ({
         agesOfKidsError !== ""
       );
     } else if (clientRequest.serviceType === "Home Cook Services") {
-      return (
-        clientRequest.numberOfDiners === 0
-      );
+      return clientRequest.numberOfDiners === 0;
     } else {
       return (
         clientRequest.typeOfHouse === "" ||
@@ -269,7 +267,7 @@ export const CustomerPreferencesSection = ({
 
         {workMode === "Live-out" && (
           <>
-            <FormControl fullWidth sx={{ mt: 2 }}>
+            <FormControl fullWidth sx={{ my: 3 }}>
               <FormLabel id="demo-simple-select-label">
                 Select preferred staff working days
               </FormLabel>
@@ -278,24 +276,23 @@ export const CustomerPreferencesSection = ({
                 value={clientRequest.workingDays}
                 sx={{ mt: 2 }}
                 onChange={handleSelectDays}
-                aria-label="text formatting"
               >
-                <ToggleButton value="Mon" aria-label="Mon">
+                <ToggleButton size="small" value="Mon" aria-label="Mon">
                   Mon
                 </ToggleButton>
-                <ToggleButton value="Tue" aria-label="Tue">
+                <ToggleButton size="small" value="Tue" aria-label="Tue">
                   Tue
                 </ToggleButton>
-                <ToggleButton value="Wed" aria-label="Wed">
+                <ToggleButton size="small" value="Wed" aria-label="Wed">
                   Wed
                 </ToggleButton>
-                <ToggleButton value="Thu" aria-label="Thu">
+                <ToggleButton size="small" value="Thu" aria-label="Thu">
                   Thu
                 </ToggleButton>
-                <ToggleButton value="Fri" aria-label="Fri">
+                <ToggleButton size="small" value="Fri" aria-label="Fri">
                   Fri
                 </ToggleButton>
-                <ToggleButton value="Sat" aria-label="Sat">
+                <ToggleButton size="small" value="Sat" aria-label="Sat">
                   Sat
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -309,13 +306,16 @@ export const CustomerPreferencesSection = ({
                 </FormHelperText>
               )}
             </FormControl>
+
             <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <FormLabel>Select preferred staff working hours</FormLabel>
               <div className="flex gap-2">
                 <FormControl
                   sx={{ mt: 2, display: "flex", flexDirection: "row" }}
                 >
                   <FormLabel className="mt-3 mr-2">From</FormLabel>
                   <DigitalClock
+                    className="border-gray-400 border"
                     shouldDisableTime={(timeValue, clockType) => {
                       if (clockType === "hours") {
                         // disable 10 PM (22) to 11 PM (23)
@@ -346,6 +346,7 @@ export const CustomerPreferencesSection = ({
                 >
                   <FormLabel className="mt-3 mr-2">To</FormLabel>
                   <DigitalClock
+                    className="border-gray-400 border"
                     shouldDisableTime={(timeValue, clockType) => {
                       if (clockType === "hours") {
                         // disable 10 PM (22) to 11 PM (23)
@@ -373,7 +374,7 @@ export const CustomerPreferencesSection = ({
                 </FormControl>
               </div>
               <FormHelperText sx={{ mt: 2 }}>
-                Working hours: {duration[1].hour() - duration[0].hour()} hours
+                Working hours: {duration[1].hour() - duration[0].hour()} hour(s)
                 per day
               </FormHelperText>
             </LocalizationProvider>
@@ -406,41 +407,43 @@ export const CustomerPreferencesSection = ({
         <p className="text-xs text-gray-400">
           Tell us about your household to better match our services
         </p>
-        {clientRequest.serviceType === "Home Cook Services" && <FormControl fullWidth sx={{ mt: 2 }}>
+        {clientRequest.serviceType === "Home Cook Services" && (
+          <FormControl fullWidth sx={{ mt: 2 }}>
             <InputLabel id="demo-simple-select-label">
-                Number of people to be served
+              Number of people to be served
             </InputLabel>
             <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                required
-                label="Number of people to be served"
-                value={clientRequest.numberOfDiners.toString()}
-                onChange={(event: SelectChangeEvent) => {
-                    setClientRequest({
-                        ...clientRequest,
-                        numberOfDiners: Number(event.target.value),
-                    });
-                }}
-                >
-                <MenuItem value={0}>0</MenuItem>
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
-                <MenuItem value={5}>5</MenuItem>
-                <MenuItem value={6}>6</MenuItem>
-                <MenuItem value={7}>7</MenuItem>
-                <MenuItem value={8}>8</MenuItem>
-                <MenuItem value={9}>9</MenuItem>
-                <MenuItem value={10}>10</MenuItem>
-                <MenuItem value={11}>11</MenuItem>
-                <MenuItem value={12}>12</MenuItem>
-                <MenuItem value={13}>13</MenuItem>
-                <MenuItem value={14}>14</MenuItem>
-                <MenuItem value={15}>15</MenuItem>
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              required
+              label="Number of people to be served"
+              value={clientRequest.numberOfDiners.toString()}
+              onChange={(event: SelectChangeEvent) => {
+                setClientRequest({
+                  ...clientRequest,
+                  numberOfDiners: Number(event.target.value),
+                });
+              }}
+            >
+              <MenuItem value={0}>0</MenuItem>
+              <MenuItem value={1}>1</MenuItem>
+              <MenuItem value={2}>2</MenuItem>
+              <MenuItem value={3}>3</MenuItem>
+              <MenuItem value={4}>4</MenuItem>
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={6}>6</MenuItem>
+              <MenuItem value={7}>7</MenuItem>
+              <MenuItem value={8}>8</MenuItem>
+              <MenuItem value={9}>9</MenuItem>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={11}>11</MenuItem>
+              <MenuItem value={12}>12</MenuItem>
+              <MenuItem value={13}>13</MenuItem>
+              <MenuItem value={14}>14</MenuItem>
+              <MenuItem value={15}>15</MenuItem>
             </Select>
-        </FormControl>}
+          </FormControl>
+        )}
         {clientRequest.serviceType !== "Housekeeper Services" &&
           clientRequest.serviceType !== "Home Cook Services" &&
           clientRequest.serviceType !== "General Help Services" && (
@@ -534,64 +537,64 @@ export const CustomerPreferencesSection = ({
           )}
 
         {clientRequest.serviceType !== "Nanny Services" &&
-        clientRequest.serviceType !== "Home Cook Services" && (
-          <>
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="demo-simple-select-label">
-                Number of Rooms
-              </InputLabel>
-              <Select
-                error={clientRequest.numberOfRooms === ""}
-                label="Number of Rooms"
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                required
-                value={clientRequest.numberOfRooms}
-                onChange={(event: SelectChangeEvent) => {
-                  setClientRequest({
-                    ...clientRequest,
-                    numberOfRooms: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="1 Bedroom">1 Bedroom</MenuItem>
-                <MenuItem value="2 Bedroom">2 Bedroom</MenuItem>
-                <MenuItem value="3 Bedroom">3 Bedroom</MenuItem>
-                <MenuItem value="4 Bedroom">4 Bedroom</MenuItem>
-                <MenuItem value="5 Bedroom">5 Bedroom</MenuItem>
-                <MenuItem value="6 Bedroom">6 Bedroom</MenuItem>
-              </Select>
-            </FormControl>
+          clientRequest.serviceType !== "Home Cook Services" && (
+            <>
+              <FormControl fullWidth sx={{ mt: 2 }}>
+                <InputLabel id="demo-simple-select-label">
+                  Number of Rooms
+                </InputLabel>
+                <Select
+                  error={clientRequest.numberOfRooms === ""}
+                  label="Number of Rooms"
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  required
+                  value={clientRequest.numberOfRooms}
+                  onChange={(event: SelectChangeEvent) => {
+                    setClientRequest({
+                      ...clientRequest,
+                      numberOfRooms: event.target.value,
+                    });
+                  }}
+                >
+                  <MenuItem value="1 Bedroom">1 Bedroom</MenuItem>
+                  <MenuItem value="2 Bedroom">2 Bedroom</MenuItem>
+                  <MenuItem value="3 Bedroom">3 Bedroom</MenuItem>
+                  <MenuItem value="4 Bedroom">4 Bedroom</MenuItem>
+                  <MenuItem value="5 Bedroom">5 Bedroom</MenuItem>
+                  <MenuItem value="6 Bedroom">6 Bedroom</MenuItem>
+                </Select>
+              </FormControl>
 
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="demo-simple-select-label">
-                Type of house
-              </InputLabel>
-              <Select
-                required
-                label="Type of House"
-                error={clientRequest.typeOfHouse === ""}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={clientRequest.typeOfHouse}
-                onChange={(event: SelectChangeEvent) => {
-                  setClientRequest({
-                    ...clientRequest,
-                    typeOfHouse: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="bungalow">Bungalow/Flat</MenuItem>
-                <MenuItem value="1 storey">1 storey</MenuItem>
-                <MenuItem value="2 storey">2 storey</MenuItem>
-                <MenuItem value="3 storey">3 storey</MenuItem>
-                <MenuItem value="4 storey">4 storey</MenuItem>
-                <MenuItem value="5 storey">5 storey</MenuItem>
-                <MenuItem value="6 storey">6 storey</MenuItem>
-              </Select>
-            </FormControl>
-          </>
-        )}
+              <FormControl fullWidth sx={{ mt: 2 }}>
+                <InputLabel id="demo-simple-select-label">
+                  Type of house
+                </InputLabel>
+                <Select
+                  required
+                  label="Type of House"
+                  error={clientRequest.typeOfHouse === ""}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={clientRequest.typeOfHouse}
+                  onChange={(event: SelectChangeEvent) => {
+                    setClientRequest({
+                      ...clientRequest,
+                      typeOfHouse: event.target.value,
+                    });
+                  }}
+                >
+                  <MenuItem value="bungalow">Bungalow/Flat</MenuItem>
+                  <MenuItem value="1 storey">1 storey</MenuItem>
+                  <MenuItem value="2 storey">2 storey</MenuItem>
+                  <MenuItem value="3 storey">3 storey</MenuItem>
+                  <MenuItem value="4 storey">4 storey</MenuItem>
+                  <MenuItem value="5 storey">5 storey</MenuItem>
+                  <MenuItem value="6 storey">6 storey</MenuItem>
+                </Select>
+              </FormControl>
+            </>
+          )}
 
         <FormControl fullWidth>
           <TextField
