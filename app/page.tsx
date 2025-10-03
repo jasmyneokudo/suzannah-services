@@ -137,12 +137,12 @@ export default function Home({ searchParams }: HomeProps) {
   const { clientPrice } = usePaymentPlan(clientRequest.serviceType, {
     extraChildren: clientRequest.numberOfKids,
     extraRooms: Number(clientRequest.numberOfRooms[0]),
-    extraDays: clientRequest.workingDays.length,
+    extraDays: clientRequest.workMode === "Live-in" ? 0 : clientRequest.workingDays.length,
     extraFloors: Number(clientRequest.typeOfHouse[0]) + 1 || 1,
     newBorns: (
       clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks)\b/gi) || []
     ).length, // check how many times the word week or weeks appear
-    extraDiners: clientRequest.numberOfDiners
+    extraDiners: clientRequest.serviceType === "Home Cook Services" ? clientRequest.numberOfDiners: 0
   });
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;

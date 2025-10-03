@@ -19,7 +19,7 @@ interface Options {
 const BASE_STAFF_PAY = 50000;
 
 const PRICING: Record<ServiceType, number> = {
-  "Nanny Services": 65500,
+  "Nanny Services": 80500,
   "General Help Services": 70500,
   "Nanny + Help Services": 80500,
   "Housekeeper Services": 70500,
@@ -36,7 +36,7 @@ export function usePaymentPlan(
 
     // ✅ Add-ons
     if (options.extraChildren && options.extraChildren > 0) {
-      clientPrice += (options.extraChildren < 3 ? 1 : options.extraChildren/3) * 12000;
+      clientPrice += (options.extraChildren) * 8000;
     }
 
     if (options.extraRooms && options.extraRooms > 0) {
@@ -44,7 +44,7 @@ export function usePaymentPlan(
     }
 
     if (options.extraDays && options.extraDays > 0) {
-      clientPrice += (options.extraDays <= 2 ? 1 : options.extraDays/2) * 12000;
+      clientPrice += (options.extraDays <= 2 ? 1 : options.extraDays/2) * 15000;
     }
 
     if (options.extraFloors && options.extraFloors > 0) {
