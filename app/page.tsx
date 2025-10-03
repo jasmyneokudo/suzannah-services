@@ -175,7 +175,10 @@ export default function Home({ searchParams }: HomeProps) {
   };
   const step: number = Number(searchParams?.step) || 0;
 
-  useEffect(() => {
+  useEffect(() => {    
+    if (step === 0) {
+      resetCustomerRequest();
+    }
     if (requestStage !== step) {
       setRequestStage(step);
     }
