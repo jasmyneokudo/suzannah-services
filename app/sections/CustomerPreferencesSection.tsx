@@ -274,7 +274,7 @@ export const CustomerPreferencesSection = ({
               <ToggleButtonGroup
                 color="primary"
                 value={clientRequest.workingDays}
-                sx={{ mt: 2 }}
+                sx={{ mt: 2, alignSelf: 'center' }}
                 onChange={handleSelectDays}
               >
                 <ToggleButton size="small" value="Mon" aria-label="Mon">
