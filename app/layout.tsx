@@ -35,6 +35,22 @@ export const metadata: Metadata = {
   title: "Suzannah Home & Care Services",
   description:
     "Trusted, Professional Home And Care Service Provider In The F.C.T",
+  keywords: [
+    "nanny services in Abuja",
+    "househelp in Abuja",
+    "live-in nanny in Abuja",
+    "live-out nanny in Abuja",
+    "housekeeper services in Abuja",
+    "home help services Abuja",
+    "trained domestic staff in Abuja",
+    "domestic staff agency in Abuja",
+    "home care services Abuja",
+    "reliable nanny agency in Abuja",
+    "professional house cleaning in Abuja",
+    "cook services in Abuja",
+    "elderly caregiver in Abuja",
+    "trusted home service agency Nigeria"
+  ],
 };
 
 export default function RootLayout({
