@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const Hero = (props: any) => {
   return (
-    <div className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90  h-3/4 max-sm:h-[400px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
+    <div className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90 h-3/4  max-sm:h-[450px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
       {/* for our menu items #0D98BA */}
       <div className="flex max-sm:hidden absolute top-3 left-0 right-0 mr-auto ml-auto w-[600px]">
         <a
@@ -94,7 +94,7 @@ export const Hero = (props: any) => {
       </div>
 
       <Link
-        className="hidden border-blue-400 border font-bold max-sm:flex max-sm:absolute max-sm:top-[69%] left-1/2 -translate-x-1/2 hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-lg"
+        className="hidden border-blue-400 border font-bold max-sm:flex max-sm:absolute max-sm:top-[67%] left-1/2 -translate-x-1/2 hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-lg"
         href="/#services-section"
         onClick={() => props.bookAServiceNow()}
       >
