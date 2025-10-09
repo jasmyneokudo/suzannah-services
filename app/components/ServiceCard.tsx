@@ -6,6 +6,7 @@ type ServiceProps = {
   serviceUrl?: string;
   onClick?: () => void;
   whatsIncluded: string[];
+  price: string;
 };
 
 const ServiceCard = (props: ServiceProps) => {
@@ -26,6 +27,10 @@ const ServiceCard = (props: ServiceProps) => {
             <li key={index}>{item}</li>
           ))}
         </ol>
+        <div className="flex justify-between">
+          <h2 className="text-xl text-blue-950 font-semibold">{props.price}</h2>
+          <p className="text-gray-600 text-sm">starting at</p>
+        </div>
         <Button onClick={props.onClick} url={props.serviceUrl} />
       </div>
     </div>

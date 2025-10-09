@@ -1,3 +1,4 @@
+import { IconCheck } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -69,12 +70,31 @@ export const Hero = (props: any) => {
         priority
       />
 
-      <h1 className="absolute text-white top-[50%] max-sm:top-[29%] w-1/2 max-sm:w-[55%] text-center left-1/2 -translate-x-1/2 z-10 font-extralight text-4xl max-sm:text-2xl">
+      <h1 className="absolute text-white top-[50%] max-sm:top-[25%] w-1/2 max-sm:w-[55%] text-center left-1/2 -translate-x-1/2 z-10 font-extralight text-4xl max-sm:text-2xl">
         Trusted, Professional Home And Care Service Provider In The F.C.T
       </h1>
 
+      <div className="absolute font-bold flex  pt-3 justify-around left-1/2 transform -translate-x-1/2  text-center top-[80%] text-base max-sm:top-[83%] self-center max-sm:w-[95%]">
+        <p className="text-white flex flex-col border-r-[0.3px] border-blue-400 pr-6">
+          Registered <span className="text-xs text-gray-300">Company</span>
+        </p>
+        <p className="flex flex-col text-white">
+          Verified
+          {/* <IconCheck
+              color="green"
+              stroke={2}
+              size={20}
+              className="mr-2 shrink-0"
+            /> */}
+          <span className="text-xs text-gray-300">Staff</span>
+        </p>
+        <p className="text-white flex flex-col border-l-[0.3px] border-blue-400 pl-6">
+          Secure <span className="text-xs text-gray-300">Payments</span>
+        </p>
+      </div>
+
       <Link
-        className="hidden font-bold max-sm:flex max-sm:absolute max-sm:top-[75%] left-1/2 -translate-x-1/2 hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-sm"
+        className="hidden border-blue-400 border font-bold max-sm:flex max-sm:absolute max-sm:top-[69%] left-1/2 -translate-x-1/2 hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-lg"
         href="/#services-section"
         onClick={() => props.bookAServiceNow()}
       >

@@ -701,7 +701,7 @@ export default function Home({ searchParams }: HomeProps) {
         {/* CLIENT REVIEWS SECTION STARTS */}
         <div
           id="client-review-section"
-          className="z-50 relative h-3/4 w-full mt-10 flex flex-col bg-gradient-to-b from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90"
+          className="z-50 relative  w-full mt-10 flex flex-col bg-gradient-to-b from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90"
         >
           <h1 className="absolute z-50 top-72 max-sm:top-[10%] font-extralight text-3xl max-sm:text-2xl mt-5 mb-20 self-center text-white">
             WHAT OUR FAMILIES SAY
@@ -710,11 +710,11 @@ export default function Home({ searchParams }: HomeProps) {
             <div className="absolute z-50 bg-white max-sm:bg-transparent w-full h-72 rounded-br-[400px] max-sm:"></div>
             <Image
               src="/images/reviews-bg2.jpg"
-              alt="Vercel Logo"
+              alt="reviews background"
               width="0"
               height="0"
               sizes="100vw"
-              className="-z-[100] max-sm:blur-[1px] w-full h-auto max-sm:h-[450px] opacity-30"
+              className="-z-[100] max-sm:blur-[1px] w-full h-auto max-sm:h-[550px] opacity-30"
               priority
             />
           </div>
@@ -746,7 +746,19 @@ export default function Home({ searchParams }: HomeProps) {
               />
             </SliderTyped>
           </div>
+
+          <Link
+            className="hidden text-sm border-yellow-400 border font-bold max-sm:flex max-sm:absolute max-sm:top-[85%] self-center hover:cursor-pointer text-white  bg-blue-950 px-5 py-3 rounded-lg"
+            href="/#services-section"
+            onClick={() => {
+              setRequestStage(0);
+              resetCustomerRequest();
+            }}
+          >
+            Get a Domestic Staff In 1 Minute
+          </Link>
         </div>
+
         {/* FAQs SECTION STARTS */}
         <section className="flex-col justify-center mx-10 max-sm:mx-5">
           <h1 className="font-extralight text-black dark:text-gray-900 text-center text-3xl mt-20 mb-20 max-sm:mb-10 self-center">

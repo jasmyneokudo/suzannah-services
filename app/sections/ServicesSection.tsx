@@ -26,6 +26,7 @@ export const ServicesSection = ({ requestStage, onSelectService }: ServicesSecti
                 serviceDescription={service.serviceDescription}
                 serviceName={service.serviceName}
                 onClick={() => onSelectService(service.serviceName as ServiceType)}
+                price={service.price}
             />
             ))}
         </section>
