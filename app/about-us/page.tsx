@@ -92,7 +92,7 @@ export default function Home() {
           thrive.</b>
         </p>
 
-        <h1 className="font-bold mt-10 text-2xl text-black">Our Values</h1>
+        {/* <h1 className="font-bold mt-10 text-2xl text-black">Our Values</h1>
         <p className="mt-3 text-gray-600 text-sm">
           These core principles guide our approach to care and define who we are
           as an organization
@@ -135,7 +135,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <h1 className="font-bold mt-10 text-2xl text-black">Our Admin Team</h1>
         <p className="mt-3 text-gray-600 text-sm">

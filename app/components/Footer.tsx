@@ -60,7 +60,7 @@ export const Footer = () => {
             href="/about-us"
           > About Us
           </Link>
-          <a href="#services-section">
+          <a href="/#services-section">
             <p className="relative z-10 font-thin max-sm:text-sm max-sm:mt-2 max-sm:text-white">
               Services
             </p>
