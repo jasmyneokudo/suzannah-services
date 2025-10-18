@@ -55,7 +55,7 @@ export const PaymentPlanCard = (props: PaymentPlanCardProps) => {
       </ol>
 
       <span className="flex mt-4 items-baseline">
-        <h1 className="text-2xl font-bold text-blue-950">₦{props.type === 'monthly' ? props.price: '120,500'}</h1>
+        <h1 className="text-2xl font-bold text-blue-950">₦{props.type === 'monthly' ? props.price: '130,500'}</h1>
         {props.type === 'monthly' && <span className="text-black dark:text-gray-900">/month</span>}
       </span>
 

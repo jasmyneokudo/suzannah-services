@@ -74,6 +74,10 @@ export const Hero = (props: any) => {
         Trusted, Professional Home And Care Service Provider In The F.C.T
       </h1>
 
+      {/* <p className="absolute text-white top-[50%] max-sm:top-[25%] w-1/2 max-sm:w-[7%] text-center left-1/2 -translate-x-1/2 z-10 font-extralight text-4xl max-sm:text-lg">
+        We have a dream to impact 2,000 homes across the F.C.T by providing trusted, reliable domestic services that make life easier and stress-free — and we cannot do it without you.
+      </p> */}
+
       <div className="absolute font-bold flex  pt-3 justify-around left-1/2 transform -translate-x-1/2  text-center top-[80%] text-base max-sm:top-[83%] self-center max-sm:w-[95%]">
         <p className="text-white flex flex-col border-r-[0.3px] border-blue-400 pr-6">
           Registered <span className="text-xs text-gray-300">Company</span>
