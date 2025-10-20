@@ -55,6 +55,12 @@ export const faqs = [
   },
   {
     id: 10,
+    question: "Do you provide uniform for your staff?",
+    answer:
+      "At the moment, we only provide a uniform for our Live-out staff.",
+  },
+  {
+    id: 11,
     question: "How can I reach Suzannah Home & Care Services for support?",
     answer:
       "You can contact us directly through our social media handles, or via our customer support line.",

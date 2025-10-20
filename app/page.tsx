@@ -116,6 +116,9 @@ export default function Home({ searchParams }: HomeProps) {
     typeOfHouse: "",
     numberOfBathrooms: 0,
     extraHomeInformation: "",
+    elderAgeRange: "",
+    elderGender: "Female",
+    elderHealthConditions: "",
     mustBeAbleToCook: false,
     mustBeAbleToIron: false,
     mustBeAbleToTeachKids: false,
@@ -139,10 +142,10 @@ export default function Home({ searchParams }: HomeProps) {
     extraChildren: clientRequest.numberOfKids,
     extraRooms: Number(clientRequest.numberOfRooms[0]),
     extraDays: clientRequest.workMode === "Live-in" ? 0 : clientRequest.workingDays.length,
-    extraFloors: Number(clientRequest.typeOfHouse[0]) + 1 || 1,
+    extraFloors: clientRequest.typeOfHouse !== "" ? Number(clientRequest.typeOfHouse[0]) + 1 || 1: 0,
     newBorns: (
-      clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks)\b/gi) || []
-    ).length, // check how many times the word week or weeks appear
+      clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks|day|days)\b/gi) || []
+    ).length, // check how many times the word week, weeks, day or days appear
     extraDiners: clientRequest.serviceType === "Home Cook Services" ? clientRequest.numberOfDiners: 0
   });
 
@@ -579,6 +582,20 @@ export default function Home({ searchParams }: HomeProps) {
                 {clientRequest.extraComment || "nil"}
               </p>
             </span>
+
+            {
+              clientRequest.serviceType === "Elder Caregiving Services" && (
+                <span className="flex items-center justify-between mt-2 gap-3">
+                  <p className="font-semibold text-black text-sm">
+                    Elder Information:
+                  </p>
+                  <p className="text-xs text-gray-700 text-end">
+                    {clientRequest.elderGender},&nbsp;{clientRequest.elderAgeRange} years, &nbsp;
+                    {clientRequest.elderHealthConditions || "No Health Condition"}
+                  </p>
+                </span>
+              )
+            }
 
             <div className="w-full bg-gray-300 h-[0.5px] mt-3"></div>
 

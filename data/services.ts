@@ -9,7 +9,7 @@ export const services = [
       "Monitoring children’s health and safety at all times.",
       "Supervising homework and educational activities.",
     ],
-    price: "₦80,500"
+    price: "₦80,500",
   },
   {
     serviceName: "General Help Services",
@@ -21,7 +21,7 @@ export const services = [
       "Grocery assistance and household supply management.",
       "Assistance with meal prep and household errands",
     ],
-    price: "₦70,500"
+    price: "₦70,500",
   },
   {
     serviceName: "Nanny + Help Services",
@@ -34,7 +34,7 @@ export const services = [
       "Accompanying children to school, activities, or appointments (if required).",
       "Assistance with small household errands.",
     ],
-    price: "₦80,500"
+    price: "₦80,500",
   },
   {
     serviceName: "Housekeeper Services",
@@ -46,7 +46,7 @@ export const services = [
       "Bed-making and linen changes on schedule.",
       "Seasonal deep cleaning tasks (as agreed).",
     ],
-    price: "₦70,500"
+    price: "₦70,500",
   },
   {
     serviceName: "Home Cook Services",
@@ -58,6 +58,19 @@ export const services = [
       "Grocery shopping or assistance with food supply management.",
       "Maintaining kitchen cleanliness and proper food storage.",
     ],
-    price: "₦85,500"
-  }
+    price: "₦85,500",
+  },
+  {
+    serviceName: "Elder Caregiving Services",
+    serviceDescription:
+      "Compassionate and professional caregivers dedicated to supporting elderly loved ones with daily activities, companionship, and personalized care for their comfort and dignity.",
+    whatsIncluded: [
+      "Assistance with bathing, dressing, and personal hygiene.",
+      "Medication reminders and basic health monitoring.",
+      "Meal preparation and light housekeeping support.",
+      "Engaging companionship and emotional support.",
+      "Escort to appointments, walks, or social activities (as agreed).",
+    ],
+    price: "₦120,500",
+  },
 ];

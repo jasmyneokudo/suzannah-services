@@ -88,7 +88,13 @@ export const CustomerPreferencesSection = ({
       );
     } else if (clientRequest.serviceType === "Home Cook Services") {
       return clientRequest.numberOfDiners === 0;
-    } else {
+    } else if (clientRequest.serviceType === "Elder Caregiving Services") {
+      return (
+        clientRequest.elderAgeRange === "" ||
+        clientRequest.elderGender === ""
+      );
+    }
+     else {
       return (
         clientRequest.typeOfHouse === "" ||
         clientRequest.numberOfRooms === "" ||
@@ -274,7 +280,7 @@ export const CustomerPreferencesSection = ({
               <ToggleButtonGroup
                 color="primary"
                 value={clientRequest.workingDays}
-                sx={{ mt: 2, alignSelf: 'center' }}
+                sx={{ mt: 2, alignSelf: "center" }}
                 onChange={handleSelectDays}
               >
                 <ToggleButton size="small" value="Mon" aria-label="Mon">
@@ -341,7 +347,12 @@ export const CustomerPreferencesSection = ({
                   />
                 </FormControl>
                 <FormControl
-                  sx={{ mt: 2, display: "flex", alignContent: 'space-between', flexDirection: "row" }}
+                  sx={{
+                    mt: 2,
+                    display: "flex",
+                    alignContent: "space-between",
+                    flexDirection: "row",
+                  }}
                 >
                   <FormLabel className="mt-3 mr-5">to</FormLabel>
                   <DigitalClock
@@ -406,6 +417,65 @@ export const CustomerPreferencesSection = ({
         <p className="text-xs text-gray-400">
           Tell us about your household to better match our services
         </p>
+
+        {clientRequest.serviceType === "Elder Caregiving Services" && (
+          <div className="flex flex-col">
+            <FormControl fullWidth sx={{ mt: 2 }}>
+              <InputLabel id="demo-simple-select-label">
+                Gender of Elder
+              </InputLabel>
+              <Select
+                displayEmpty
+                required
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={clientRequest.elderGender}
+                label="Gender"
+                onChange={(event: SelectChangeEvent) => {
+                  setClientRequest({
+                    ...clientRequest,
+                    elderGender: event.target.value,
+                  });
+                }}
+              >
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Male">Male</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth>
+              <TextField
+                value={clientRequest.elderAgeRange}
+                type="number"
+                label="Age of Elder"
+                onChange={(e) => {
+                  setClientRequest({
+                    ...clientRequest,
+                    elderAgeRange: e.target.value,
+                  });
+                }}
+                placeholder="Age of Elder"
+                sx={{ mt: 2 }}
+              />
+            </FormControl>
+
+            <FormControl fullWidth >
+              <TextField
+                value={clientRequest.elderHealthConditions}
+                type="text"
+                label="Health conditions we should be aware of"
+                onChange={(e) => {
+                  setClientRequest({
+                    ...clientRequest,
+                    elderHealthConditions: e.target.value,
+                  });
+                }}
+                placeholder="Health conditions we should be aware of"
+                sx={{ mt: 2 }}
+              />
+            </FormControl>
+          </div>
+        )}
         {clientRequest.serviceType === "Home Cook Services" && (
           <FormControl fullWidth sx={{ mt: 2 }}>
             <InputLabel id="demo-simple-select-label">
@@ -415,7 +485,7 @@ export const CustomerPreferencesSection = ({
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               required
-              label="Number of people to be served"
+              label="Any medical conditions we should be aware of?"
               value={clientRequest.numberOfDiners.toString()}
               onChange={(event: SelectChangeEvent) => {
                 setClientRequest({
@@ -445,6 +515,7 @@ export const CustomerPreferencesSection = ({
         )}
         {clientRequest.serviceType !== "Housekeeper Services" &&
           clientRequest.serviceType !== "Home Cook Services" &&
+          clientRequest.serviceType !== "Elder Caregiving Services" &&
           clientRequest.serviceType !== "General Help Services" && (
             <>
               <FormControl fullWidth sx={{ mt: 2 }}>
@@ -536,6 +607,7 @@ export const CustomerPreferencesSection = ({
           )}
 
         {clientRequest.serviceType !== "Nanny Services" &&
+         clientRequest.serviceType !== "Elder Caregiving Services" &&
           clientRequest.serviceType !== "Home Cook Services" && (
             <>
               <FormControl fullWidth sx={{ mt: 2 }}>
