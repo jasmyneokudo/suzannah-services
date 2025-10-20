@@ -88,7 +88,11 @@ export const CustomerPreferencesSection = ({
       );
     } else if (clientRequest.serviceType === "Home Cook Services") {
       return clientRequest.numberOfDiners === 0;
-    }  else {
+    } else if (clientRequest.serviceType === "Elder Caregiving Services") {
+      return (
+        clientRequest.elderAgeRange === "" || clientRequest.elderGender === ""
+      );
+    } else {
       return (
         clientRequest.typeOfHouse === "" ||
         clientRequest.numberOfRooms === "" ||
