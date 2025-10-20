@@ -71,6 +71,6 @@ export const services = [
       "Engaging companionship and emotional support.",
       "Escort to appointments, walks, or social activities (as agreed).",
     ],
-    price: "₦120,500",
+    price: "₦130,500",
   },
 ];

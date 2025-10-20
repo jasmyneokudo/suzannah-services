@@ -24,7 +24,7 @@ const PRICING: Record<ServiceType, number> = {
   "Nanny + Help Services": 80500,
   "Housekeeper Services": 70500,
   "Home Cook Services": 80500,
-  "Elder Caregiving Services": 120500
+  "Elder Caregiving Services": 130500
 };
 
 export function usePaymentPlan(
