@@ -37,8 +37,6 @@ const PaystackButton = dynamic(
 );
 
 import {
-  IconBrandFacebook,
-  IconBrandInstagram,
   IconBrandWhatsapp,
   IconFileDescription,
 } from "@tabler/icons-react";
