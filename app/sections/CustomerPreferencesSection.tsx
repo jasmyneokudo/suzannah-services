@@ -88,13 +88,7 @@ export const CustomerPreferencesSection = ({
       );
     } else if (clientRequest.serviceType === "Home Cook Services") {
       return clientRequest.numberOfDiners === 0;
-    } else if (clientRequest.serviceType === "Elder Caregiving Services") {
-      return (
-        clientRequest.elderAgeRange === "" ||
-        clientRequest.elderGender === ""
-      );
-    }
-     else {
+    }  else {
       return (
         clientRequest.typeOfHouse === "" ||
         clientRequest.numberOfRooms === "" ||
@@ -459,7 +453,7 @@ export const CustomerPreferencesSection = ({
               />
             </FormControl>
 
-            <FormControl fullWidth >
+            <FormControl fullWidth>
               <TextField
                 value={clientRequest.elderHealthConditions}
                 type="text"
@@ -473,9 +467,10 @@ export const CustomerPreferencesSection = ({
                 placeholder="Health conditions we should be aware of"
                 sx={{ mt: 2 }}
               />
-               <FormHelperText>
-                  E.g Diabetes, Dementia, Stroke, Paralysis, Cancer, Hypertension, Incontinence, Hearing/Vison Loss etc.
-                </FormHelperText>
+              <FormHelperText>
+                E.g Diabetes, Dementia, Stroke, Paralysis, Cancer, Hypertension,
+                Incontinence, Hearing/Vison Loss etc.
+              </FormHelperText>
             </FormControl>
           </div>
         )}
@@ -610,7 +605,7 @@ export const CustomerPreferencesSection = ({
           )}
 
         {clientRequest.serviceType !== "Nanny Services" &&
-         clientRequest.serviceType !== "Elder Caregiving Services" &&
+          clientRequest.serviceType !== "Elder Caregiving Services" &&
           clientRequest.serviceType !== "Home Cook Services" && (
             <>
               <FormControl fullWidth sx={{ mt: 2 }}>
