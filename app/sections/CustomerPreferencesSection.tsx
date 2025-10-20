@@ -473,6 +473,9 @@ export const CustomerPreferencesSection = ({
                 placeholder="Health conditions we should be aware of"
                 sx={{ mt: 2 }}
               />
+               <FormHelperText>
+                  E.g Diabetes, Dementia, Stroke, Paralysis, Cancer, Hypertension, Incontinence, Hearing/Vison Loss etc.
+                </FormHelperText>
             </FormControl>
           </div>
         )}
