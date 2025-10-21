@@ -378,7 +378,7 @@ export default function Home({ searchParams }: HomeProps) {
         />
 
         {/* CUSTOMER PREFERENCES SECTION */}
-        {/* <CustomerPreferencesSection
+        <CustomerPreferencesSection
           goBack={() => {
             resetCustomerRequest();
             setRequestStage(0);
@@ -402,7 +402,7 @@ export default function Home({ searchParams }: HomeProps) {
           setClientRequest={setClientRequest}
           clientRequest={clientRequest}
           requestStage={requestStage}
-        /> */}
+        />
 
         {/* PAYMENT PLANS SECTION */}
         <section
