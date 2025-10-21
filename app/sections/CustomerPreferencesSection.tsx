@@ -428,7 +428,7 @@ export const CustomerPreferencesSection = ({
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={clientRequest.elderGender}
-                label="Gender"
+                label="Gender of Elder"
                 onChange={(event: SelectChangeEvent) => {
                   setClientRequest({
                     ...clientRequest,
