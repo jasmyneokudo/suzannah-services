@@ -159,7 +159,7 @@ export default function Home() {
               </h2>
               <p className="text-gray-600">Manager/Client Success</p>
               <p className="mt-2 text-gray-600">
-                With a Master&apos;s degree in Public Administration and years of experience in tbe public service sector, Bright is passionate about using his skills and experience to make a positive impact in people&apos;s lives.
+                With a Master&apos;s degree in Public Administration and over a decade of experience in the public service sector, Bright is passionate about using his skills and experience to make a positive impact in people&apos;s lives.
               </p>
             </div>
           </div>
