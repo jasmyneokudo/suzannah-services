@@ -224,6 +224,11 @@ export default function Home({ searchParams }: HomeProps) {
         `Working Days: ${clientRequest.workingDays.join(", ")},
          Working Hours: ${clientRequest.workingHours.join(", ")},`
       },
+      ${
+        clientRequest.serviceType === "Elder Caregiving Services" &&
+        `Elder Age/Gender: ${clientRequest.elderAgeRange} years, ${clientRequest.elderGender}
+         Elder Health Conditions: ${clientRequest.elderHealthConditions ?? 'nil'},`
+      },
       Work Mode: ${clientRequest.workMode},
       Other Staff Preferences: ${clientRequest.extraComment},
       Amount Paid: ${
@@ -256,6 +261,9 @@ export default function Home({ searchParams }: HomeProps) {
         clientRequest.extraComment,
         clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
         clientRequest.bookingFee,
+        clientRequest.elderAgeRange,
+        clientRequest.elderGender,
+        clientRequest.elderHealthConditions
       ],
     ]);
 
