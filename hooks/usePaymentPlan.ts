@@ -20,7 +20,7 @@ const BASE_STAFF_PAY = 50000;
 
 const PRICING: Record<ServiceType, number> = {
   "Nanny Services": 80500,
-  "General Help Services": 70500,
+  "General Help Services": 100500,
   "Nanny + Help Services": 80500,
   "Housekeeper Services": 70500,
   "Home Cook Services": 80500,
