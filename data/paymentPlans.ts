@@ -26,7 +26,7 @@ export const paymentPlans = [
       "Client makes a one-time payment for recruitment & screening.",
       "We conduct interviews and shortlist 2 competent candidates within 2 working days and send their profiles to the client.",
       "We bring the candidates over to client's selected location for physical interview",
-      "Client discusses and agrees on salary directly with their chosen candidate (starting from ₦60,000/month for Nannies/Helps/Housekeepers, ₦70,000/month for cooks, ₦80,000/month for Elder Caregivers).",
+      "Client discusses and agrees on salary directly with their chosen candidate (starting from ₦60,000/month for Nannies/Helps/Housekeepers, ₦80,000/month for cooks, ₦100,000/month for Elder Caregivers).",
       "We run medical tests before the staff resumes.",
       "Replacement is only valid for one month after initial placemment",
     ],
@@ -35,7 +35,7 @@ export const paymentPlans = [
       "Free Medical Test for selected candidate",
       "Manage your own staff directly without external inteference.",
     ],
-    price: "130,500",
+    price: "150,500",
     type: "one-off" as PaymentPlan,
   },
 ];
