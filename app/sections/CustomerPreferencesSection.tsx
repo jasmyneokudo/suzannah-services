@@ -13,12 +13,14 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
+  FormGroup,
+  Checkbox,
 } from "@mui/material";
 import { IconHomeQuestion, IconUserQuestion } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import router from "next/router";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import Button from "../components/Button";
 import { DigitalClock } from "@mui/x-date-pickers/DigitalClock";
 import dayjs, { Dayjs } from "dayjs";
@@ -47,6 +49,23 @@ export const CustomerPreferencesSection = ({
     dayjs("2022-04-17T08:00"),
     dayjs("2022-04-17T12:00"),
   ]);
+  const [healthConditions, setHealthConditions] = useState({
+    diabetes: false,
+    incontinence: false,
+    paralysis: false,
+    dementia: false,
+    hearing: false,
+    vision: false,
+    hypertension: false,
+  });
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setHealthConditions({
+      ...healthConditions,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
   const handleSelectDays = (
     event: React.MouseEvent<HTMLElement>,
     newDays: string[]
@@ -54,13 +73,6 @@ export const CustomerPreferencesSection = ({
     // setDays(newDays);
     setClientRequest({ ...clientRequest, workingDays: newDays });
   };
-
-  console.log(
-    "work mode---->",
-    workMode,
-    clientRequest.workMode,
-    clientRequest.workingDays.length
-  );
 
   const handleWorkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWorkMode(
@@ -102,6 +114,17 @@ export const CustomerPreferencesSection = ({
       );
     }
   }
+
+  useEffect(() => {
+    setClientRequest({
+                ...clientRequest,
+                elderHealthConditions: Object.keys(healthConditions).filter((condition) => {
+                    console.log(condition, healthConditions[condition as keyof typeof healthConditions]);
+
+                    return healthConditions[condition as keyof typeof healthConditions]
+                }).join(", ")
+            });
+  }, [healthConditions]);
 
   return (
     <section
@@ -457,24 +480,81 @@ export const CustomerPreferencesSection = ({
               />
             </FormControl>
 
-            <FormControl fullWidth>
-              <TextField
-                value={clientRequest.elderHealthConditions}
-                type="text"
-                label="Health conditions we should be aware of"
-                onChange={(e) => {
-                  setClientRequest({
-                    ...clientRequest,
-                    elderHealthConditions: e.target.value,
-                  });
-                }}
-                placeholder="Health conditions we should be aware of"
-                sx={{ mt: 2 }}
-              />
-              <FormHelperText>
-                E.g Diabetes, Dementia, Stroke, Paralysis, Cancer, Hypertension,
-                Incontinence, Hearing/Vison Loss etc.
-              </FormHelperText>
+            <FormControl sx={{ mt: 2 }} fullWidth>
+              <FormLabel>Health conditions (Select all that apply)</FormLabel>
+
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={healthConditions.diabetes}
+                      onChange={handleChange}
+                      name="diabetes"
+                    />
+                  }
+                  label="Diabetes"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={healthConditions.incontinence}
+                      onChange={handleChange}
+                      name="incontinence"
+                    />
+                  }
+                  label="Incontinence"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={healthConditions.paralysis}
+                      onChange={handleChange}
+                      name="paralysis"
+                    />
+                  }
+                  label="Paralysis"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={healthConditions.dementia}
+                      onChange={handleChange}
+                      name="dementia"
+                    />
+                  }
+                  label="Dementia"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={healthConditions.hearing}
+                      onChange={handleChange}
+                      name="hearing"
+                    />
+                  }
+                  label="Hearing Loss"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={healthConditions.vision}
+                      onChange={handleChange}
+                      name="vision"
+                    />
+                  }
+                  label="Vision Loss"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={healthConditions.hypertension}
+                      onChange={handleChange}
+                      name="hypertension"
+                    />
+                  }
+                  label="Hypertension"
+                />
+              </FormGroup>
             </FormControl>
           </div>
         )}

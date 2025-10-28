@@ -144,7 +144,8 @@ export default function Home({ searchParams }: HomeProps) {
     newBorns: (
       clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks|day|days)\b/gi) || []
     ).length, // check how many times the word week, weeks, day or days appear
-    extraDiners: clientRequest.serviceType === "Home Cook Services" ? clientRequest.numberOfDiners: 0
+    extraDiners: clientRequest.serviceType === "Home Cook Services" ? clientRequest.numberOfDiners: 0,
+    elderHealthConditions: clientRequest.serviceType === "Elder Caregiving Services" ? clientRequest.elderHealthConditions.split(', ').length: 0
   });
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
@@ -185,6 +186,9 @@ export default function Home({ searchParams }: HomeProps) {
       setRequestStage(step);
     }
   }, [step]);
+
+    console.log('client2 request->', clientRequest.elderHealthConditions);
+
 
   async function sendRequestDetails() {
     const requestBody = `

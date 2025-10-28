@@ -14,6 +14,7 @@ interface Options {
   extraFloors?: number;
   newBorns?: number;
   extraDiners?: number;
+  elderHealthConditions?: number;
 }
 
 const BASE_STAFF_PAY = 50000;
@@ -59,6 +60,11 @@ export function usePaymentPlan(
     // Add 12k per new born
     if (options.newBorns && options.newBorns > 0) {
       clientPrice += (options.newBorns) * 12000;
+    }
+
+     // Add 12k per elder health condition
+    if (options.elderHealthConditions && options.elderHealthConditions > 0) {
+      clientPrice += (options.elderHealthConditions) * 12000;
     }
 
     // round to nearest 100
