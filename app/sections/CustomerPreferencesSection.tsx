@@ -483,7 +483,7 @@ export const CustomerPreferencesSection = ({
             <FormControl sx={{ mt: 2 }} fullWidth>
               <FormLabel>Health conditions (Select all that apply)</FormLabel>
 
-              <FormGroup>
+              <FormGroup className="text-black dark:text-gray-900" >
                 <FormControlLabel
                   control={
                     <Checkbox
