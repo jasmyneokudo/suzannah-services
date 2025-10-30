@@ -73,4 +73,17 @@ export const services = [
     ],
     price: "₦130,500"
   },
+  {
+  serviceName: "Driving Services",
+  serviceDescription:
+    "Professional, courteous, and reliable drivers committed to providing safe, comfortable, and stress-free transportation for you and your family — whether for daily commutes, school runs, or executive travel.",
+  whatsIncluded: [
+    "Experienced and background-verified driver assigned to your home or office.",
+    "Safe and defensive driving for all road conditions.",
+    "Prompt school pick-up and drop-off for children (if required).",
+    "Errand and shopping support as directed by the client.",
+    "Vehicle care assistance — cleaning, fueling, and basic maintenance checks.",
+  ],
+  price: "₦120,500"
+}
 ];

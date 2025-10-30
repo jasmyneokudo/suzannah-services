@@ -117,6 +117,7 @@ export default function Home({ searchParams }: HomeProps) {
     elderAgeRange: "",
     elderGender: "Female",
     elderHealthConditions: "",
+    numberOfPassengers: 0,
     mustBeAbleToCook: false,
     mustBeAbleToIron: false,
     mustBeAbleToTeachKids: false,
@@ -145,6 +146,7 @@ export default function Home({ searchParams }: HomeProps) {
       clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks|day|days)\b/gi) || []
     ).length, // check how many times the word week, weeks, day or days appear
     extraDiners: clientRequest.serviceType === "Home Cook Services" ? clientRequest.numberOfDiners: 0,
+    numberOfPassengers: clientRequest.serviceType === "Driving Services" ? clientRequest.numberOfPassengers : 0,
     elderHealthConditions: clientRequest.serviceType === "Elder Caregiving Services" ? clientRequest.elderHealthConditions.split(', ').length: 0
   });
 
@@ -186,6 +188,12 @@ export default function Home({ searchParams }: HomeProps) {
       setRequestStage(step);
     }
   }, [step]);
+
+  useEffect(() => {
+    if (clientRequest.serviceType === "Driving Services" ) {
+      setClientRequest({...clientRequest, employeeGender: "Male"})
+    }
+  }, [clientRequest.serviceType])
 
     console.log('client2 request->', clientRequest.elderHealthConditions);
 
@@ -233,6 +241,10 @@ export default function Home({ searchParams }: HomeProps) {
         `Elder Age/Gender: ${clientRequest.elderAgeRange} years, ${clientRequest.elderGender}
          Elder Health Conditions: ${clientRequest.elderHealthConditions ?? 'nil'},`
       },
+      ${
+        clientRequest.serviceType === "Driving Services" &&
+        `Number of Passengers: ${clientRequest.numberOfPassengers}`
+      },
       Work Mode: ${clientRequest.workMode},
       Other Staff Preferences: ${clientRequest.extraComment},
       Amount Paid: ${
@@ -249,7 +261,7 @@ export default function Home({ searchParams }: HomeProps) {
         clientRequest.clientEmail,
         clientRequest.clientPhoneNumber,
         clientRequest.clientAddress,
-        clientRequest.numberOfKids,
+        clientRequest.serviceType === "Driving Services" ? clientRequest.numberOfPassengers + " Passengers" : clientRequest.numberOfKids,
         clientRequest.numberOfDiners,
         clientRequest.agesOfKids,
         clientRequest.typeOfHouse,
@@ -267,7 +279,7 @@ export default function Home({ searchParams }: HomeProps) {
         clientRequest.bookingFee,
         clientRequest.elderAgeRange,
         clientRequest.elderGender,
-        clientRequest.elderHealthConditions
+        clientRequest.elderHealthConditions,
       ],
     ]);
 
@@ -516,6 +528,7 @@ export default function Home({ searchParams }: HomeProps) {
 
             {(clientRequest.serviceType === "Housekeeper Services" ||
               clientRequest.serviceType === "General Help Services" ||
+               clientRequest.serviceType === "Driving Services" ||
               clientRequest.serviceType === "Home Cook Services" ||
               clientRequest.serviceType === "Nanny + Help Services") && (
               <>
@@ -526,6 +539,8 @@ export default function Home({ searchParams }: HomeProps) {
                   <p className="text-xs text-gray-700 text-end">
                     {clientRequest.serviceType === "Home Cook Services"
                       ? `${clientRequest.numberOfDiners} people to be cooked for`
+                      : clientRequest.serviceType === "Driving Services" 
+                      ? `${clientRequest.numberOfPassengers} individuals to be driven`
                       : `${clientRequest.typeOfHouse} home with ${clientRequest.numberOfRooms}`}
                   </p>
                 </span>

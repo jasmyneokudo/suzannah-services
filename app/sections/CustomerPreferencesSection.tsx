@@ -104,6 +104,8 @@ export const CustomerPreferencesSection = ({
       return (
         clientRequest.elderAgeRange === "" || clientRequest.elderGender === ""
       );
+    } else if (clientRequest.serviceType === "Driving Services") {
+      return clientRequest.numberOfPassengers === 0;
     } else {
       return (
         clientRequest.typeOfHouse === "" ||
@@ -117,14 +119,33 @@ export const CustomerPreferencesSection = ({
 
   useEffect(() => {
     setClientRequest({
-                ...clientRequest,
-                elderHealthConditions: Object.keys(healthConditions).filter((condition) => {
-                    console.log(condition, healthConditions[condition as keyof typeof healthConditions]);
+      ...clientRequest,
+      elderHealthConditions: Object.keys(healthConditions)
+        .filter((condition) => {
+          console.log(
+            condition,
+            healthConditions[condition as keyof typeof healthConditions]
+          );
 
-                    return healthConditions[condition as keyof typeof healthConditions]
-                }).join(", ")
-            });
+          return healthConditions[condition as keyof typeof healthConditions];
+        })
+        .join(", "),
+    });
   }, [healthConditions]);
+
+  useEffect(() => {
+    if (clientRequest.workMode === "Live-out") {
+      setClientRequest({
+        ...clientRequest,
+        workingHours: [
+          `${duration[0].format("hh:mm A")} to ${duration[1]?.format(
+            "hh:mm A"
+          )}`,
+          `${duration[1].hour() - duration[0].hour()} hours`,
+        ],
+      });
+    }
+  }, [clientRequest.workMode]);
 
   return (
     <section
@@ -483,7 +504,7 @@ export const CustomerPreferencesSection = ({
             <FormControl sx={{ mt: 2 }} fullWidth>
               <FormLabel>Health conditions (Select all that apply)</FormLabel>
 
-              <FormGroup className="text-black dark:text-gray-900" >
+              <FormGroup className="text-black dark:text-gray-900">
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -597,6 +618,7 @@ export const CustomerPreferencesSection = ({
         )}
         {clientRequest.serviceType !== "Housekeeper Services" &&
           clientRequest.serviceType !== "Home Cook Services" &&
+          clientRequest.serviceType !== "Driving Services" &&
           clientRequest.serviceType !== "Elder Caregiving Services" &&
           clientRequest.serviceType !== "General Help Services" && (
             <>
@@ -688,8 +710,39 @@ export const CustomerPreferencesSection = ({
             </>
           )}
 
+        {clientRequest.serviceType === "Driving Services" && (
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="demo-simple-select-label">
+              Number of Individuals to be driven
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              required
+              label="Number of Individuals to be driven"
+              value={clientRequest.numberOfPassengers.toString()}
+              onChange={(event: SelectChangeEvent) => {
+                setClientRequest({
+                  ...clientRequest,
+                  numberOfPassengers: Number(event.target.value),
+                });
+              }}
+            >
+              <MenuItem value={0}>0</MenuItem>
+              <MenuItem value={1}>1</MenuItem>
+              <MenuItem value={2}>2</MenuItem>
+              <MenuItem value={3}>3</MenuItem>
+              <MenuItem value={4}>4</MenuItem>
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={6}>6</MenuItem>
+              <MenuItem value={6}>7</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+
         {clientRequest.serviceType !== "Nanny Services" &&
           clientRequest.serviceType !== "Elder Caregiving Services" &&
+          clientRequest.serviceType !== "Driving Services" &&
           clientRequest.serviceType !== "Home Cook Services" && (
             <>
               <FormControl fullWidth sx={{ mt: 2 }}>

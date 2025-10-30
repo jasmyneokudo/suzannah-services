@@ -5,7 +5,8 @@
     | "Nanny + Help Services"
     | "Housekeeper Services"
     | "Home Cook Services"
-    | "Elder Caregiving Services";
+    | "Elder Caregiving Services"
+    | "Driving Services";
 
   export type PaymentPlan = "monthly" | "one-off";
 
@@ -35,6 +36,7 @@
     elderGender: string;
     elderAgeRange: string;
     elderHealthConditions: string;
+    numberOfPassengers: number;
     mustBeAbleToCook: boolean;
     mustBeAbleToIron: boolean;
     mustBeAbleToTeachKids: boolean;

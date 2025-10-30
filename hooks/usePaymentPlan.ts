@@ -14,6 +14,7 @@ interface Options {
   extraFloors?: number;
   newBorns?: number;
   extraDiners?: number;
+  numberOfPassengers?: number;
   elderHealthConditions?: number;
 }
 
@@ -21,10 +22,11 @@ const BASE_STAFF_PAY = 50000;
 
 const PRICING: Record<ServiceType, number> = {
   "Nanny Services": 80500,
-  "General Help Services": 70500,
-  "Nanny + Help Services": 80500,
+  "General Help Services": 80500,
+  "Nanny + Help Services": 85500,
   "Housekeeper Services": 70500,
-  "Home Cook Services": 85500,
+  "Home Cook Services": 90500,
+  "Driving Services": 120500,
   "Elder Caregiving Services": 150500
 };
 
@@ -43,6 +45,10 @@ export function usePaymentPlan(
 
     if (options.extraRooms && options.extraRooms > 0) {
       clientPrice += (options.extraRooms < 3 ? 1 : options.extraRooms/3) * 10000;
+    }
+
+    if (options.numberOfPassengers && options.numberOfPassengers > 0) {
+      clientPrice += (options.numberOfPassengers < 3 ? 1 : options.numberOfPassengers/3) * 10000;
     }
 
     if (options.extraDays && options.extraDays > 0) {
