@@ -48,6 +48,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ServicesSection } from "./sections/ServicesSection";
 import { CustomerPreferencesSection } from "./sections/CustomerPreferencesSection";
 import { Footer } from "./components/Footer";
+import { PremiumPackageSection } from "./sections/PremiumPackageSection";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 const BOOKING_FEE = 15250;
@@ -819,9 +820,12 @@ export default function Home({ searchParams }: HomeProps) {
           </div>
         </section>
 
+        {/* PREMIUM PACKAGES SECTION */}
+        <PremiumPackageSection/>
+
         {/* CUSTOM REQUEST SECTION */}
-        <section className="py-10 max-sm:px-10 w-full">
-          <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700 mt-10">
+        <section className="py-8 max-sm:px-10 w-full">
+          <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700">
             CUSTOM REQUEST
           </h1>
           <p className="text-sm text-gray-600 text-start w-1/2 max-sm:w-full ml-auto mr-auto mt-3">
