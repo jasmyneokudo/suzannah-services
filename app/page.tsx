@@ -48,10 +48,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { ServicesSection } from "./sections/ServicesSection";
 import { CustomerPreferencesSection } from "./sections/CustomerPreferencesSection";
 import { Footer } from "./components/Footer";
-import { PremiumPackageSection } from "./sections/PremiumPackageSection";
+// import { PremiumPackageSection } from "./sections/PremiumPackageSection";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
-const BOOKING_FEE = 15250;
+const BOOKING_FEE = 20500;
 const ONE_OFF_FEE = 150500;
 
 type HomeProps = {
