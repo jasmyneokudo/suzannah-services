@@ -821,7 +821,7 @@ export default function Home({ searchParams }: HomeProps) {
         </section>
 
         {/* PREMIUM PACKAGES SECTION */}
-        <PremiumPackageSection/>
+        {/* <PremiumPackageSection/> */}
 
         {/* CUSTOM REQUEST SECTION */}
         <section className="py-8 max-sm:px-10 w-full">

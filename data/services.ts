@@ -84,6 +84,6 @@ export const services = [
     "Errand and shopping support as directed by the client.",
     "Vehicle care assistance — cleaning, fueling, and basic maintenance checks.",
   ],
-  price: "₦120,500"
+  price: "₦140,500"
 }
 ];

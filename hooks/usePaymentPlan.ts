@@ -26,7 +26,7 @@ const PRICING: Record<ServiceType, number> = {
   "Nanny + Help Services": 85500,
   "Housekeeper Services": 70500,
   "Home Cook Services": 90500,
-  "Driving Services": 120500,
+  "Driving Services": 140500,
   "Elder Caregiving Services": 150500
 };
 

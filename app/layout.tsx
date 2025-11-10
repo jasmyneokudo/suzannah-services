@@ -8,6 +8,7 @@ import {
 import "./globals.css";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { AppProvider } from "./context/AppContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -68,7 +69,7 @@ export default function RootLayout({
         strategy="beforeInteractive"
       />
       <body className={inter.className}>
-        {children}
+        <AppProvider>{children}</AppProvider>
         <Analytics />
       </body>
     </html>

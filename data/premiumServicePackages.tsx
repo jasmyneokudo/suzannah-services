@@ -15,7 +15,7 @@ export const premiumServicePackages = [
       />
     ),
     serviceName: "The Executive Home Comfort Package",
-    investment: "₦1,200,000 per month",
+    investment: 1200000,
     includes: [
       "Professional Nanny",
       "Professional Housekeeper",
@@ -40,7 +40,7 @@ export const premiumServicePackages = [
           />
     ),
     serviceName: "The Prestige Lifestyle Package",
-    investment: " ₦1,800,000/month",
+    investment: 1800000,
     includes: [
       "Professional Nanny",
       "Professional Housekeeper",
@@ -66,7 +66,7 @@ export const premiumServicePackages = [
           />
     ),
     serviceName: "The Royal Residence Management Package",
-    investment: "₦2,200,000/month",
+    investment: 2200000,
     includes: [
       "Professional Nanny",
       "Professional Housekeeper",
@@ -74,7 +74,7 @@ export const premiumServicePackages = [
       "+ Any two additional domestic staff of your choice (Driver, Butler, House Manager, Laundry Attendant, Gardener, or Security Assistant)"
     ],
     featured: false,
-    Highlights: [
+    highlights: [
       "Fully managed household team — recruitment, supervision, and replacement handled by use",
       "Elegant staff uniforms, etiquette training, and grooming",
       "Weekly home check-ins and continuous performance reviews",
