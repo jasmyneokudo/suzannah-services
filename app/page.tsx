@@ -36,10 +36,7 @@ const PaystackButton = dynamic(
   { ssr: false } // This ensures the component is only loaded on the client-side
 );
 
-import {
-  IconBrandWhatsapp,
-  IconFileDescription,
-} from "@tabler/icons-react";
+import { IconBrandWhatsapp, IconFileDescription } from "@tabler/icons-react";
 import { paymentPlans } from "@/data/paymentPlans";
 import PaymentPlanCard from "./components/PaymentPlanCard";
 import { usePaymentPlan } from "@/hooks/usePaymentPlan";
@@ -48,7 +45,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ServicesSection } from "./sections/ServicesSection";
 import { CustomerPreferencesSection } from "./sections/CustomerPreferencesSection";
 import { Footer } from "./components/Footer";
-// import { PremiumPackageSection } from "./sections/PremiumPackageSection";
+import { PremiumPackageSection } from "./sections/PremiumPackageSection";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 const BOOKING_FEE = 20500;
@@ -141,14 +138,30 @@ export default function Home({ searchParams }: HomeProps) {
   const { clientPrice } = usePaymentPlan(clientRequest.serviceType, {
     extraChildren: clientRequest.numberOfKids,
     extraRooms: Number(clientRequest.numberOfRooms[0]),
-    extraDays: clientRequest.workMode === "Live-in" ? 0 : clientRequest.workingDays.length,
-    extraFloors: clientRequest.typeOfHouse !== "" ? Number(clientRequest.typeOfHouse[0]) + 1 || 1: 0,
+    extraDays:
+      clientRequest.workMode === "Live-in"
+        ? 0
+        : clientRequest.workingDays.length,
+    extraFloors:
+      clientRequest.typeOfHouse !== ""
+        ? Number(clientRequest.typeOfHouse[0]) + 1 || 1
+        : 0,
     newBorns: (
-      clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks|day|days)\b/gi) || []
+      clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks|day|days)\b/gi) ||
+      []
     ).length, // check how many times the word week, weeks, day or days appear
-    extraDiners: clientRequest.serviceType === "Home Cook Services" ? clientRequest.numberOfDiners: 0,
-    numberOfPassengers: clientRequest.serviceType === "Driving Services" ? clientRequest.numberOfPassengers : 0,
-    elderHealthConditions: clientRequest.serviceType === "Elder Caregiving Services" ? clientRequest.elderHealthConditions.split(', ').length: 0
+    extraDiners:
+      clientRequest.serviceType === "Home Cook Services"
+        ? clientRequest.numberOfDiners
+        : 0,
+    numberOfPassengers:
+      clientRequest.serviceType === "Driving Services"
+        ? clientRequest.numberOfPassengers
+        : 0,
+    elderHealthConditions:
+      clientRequest.serviceType === "Elder Caregiving Services"
+        ? clientRequest.elderHealthConditions.split(", ").length
+        : 0,
   });
 
   const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
@@ -181,7 +194,7 @@ export default function Home({ searchParams }: HomeProps) {
   };
   const step: number = Number(searchParams?.step) || 0;
 
-  useEffect(() => {    
+  useEffect(() => {
     if (step === 0) {
       resetCustomerRequest();
     }
@@ -191,13 +204,17 @@ export default function Home({ searchParams }: HomeProps) {
   }, [step]);
 
   useEffect(() => {
-    if (clientRequest.serviceType === "Driving Services" ) {
-      setClientRequest({...clientRequest, employeeGender: "Male"})
+    if (step === 3 && clientRequest.bookingFee === 0) {
+      alert("Something went wrong, please try booking again.");
+      router.push("/#services-section");
     }
-  }, [clientRequest.serviceType])
+  }, [clientRequest]);
 
-    console.log('client2 request->', clientRequest.elderHealthConditions);
-
+  useEffect(() => {
+    if (clientRequest.serviceType === "Driving Services") {
+      setClientRequest({ ...clientRequest, employeeGender: "Male" });
+    }
+  }, [clientRequest.serviceType]);
 
   async function sendRequestDetails() {
     const requestBody = `
@@ -216,7 +233,7 @@ export default function Home({ searchParams }: HomeProps) {
       Ages of Kids: ${clientRequest.agesOfKids},`
       }
       ${
-        (clientRequest.serviceType === "Home Cook Services") &&
+        clientRequest.serviceType === "Home Cook Services" &&
         `Number of Diners: ${clientRequest.numberOfDiners},`
       }
       ${
@@ -239,8 +256,12 @@ export default function Home({ searchParams }: HomeProps) {
       },
       ${
         clientRequest.serviceType === "Elder Caregiving Services" &&
-        `Elder Age/Gender: ${clientRequest.elderAgeRange} years, ${clientRequest.elderGender}
-         Elder Health Conditions: ${clientRequest.elderHealthConditions ?? 'nil'},`
+        `Elder Age/Gender: ${clientRequest.elderAgeRange} years, ${
+          clientRequest.elderGender
+        }
+         Elder Health Conditions: ${
+           clientRequest.elderHealthConditions ?? "nil"
+         },`
       },
       ${
         clientRequest.serviceType === "Driving Services" &&
@@ -262,7 +283,9 @@ export default function Home({ searchParams }: HomeProps) {
         clientRequest.clientEmail,
         clientRequest.clientPhoneNumber,
         clientRequest.clientAddress,
-        clientRequest.serviceType === "Driving Services" ? clientRequest.numberOfPassengers + " Passengers" : clientRequest.numberOfKids,
+        clientRequest.serviceType === "Driving Services"
+          ? clientRequest.numberOfPassengers + " Passengers"
+          : clientRequest.numberOfKids,
         clientRequest.numberOfDiners,
         clientRequest.agesOfKids,
         clientRequest.typeOfHouse,
@@ -529,7 +552,7 @@ export default function Home({ searchParams }: HomeProps) {
 
             {(clientRequest.serviceType === "Housekeeper Services" ||
               clientRequest.serviceType === "General Help Services" ||
-               clientRequest.serviceType === "Driving Services" ||
+              clientRequest.serviceType === "Driving Services" ||
               clientRequest.serviceType === "Home Cook Services" ||
               clientRequest.serviceType === "Nanny + Help Services") && (
               <>
@@ -540,7 +563,7 @@ export default function Home({ searchParams }: HomeProps) {
                   <p className="text-xs text-gray-700 text-end">
                     {clientRequest.serviceType === "Home Cook Services"
                       ? `${clientRequest.numberOfDiners} people to be cooked for`
-                      : clientRequest.serviceType === "Driving Services" 
+                      : clientRequest.serviceType === "Driving Services"
                       ? `${clientRequest.numberOfPassengers} individuals to be driven`
                       : `${clientRequest.typeOfHouse} home with ${clientRequest.numberOfRooms}`}
                   </p>
@@ -609,19 +632,18 @@ export default function Home({ searchParams }: HomeProps) {
               </p>
             </span>
 
-            {
-              clientRequest.serviceType === "Elder Caregiving Services" && (
-                <span className="flex items-center justify-between mt-2 gap-3">
-                  <p className="font-semibold text-black text-sm">
-                    Elder Information:
-                  </p>
-                  <p className="text-xs text-gray-700 text-end">
-                    {clientRequest.elderGender},&nbsp;{clientRequest.elderAgeRange} years, &nbsp;
-                    {clientRequest.elderHealthConditions || "No Health Condition"}
-                  </p>
-                </span>
-              )
-            }
+            {clientRequest.serviceType === "Elder Caregiving Services" && (
+              <span className="flex items-center justify-between mt-2 gap-3">
+                <p className="font-semibold text-black text-sm">
+                  Elder Information:
+                </p>
+                <p className="text-xs text-gray-700 text-end">
+                  {clientRequest.elderGender},&nbsp;
+                  {clientRequest.elderAgeRange} years, &nbsp;
+                  {clientRequest.elderHealthConditions || "No Health Condition"}
+                </p>
+              </span>
+            )}
 
             <div className="w-full bg-gray-300 h-[0.5px] mt-3"></div>
 
@@ -723,10 +745,13 @@ export default function Home({ searchParams }: HomeProps) {
             <p className="text-sm text-gray-600 mt-2">
               Kindly review the contact details provided before making payment
             </p>
+
             <PaystackButton
               disabled={
                 clientRequest.clientEmail === "" ||
-                clientRequest.clientPhoneNumber === ""
+                clientRequest.clientPhoneNumber === "" ||
+                (clientRequest.paymentPlan === "monthly" &&
+                  clientRequest.bookingFee === 0)
               }
               className="paystack-button"
               {...componentProps}
@@ -819,9 +844,6 @@ export default function Home({ searchParams }: HomeProps) {
             ))}
           </div>
         </section>
-
-        {/* PREMIUM PACKAGES SECTION */}
-        {/* <PremiumPackageSection/> */}
 
         {/* CUSTOM REQUEST SECTION */}
         <section className="py-8 max-sm:px-10 w-full">
