@@ -46,7 +46,7 @@ export const services = [
       "Bed-making and linen changes on schedule.",
       "Seasonal deep cleaning tasks (as agreed).",
     ],
-    price: "₦70,500"
+    price: "₦75,500"
   },
   {
     serviceName: "Home Cook Services",
