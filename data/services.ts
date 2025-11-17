@@ -9,7 +9,7 @@ export const services = [
       "Monitoring children’s health and safety at all times.",
       "Supervising homework and educational activities.",
     ],
-    price: "₦80,500"
+    price: "₦85,500"
   },
   {
     serviceName: "General Help Services",
@@ -34,7 +34,7 @@ export const services = [
       "Accompanying children to school, activities, or appointments (if required).",
       "Assistance with small household errands.",
     ],
-    price: "₦80,500"
+    price: "₦95,500"
   },
   {
     serviceName: "Housekeeper Services",
