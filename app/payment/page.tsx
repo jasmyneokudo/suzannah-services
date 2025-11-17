@@ -1,16 +1,13 @@
 "use client";
 
 import { premiumServicePackages } from "@/data/premiumServicePackages";
-import {
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  TextField,
-} from "@mui/material";
+import { RadioGroup, FormControlLabel, Radio, TextField } from "@mui/material";
 import { IconCheck, IconCreditCardPay, IconPuzzle } from "@tabler/icons-react";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import Button from "../components/Button";
+import { PremiumPackagePaymentPlan } from "@/types/ClientRequest";
+import { useRouter } from "next/navigation";
 
 type HomeProps = {
   searchParams?: {
@@ -21,11 +18,12 @@ type HomeProps = {
 export default function Home({ searchParams }: HomeProps) {
   const type: number = Number(searchParams?.type) || 0;
   const selectedPackage = premiumServicePackages[type - 1];
-  const [paymentPlans, setPaymentPlan] = useState<
+  const [paymentPlan, setPaymentPlan] = useState<
     "monthly" | "biannual" | "annual"
   >("monthly");
 
   const { premiumPackageRequest, setPremiumPackageRequest } = useAppContext();
+  const router = useRouter();
 
   const handlePaymentPlanChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -35,11 +33,46 @@ export default function Home({ searchParams }: HomeProps) {
         "monthly" | "biannual" | "annual"
       >
     );
-    // setClientRequest({
-    //   ...clientRequest,
-    //   workMode: event.target.value as ModeOfWork,
-    // });
+    setPremiumPackageRequest({
+      ...premiumPackageRequest,
+      paymentPlan: {
+        name: event.target.value as PremiumPackagePaymentPlan,
+        durationInMonths:
+          event.target.value === "monthly"
+            ? 1
+            : event.target.value === "biannual"
+            ? 6
+            : 12,
+        totalAmount:
+          event.target.value === "monthly"
+            ? selectedPackage.investment
+            : event.target.value === "biannual"
+            ? selectedPackage.investment * 0.92 * 6
+            : selectedPackage.investment * 0.85 * 12,
+      },
+    });
   };
+
+  useEffect(() => {
+    setPremiumPackageRequest({
+      ...premiumPackageRequest,
+      paymentPlan: {
+        name: paymentPlan as PremiumPackagePaymentPlan,
+        durationInMonths:
+          paymentPlan === "monthly"
+            ? 1
+            : paymentPlan === "biannual"
+            ? 6
+            : 12,
+        totalAmount:
+          paymentPlan === "monthly"
+            ? selectedPackage.investment
+            : paymentPlan === "biannual"
+            ? selectedPackage.investment * 0.92 * 6
+            : selectedPackage.investment * 0.85 * 12,
+      },
+    });
+  }, [paymentPlan]);
 
   return (
     <div className="bg-white h-full p-5">
@@ -62,14 +95,14 @@ export default function Home({ searchParams }: HomeProps) {
       <RadioGroup
         row
         aria-labelledby="gender-radio-buttons-group-label"
-        defaultValue="Female"
-        value={paymentPlans}
+        defaultValue="monthly"
+        value={paymentPlan}
         onChange={handlePaymentPlanChange}
       >
         <div
           onClick={() => setPaymentPlan("monthly")}
           className={`border w-full ${
-            paymentPlans === "monthly" ? "border-blue-600" : "border-gray-400"
+            paymentPlan === "monthly" ? "border-blue-600" : "border-gray-400"
           }  rounded-md p-4 mt-4`}
         >
           <div className="flex justify-between items-center">
@@ -98,7 +131,7 @@ export default function Home({ searchParams }: HomeProps) {
         <div
           onClick={() => setPaymentPlan("biannual")}
           className={`border relative w-full ${
-            paymentPlans === "biannual" ? "border-blue-600" : "border-gray-400"
+            paymentPlan === "biannual" ? "border-blue-600" : "border-gray-400"
           }  rounded-md p-4 mt-4`}
         >
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3 rounded-xl bg-blue-600 px-3 flex items-center">
@@ -143,7 +176,7 @@ export default function Home({ searchParams }: HomeProps) {
         <div
           onClick={() => setPaymentPlan("annual")}
           className={`border relative w-full ${
-            paymentPlans === "annual" ? "border-blue-600" : "border-gray-400"
+            paymentPlan === "annual" ? "border-blue-600" : "border-gray-400"
           }  rounded-md p-4 mt-4`}
         >
           <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3 rounded-xl bg-blue-600 px-3 flex items-center">
@@ -190,25 +223,8 @@ export default function Home({ searchParams }: HomeProps) {
 
       <div className="mt-5 rounded-md border border-gray-300 p-5">
         <TextField
-          label="Address (Where Service will be rendered)"
-          value={premiumPackageRequest.clientInformation.address}
-          onChange={(e) =>
-            setPremiumPackageRequest({
-              ...premiumPackageRequest,
-              clientInformation: {
-                ...premiumPackageRequest.clientInformation,
-                address: e.target.value,
-              },
-            })
-          }
-          fullWidth
-          sx={{ mt: 2 }}
-          id="filled-multiline-static"
-          placeholder="Address (Where Service will be rendered)"
-        />
-
-        <TextField
-          label="Name"
+          label="Name" 
+          type="text"
           value={premiumPackageRequest.clientInformation.name}
           onChange={(e) =>
             setPremiumPackageRequest({
@@ -227,6 +243,7 @@ export default function Home({ searchParams }: HomeProps) {
 
         <TextField
           label="Email"
+          type="email"
           value={premiumPackageRequest.clientInformation.email}
           onChange={(e) =>
             setPremiumPackageRequest({
@@ -244,7 +261,8 @@ export default function Home({ searchParams }: HomeProps) {
         />
 
         <TextField
-          label="WhatsApp Number"
+          label="Address (Where Service will be rendered)"
+          type="text"
           value={premiumPackageRequest.clientInformation.address}
           onChange={(e) =>
             setPremiumPackageRequest({
@@ -260,16 +278,30 @@ export default function Home({ searchParams }: HomeProps) {
           id="filled-multiline-static"
           placeholder="Address (Where Service will be rendered)"
         />
+
+        <TextField
+          label="WhatsApp Number"
+          type="tel"
+          value={premiumPackageRequest.clientInformation.phoneNumber}
+          onChange={(e) =>
+            setPremiumPackageRequest({
+              ...premiumPackageRequest,
+              clientInformation: {
+                ...premiumPackageRequest.clientInformation,
+                phoneNumber: e.target.value,
+              },
+            })
+          }
+          fullWidth
+          sx={{ mt: 2 }}
+          id="filled-multiline-static"
+          placeholder="Address (Where Service will be rendered)"
+        />
       </div>
 
       <div className="mt-3 flex justify-between border-t border-[#F3E8C6]">
         <Button
-          //   disabled={
-          //     clientRequest.workMode === "Live-in"
-          //       ? disableButton()
-          //       : clientRequest.workingDays.length === 0 || disableButton()
-          //   }
-          //   onClick={onContinue}
+          onClick={() => router.push(`/package?type=${type}`)}
           outline
           style={{
             width: "150px",
@@ -281,12 +313,13 @@ export default function Home({ searchParams }: HomeProps) {
           buttonName="Cancel"
         />
         <Button
-          //   disabled={
-          //     clientRequest.workMode === "Live-in"
-          //       ? disableButton()
-          //       : clientRequest.workingDays.length === 0 || disableButton()
-          //   }
-        //   onClick={proceedToPaymeent}
+          disabled={
+            premiumPackageRequest.clientInformation.address === "" ||
+            premiumPackageRequest.clientInformation.phoneNumber === "" ||
+            premiumPackageRequest.clientInformation.email === "" ||
+            premiumPackageRequest.clientInformation.name === ""
+          }
+          onClick={() => router.push(`/checkout?type=${type}`)}
           style={{
             width: "150px",
             alignSelf: "end",

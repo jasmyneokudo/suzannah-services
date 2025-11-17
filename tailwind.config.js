@@ -13,7 +13,10 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-opensans)"],
         mono: ["var(--font-roboto-mono)"],
-        'edu-sa': ["var(--font-edu-sa-beginner)"]
+        'edu-sa': ["var(--font-edu-sa-beginner)"],
+        crushed: ["var(--crushed)"],
+        unifrakturCook: ["var(--unifrakturCook)"],
+        'young-serif': ["var(--youngSerif)"],
         // Add more custom font families as needed
       }
     },

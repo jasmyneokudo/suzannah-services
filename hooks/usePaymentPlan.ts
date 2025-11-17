@@ -20,7 +20,7 @@ interface Options {
 
 const BASE_STAFF_PAY = 50000;
 
-const PRICING: Record<ServiceType, number> = {
+export const PRICING: Record<ServiceType, number> = {
   "Nanny Services": 85500,
   "General Help Services": 80500,
   "Nanny + Help Services": 95500,

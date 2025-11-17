@@ -16,7 +16,7 @@ export const PremiumPackageSection = () => {
       <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent opacity-60" />
 
       <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700 mt-10">
-        PREMIUM HOME SERVICE PACKAGES
+        Our Bespoke Packages
       </h1>
       <p className="text-center text-sm text-blue-800 font-sans mt-2">
         Personalized home services for distinguished homes.

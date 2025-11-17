@@ -4,6 +4,9 @@ import {
   Open_Sans,
   Roboto_Mono,
   Edu_SA_Beginner,
+  UnifrakturCook,
+  Crushed,
+  Young_Serif,
 } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
@@ -32,6 +35,27 @@ const eduSABeginner = Edu_SA_Beginner({
   variable: "--font-edu-sa-beginner",
 });
 
+const crushed = Crushed({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--crushed",
+});
+
+const unifrakturCook = UnifrakturCook({
+  subsets: ["latin"],
+  weight: "700",
+  display: "swap",
+  variable: "--unifrakturCook",
+});
+
+const youngSerif = Young_Serif({
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+  variable: "--youngSerif",
+});
+
 export const metadata: Metadata = {
   title: "Suzannah Home & Care Services",
   description:
@@ -50,7 +74,7 @@ export const metadata: Metadata = {
     "professional house cleaning in Abuja",
     "cook services in Abuja",
     "elderly caregiver in Abuja",
-    "trusted home service agency Nigeria"
+    "trusted home service agency Nigeria",
   ],
 };
 
@@ -62,7 +86,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${openSans.variable} ${robotoMono.variable} ${eduSABeginner.variable} font-inter`}
+      className={`${openSans.variable} ${robotoMono.variable} ${crushed.variable} ${unifrakturCook.variable} ${eduSABeginner.variable} ${youngSerif.variable} font-inter`}
     >
       <Script
         src="https://js.paystack.co/v1/inline.js"

@@ -1,7 +1,11 @@
 "use client";
 
 import { premiumServicePackages } from "@/data/premiumServicePackages";
-import { ModeOfWork, StaffRole } from "@/types/ClientRequest";
+import {
+  ModeOfWork,
+  StaffMemberDetails,
+  StaffRole,
+} from "@/types/ClientRequest";
 import {
   FormControl,
   FormLabel,
@@ -11,12 +15,14 @@ import {
   TextField,
   MenuItem,
   Select,
+  SelectChangeEvent,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
 import { IconPuzzle } from "@tabler/icons-react";
 import { useAppContext } from "../context/AppContext";
+import CustomStaffMember from "../components/CustomStaffMember";
 
 type HomeProps = {
   searchParams?: {
@@ -49,6 +55,20 @@ export default function Home({ searchParams }: HomeProps) {
     others: "",
   });
 
+  const [additionalStaffMember1, setAdditionalStaffMember1] = useState<{}>({
+    staffMemberRole: "",
+    workMode: "Live-in",
+    gender: "Female",
+    othersPreferences: "",
+  });
+
+  const [additionalStaffMember2, setAdditionalStaffMember2] = useState<{}>({
+    staffMemberRole: "",
+    workMode: "Live-in",
+    gender: "Female",
+    othersPreferences: "",
+  });
+
   const [gender, setGender] = useState<"Female" | "Male" | "Any Gender">(
     "Female"
   );
@@ -56,6 +76,15 @@ export default function Home({ searchParams }: HomeProps) {
   const { premiumPackageRequest, setPremiumPackageRequest } = useAppContext();
 
   const selectedPackage = premiumServicePackages[type - 1];
+
+  useEffect(() => {
+    if (selectedPackage) {
+      setPremiumPackageRequest({
+        ...premiumPackageRequest,
+        packageType: type,
+      });
+    }
+  }, [type]);
 
   const handleWorkModeChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -125,21 +154,21 @@ export default function Home({ searchParams }: HomeProps) {
     });
   };
 
-
-    const handleAdditionDetailsChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, staffMember: StaffRole
-    ) => {
-      setPremiumPackageRequest({
-        ...premiumPackageRequest,
-        coreStaffMembers: {
-          ...premiumPackageRequest.coreStaffMembers,
-          [staffMember]: {
-            ...premiumPackageRequest.coreStaffMembers[staffMember],
-            otherPreferences: e.target.value,
-          },
+  const handleAdditionDetailsChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    staffMember: StaffRole
+  ) => {
+    setPremiumPackageRequest({
+      ...premiumPackageRequest,
+      coreStaffMembers: {
+        ...premiumPackageRequest.coreStaffMembers,
+        [staffMember]: {
+          ...premiumPackageRequest.coreStaffMembers[staffMember],
+          otherPreferences: e.target.value,
         },
-      });
-    };
+      },
+    });
+  };
 
   const proceedToPaymeent = () => {
     router.push(`/payment?type=${type}`);
@@ -233,7 +262,9 @@ export default function Home({ searchParams }: HomeProps) {
             Additional Details or Special Requirements
           </FormLabel>
           <TextField
-            value={premiumPackageRequest.coreStaffMembers.nanny.otherPreferences}
+            value={
+              premiumPackageRequest.coreStaffMembers.nanny.otherPreferences
+            }
             onChange={(e) => handleAdditionDetailsChange(e, "nanny")}
             fullWidth
             sx={{ mt: 2 }}
@@ -308,9 +339,7 @@ export default function Home({ searchParams }: HomeProps) {
             Additional Details or Special Requirements
           </FormLabel>
           <TextField
-            value={
-              premiumPackageRequest.coreStaffMembers.chef.otherPreferences
-            }
+            value={premiumPackageRequest.coreStaffMembers.chef.otherPreferences}
             onChange={(e) => handleAdditionDetailsChange(e, "chef")}
             fullWidth
             sx={{ mt: 2 }}
@@ -385,7 +414,10 @@ export default function Home({ searchParams }: HomeProps) {
             Additional Details or Special Requirements
           </FormLabel>
           <TextField
-            value={premiumPackageRequest.coreStaffMembers.housekeeper.otherPreferences}
+            value={
+              premiumPackageRequest.coreStaffMembers.housekeeper
+                .otherPreferences
+            }
             onChange={(e) => handleAdditionDetailsChange(e, "housekeeper")}
             fullWidth
             sx={{ mt: 2 }}
@@ -398,121 +430,60 @@ export default function Home({ searchParams }: HomeProps) {
 
       {type !== 1 && (
         <>
-          <h1 className="border-b border-[#F3E8C6] mt-4 font-semibold">
-            Additional Staff Members (1 choice)
+          <h1 className="border-b border-[#F3E8C6] mt-5 font-semibold">
+            Additional Staff Members ({type === 2 ? '1 choice'  : '2 choices'})
           </h1>
 
-          <div
-            className="p-6 rounded-lg mt-4"
-            style={{
-              background:
-                "linear-gradient(135deg, hsl(40 33% 97%), hsl(42 47% 88%))",
-              borderColor: "hsl(42 47% 88%)",
-              borderWidth: 1,
+          <CustomStaffMember
+            number={1}
+            setStaffDetails={(details: StaffMemberDetails) => {
+              const updatedAdditionalStaffMembers = [
+                ...premiumPackageRequest.additionalStaffMembers,
+              ];
+              updatedAdditionalStaffMembers[0] = {
+                ...updatedAdditionalStaffMembers[0],
+                staffMemberRole: details.staffMemberRole,
+                accomodationPreference: details.accomodationPreference,
+                genderPreference: details.genderPreference,
+                otherPreferences: details.otherPreferences,
+              };
+              setPremiumPackageRequest({
+                ...premiumPackageRequest,
+                additionalStaffMembers: updatedAdditionalStaffMembers,
+              });
             }}
-          >
-            {/* <FormControl fullWidth sx={{ mt: 2 }}>
-              <FormLabel id="demo2-simple-select-label">
-                Select Staff Member 1
-              </FormLabel>
-              <Select
-                displayEmpty
-                labelId="demo2-simple-select-label"
-                id="demo-simple-select"
-                // value={clientRequest.employeeAgeRange}
-                // label="Age Range"
-                aria-placeholder="he"
-                required
-                // onChange={(event: SelectChangeEvent) => {
-                //   setClientRequest({
-                //     ...clientRequest,
-                //     employeeAgeRange: event.target.value,
-                //   });
-                // }}
-              >
-                <MenuItem value="Nanny">Childcare Professional</MenuItem>
-                <MenuItem value="Chef">Private Chef</MenuItem>
-                <MenuItem value="Housekeeper">Professional Housekeeper</MenuItem>
-                <MenuItem value="Driver">Executive Chaffeur/Driver</MenuItem>
-                <MenuItem value="House Help">House Attendant/Help</MenuItem>
-                <MenuItem value="House Help">Personal Assistant</MenuItem>
-              </Select>
-            </FormControl>
+            staffDetails={premiumPackageRequest.additionalStaffMembers[0] || {
+              accomodationPreference: "Live-in",
+              genderPreference: "Female",
+              otherPreferences: "",
+              staffMemberRole: ""
+            }}
+          />
 
-            <FormControl
-              className="text-black dark:text-gray-900"
-              sx={{ mt: 2 }}
-            >
-              <FormLabel id="demo-radio-buttons-group-label">
-                Accomodation Preference
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="Live-in"
-                // value={nannyWorkMode}
-                onChange={handleWorkModeChange}
-              >
-                <FormControlLabel
-                  value="Live-in"
-                  control={<Radio />}
-                  label="Live-in"
-                />
-                <FormControlLabel
-                  value="Live-out"
-                  control={<Radio />}
-                  label="Live-out"
-                />
-              </RadioGroup>
-            </FormControl>
-
-            <FormControl
-              className="text-black dark:text-gray-900"
-              sx={{ mt: 2 }}
-            >
-              <FormLabel id="gender-radio-buttons-group-label">
-                Gender Preference
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="gender-radio-buttons-group-label"
-                defaultValue="Female"
-                value={gender}
-                onChange={handleGenderChange}
-              >
-                <FormControlLabel
-                  value="Female"
-                  control={<Radio />}
-                  label="Female"
-                />
-                <FormControlLabel
-                  value="Male"
-                  control={<Radio />}
-                  label="Male"
-                />
-                <FormControlLabel
-                  value="Any Gender"
-                  control={<Radio />}
-                  label="Any Gender"
-                />
-              </RadioGroup>
-            </FormControl>
-
-            <FormControl>
-              <FormLabel className="mt-2" id="gender-radio-buttons-group-label">
-                Additional Details or Special Requirements
-              </FormLabel>
-              <TextField
-                // value={"customRequest.serviceDescription"}
-                onChange={(e) => null}
-                fullWidth
-                sx={{ mt: 2 }}
-                placeholder="Any specific requirements, preferences, or notes for this staff member..."
-                multiline
-                rows={4}
-              />
-            </FormControl> */}
-          </div>
+          {type === 3 && (
+            <CustomStaffMember
+              number={2}
+              setStaffDetails={(details: StaffMemberDetails) => {
+                const updatedAdditionalStaffMembers = [
+                  ...premiumPackageRequest.additionalStaffMembers,
+                ];
+                updatedAdditionalStaffMembers[1] = {
+                  ...updatedAdditionalStaffMembers[1],
+                  staffMemberRole: details.staffMemberRole,
+                  accomodationPreference: details.accomodationPreference,
+                  genderPreference: details.genderPreference,
+                  otherPreferences: details.otherPreferences,
+                };
+                setPremiumPackageRequest({
+                  ...premiumPackageRequest,
+                  additionalStaffMembers: updatedAdditionalStaffMembers,
+                });
+              }}
+              staffDetails={
+                premiumPackageRequest.additionalStaffMembers[1] || {}
+              }
+            />
+          )}
         </>
       )}
 

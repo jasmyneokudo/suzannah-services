@@ -46,9 +46,22 @@ export interface CustomerRequest {
 
 export type StaffRole = "nanny" | "housekeeper" | "chef";
 
+export type PremiumPackagePaymentPlan = "monthly" | "biannual" | "annual";
 
+export const PremiumPackageNetPercentages: Record<PremiumPackagePaymentPlan, number> = {
+  monthly: 1,
+  biannual: 0.92,
+  annual: 0.85,
+};
+
+export type StaffMemberDetails = {
+  staffMemberRole: StaffRole;
+  accomodationPreference: ModeOfWork;
+  genderPreference: string;
+  otherPreferences: string;
+}
 export interface PremiumPackageRequest {
-  packageType: string;
+  packageType: number;
   coreStaffMembers: {
     nanny: {
       accomodationPreference: string;
@@ -66,8 +79,13 @@ export interface PremiumPackageRequest {
       otherPreferences: string;
     };
   };
-  additionalStaffMembers: string[];
-  paymentPlan: string;
+  additionalStaffMembers: StaffMemberDetails[];
+  paymentPlan: {
+    name: PremiumPackagePaymentPlan;
+    durationInMonths: number;
+    netPercentage?: number;
+    totalAmount: number;
+  };
   clientInformation: {
     name: string;
     email: string;

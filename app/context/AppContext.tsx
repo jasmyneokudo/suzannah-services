@@ -1,6 +1,6 @@
 "use client";
 
-import { PremiumPackageRequest } from "@/types/ClientRequest";
+import { PremiumPackagePaymentPlan, PremiumPackageRequest } from "@/types/ClientRequest";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 type AppContextType = {
@@ -14,26 +14,30 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [premiumPackageRequest, setPremiumPackageRequest] = useState<PremiumPackageRequest>({
-    packageType: "",
+    packageType: 0,
     coreStaffMembers: {
         nanny: {
-            accomodationPreference: "",
-            genderPreference: "",
+            accomodationPreference: "Live-in",
+            genderPreference: "Female",
             otherPreferences: "",
         },
         housekeeper: {
-            accomodationPreference: "",
-            genderPreference: "",
+            accomodationPreference: "Live-in",
+            genderPreference: "Female",
             otherPreferences: "",
         },
         chef: {
-            accomodationPreference: "",
-            genderPreference: "",
+            accomodationPreference: "Live-in",
+            genderPreference: "Female",
             otherPreferences: "",
         }
     },
     additionalStaffMembers: [],
-    paymentPlan: "",
+    paymentPlan: {
+      name: "" as PremiumPackagePaymentPlan,
+      durationInMonths: 0,
+      totalAmount: 0,
+    },
     clientInformation: {
         name: "",
         email: "",

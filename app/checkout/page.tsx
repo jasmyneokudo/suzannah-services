@@ -1,21 +1,21 @@
 "use client";
 
-import {
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
+import { Checkbox, FormControlLabel } from "@mui/material";
 import {
   IconCreditCard,
   IconPackage,
-  IconPuzzle,
-  IconShoppingCartCopy,
   IconShoppingCartPlus,
   IconUser,
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
+import { useAppContext } from "../context/AppContext";
+import { useRouter } from "next/navigation";
+import { premiumServicePackages } from "@/data/premiumServicePackages";
+import { useState } from "react";
+import { PremiumPackageNetPercentages } from "@/types/ClientRequest";
+import SelectedStaffDetails from "../components/SelectedStaffDetails";
+
+const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
 
 const PaystackButton = dynamic(
   () => import("react-paystack").then((mod) => mod.PaystackButton),
@@ -31,9 +31,21 @@ type HomeProps = {
 export default function Home({ searchParams }: HomeProps) {
   const type: number = Number(searchParams?.type) || 0;
 
+  const { premiumPackageRequest, setPremiumPackageRequest } = useAppContext();
+  const router = useRouter();
+
+  const { nanny, chef, housekeeper } = premiumPackageRequest.coreStaffMembers;
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const handleTermsAndConditionsChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setTermsAccepted(event.target.checked);
+  };
+
   const componentProps = {
-    // email: clientRequest.clientEmail,
-    // amount: bookingFee * 100, // Paystack expects amount in kobo
+    email: premiumPackageRequest.clientInformation.email,
+    amount: premiumPackageRequest.paymentPlan.totalAmount * 100, // Paystack expects amount in kobo
     metadata: {
       custom_fields: [
         {
@@ -43,8 +55,8 @@ export default function Home({ searchParams }: HomeProps) {
         },
       ],
     },
-    // publicKey,
-    text: `Pay Now (₦1,200,000)`,
+    publicKey,
+    text: `Pay Now (₦${premiumPackageRequest.paymentPlan.totalAmount.toLocaleString()})`,
     onSuccess: async () => {
       //   await sendRequestDetails();
       //   resetCustomerRequest();
@@ -86,28 +98,57 @@ export default function Home({ searchParams }: HomeProps) {
             Your Selected Package
           </h1>
         </div>
-        <p className="text-sm text-gray-500">Executive Home Comfort Package</p>
+        <p className="text-sm text-gray-500">
+          {
+            premiumServicePackages[premiumPackageRequest.packageType]
+              .serviceName
+          }
+        </p>
 
         {/* Divider */}
         <div className="bg-gray-400 h-[0.2px] w-full my-3" />
 
-        <div className="mb-3 border-l-2 border-blue-600/40 pl-3">
-          <p className="font-medium">Professional Nanny</p>
-          <p className="text-gray-600 text-sm">Live-in • Female</p>
-          <p className="text-gray-600 text-sm">Note: {}</p>
-        </div>
+        <SelectedStaffDetails
+          staffMemberRole="Professional Nanny"
+          genderPreference={nanny.genderPreference}
+          accomodationPreference={nanny.accomodationPreference}
+          otherPreferences={nanny.otherPreferences}
+        />
 
-        <div className="mb-3 border-l-2 border-blue-600/40 pl-3">
-          <p className="font-medium">Professional Housekeeper</p>
-          <p className="text-gray-600 text-sm">Live-in • Female</p>
-          <p className="text-gray-600 text-sm">Note: {}</p>
-        </div>
+        <SelectedStaffDetails
+          staffMemberRole="Professional Housekeeper"
+          genderPreference={housekeeper.genderPreference}
+          accomodationPreference={housekeeper.accomodationPreference}
+          otherPreferences={housekeeper.otherPreferences}
+        />
 
-        <div className="mb-3 border-l-2 border-blue-600/40 pl-3">
-          <p className="font-medium">Private Chef</p>
-          <p className="text-gray-600 text-sm">Live-in • Female</p>
-          <p className="text-gray-600 text-sm">Note: {}</p>
-        </div>
+        <SelectedStaffDetails
+          staffMemberRole="Private Chef"
+          genderPreference={chef.genderPreference}
+          accomodationPreference={chef.accomodationPreference}
+          otherPreferences={chef.otherPreferences}
+        />
+
+        {type !== 1 && (
+          <>
+            <h1 className="mt-5 font-semibold text-black">
+              Additional Staff Members
+            </h1>
+            <div className="bg-gray-400 h-[0.2px] w-full my-3" />
+
+            {premiumPackageRequest.additionalStaffMembers.map(
+              (staffMember, index) => (
+                <SelectedStaffDetails
+                  key={index}
+                  staffMemberRole={staffMember.staffMemberRole}
+                  genderPreference={staffMember.genderPreference}
+                  accomodationPreference={staffMember.accomodationPreference}
+                  otherPreferences={staffMember.otherPreferences}
+                />
+              )
+            )}
+          </>
+        )}
       </div>
 
       <div className="mt-3 rounded-md border border-gray-300 p-4 shadow-sm">
@@ -119,21 +160,42 @@ export default function Home({ searchParams }: HomeProps) {
             stroke={1.5}
           />
           <h1 className="font-semibold text-center text-lg">
-            You Selected Payment Plan
+            Your Selected Payment Plan
           </h1>
         </div>
-        <p className="text-sm text-gray-500">Monthly - to renew every month</p>
+        <p className="text-sm text-gray-500">
+          {premiumPackageRequest.paymentPlan.name} - to renew every{" "}
+          {premiumPackageRequest.paymentPlan.name === "monthly"
+            ? "month"
+            : premiumPackageRequest.paymentPlan.name === "biannual"
+            ? "6 months"
+            : "year"}{" "}
+        </p>
 
         {/* Divider */}
         <div className="bg-gray-400 h-[0.2px] w-full my-3" />
 
         <div className="mt-2 flex justify-between text-gray-500">
           <p>Amount: </p>
-          <p>1,200,000</p>
+          <p>
+            ₦
+            {(
+              premiumServicePackages[type - 1].investment *
+              PremiumPackageNetPercentages[
+                premiumPackageRequest.paymentPlan.name
+              ]
+            ).toLocaleString()}
+          </p>
         </div>
         <div className="mt-2 flex justify-between text-gray-500">
           <p>Duration: </p>
-          <p>1 Month</p>
+          <p>
+            {premiumPackageRequest.paymentPlan.name === "monthly"
+              ? "1 Month"
+              : premiumPackageRequest.paymentPlan.name === "biannual"
+              ? "6 Months"
+              : "1 Year"}
+          </p>
         </div>
 
         {/* Divider */}
@@ -141,7 +203,9 @@ export default function Home({ searchParams }: HomeProps) {
 
         <div className="mt-2 flex justify-between font-bold text-black">
           <p>Total Amount:</p>
-          <p>1,200,000</p>
+          <p>
+            ₦ {premiumPackageRequest.paymentPlan.totalAmount.toLocaleString()}
+          </p>
         </div>
       </div>
 
@@ -158,225 +222,268 @@ export default function Home({ searchParams }: HomeProps) {
 
         <div className="mt-2 text-gray-500">
           <p className="text-sm">Name: </p>
-          <p className="font-bold text-black">John Doe</p>
+          <p className="font-bold text-black">
+            {premiumPackageRequest.clientInformation.name}
+          </p>
         </div>
         <div className="mt-2 text-gray-500">
           <p className="text-sm">Email: </p>
-          <p className="font-bold text-black">Johndoe@gmail.com</p>
+          <p className="font-bold text-black">
+            {premiumPackageRequest.clientInformation.email}
+          </p>
         </div>
         <div className="mt-2 text-gray-500">
           <p className="text-sm">Phone: </p>
-          <p className="font-bold text-black">08160074083</p>
+          <p className="font-bold text-black">
+            {premiumPackageRequest.clientInformation.phoneNumber}
+          </p>
         </div>
         <div className="mt-2 text-gray-500">
           <p className="text-sm">Address: </p>
-          <p className="font-bold text-black">Durumi, Abuja</p>
+          <p className="font-bold text-black">
+            {premiumPackageRequest.clientInformation.address}
+          </p>
         </div>
       </div>
 
-      <div className="mt-3 inline-block rounded-md border border-gray-300 p-4 shadow-sm">
+      <div className="mt-3 rounded-md border border-gray-300 p-4 shadow-sm">
         <FormControlLabel
           control={
             <Checkbox
-              checked={true}
-              //   onChange={handleChange}
-              //   name="diabetes"
+              checked={termsAccepted}
+              onChange={handleTermsAndConditionsChange}
+              name="termsAccepted"
             />
           }
-          label=""
+          label={
+            <p>
+              I agree to the{" "}
+              <a
+                className="text-blue-800 underline"
+                href="#terms-and-conditions"
+              >
+                Terms and Conditions
+              </a>{" "}
+              and{" "}
+              <a className="text-blue-800 underline" href="#privacy-policy">
+                Privacy Policy
+              </a>
+              . I understand that this payment is for{" "}
+              {premiumPackageRequest.paymentPlan.name} and acknowledge the
+              package details and payment plan outlined above.
+            </p>
+          }
         />
-        <p>
-          I agree to the Terms and Conditions and Privacy Policy. I understand
-          that this payment is for luxury security services and acknowledge the
-          package details and payment plan outlined above.
-        </p>
+
+        <PaystackButton
+          disabled={!termsAccepted}
+          className="paystack-button"
+          {...componentProps}
+        />
       </div>
 
-      {/* <PaystackButton
-        //   disabled={
-        //     clientRequest.clientEmail === "" ||
-        //     clientRequest.clientPhoneNumber === ""
-        //   }
-        className="paystack-button"
-        {...componentProps}
-      /> */}
-
-      <div className="bg-gray-300 p-3 my-5 rounded-md bg-gradient-to-b from-white to-yellow-50 text-gray-800 md:p-16">
+      <div
+        id="terms-and-conditions"
+        className="bg-gray-300 p-3 my-5 rounded-md bg-gradient-to-b from-white to-yellow-50 text-gray-800 md:p-16"
+      >
         <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-4 md:p-16 border border-yellow-100">
-        <h1 className="text-4xl font-semibold text-center mb-8 text-yellow-800">
-          Terms & Conditions
-        </h1>
+          <h1 className="text-4xl font-semibold text-center mb-8 text-yellow-800">
+            Terms & Conditions
+          </h1>
 
-        <article className="prose prose-lg prose-slate max-w-none">
-          <p className="lead">
-            At <strong>Suzannah Home &amp; Care Services</strong>, we provide
-            discreet, professional and reliable managed home services for
-            discerning households. Below are the terms guiding our premium
-            engagements.
-          </p>
-
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">
-              1. Service Preparation & Commencement
-            </h3>
-            <p className="text-gray-900 text-sm">
-              Upon confirmation of payment, please allow{" "}
-              <strong>10 working days</strong> for onboarding and team
-              preparation. This window covers background checks, medical
-              screening, orientation, and tailored briefing so each staff member
-              meets your household standards.
+          <article className="prose prose-lg prose-slate max-w-none">
+            <p className="lead">
+              At <strong>Suzannah Home &amp; Care Services</strong>, we provide
+              discreet, professional and reliable managed home services for
+              discerning households. Below are the terms guiding our premium
+              engagements.
             </p>
-          </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">2. Renewal Schedule</h3>
-            <p className="text-gray-900 text-sm">
-              Service renewal occurs at{" "}
-              <strong>1 month, 6 months, or 1 year</strong> depending on the
-              payment plan selected. You will receive a reminder prior to
-              renewal to ensure uninterrupted service.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                1. Service Preparation & Commencement
+              </h3>
+              <p className="text-gray-900 text-sm">
+                Upon confirmation of payment, please allow{" "}
+                <strong>10 working days</strong> for onboarding and team
+                preparation. This window covers background checks, medical
+                screening, orientation, and tailored briefing so each staff
+                member meets your household standards.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">
-              3. Quality Supervision & Monitoring
-            </h3>
-            <p className="text-gray-900 text-sm">
-              A Suzannah supervisor will visit periodically to perform discreet
-              performance reviews, collect feedback, and confirm adherence to
-              our standards. Additional visits may be scheduled upon request.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                2. Renewal Schedule
+              </h3>
+              <p className="text-gray-900 text-sm">
+                Service renewal occurs at{" "}
+                <strong>1 month, 6 months, or 1 year</strong> depending on the
+                payment plan selected. You will receive a reminder prior to
+                renewal to ensure uninterrupted service.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">4. Staff Replacement Policy</h3>
-            <p className="text-gray-900 text-sm">
-              If a team member underperforms, submit a replacement request to
-              your Account Manager. We aim to provide a suitable replacement
-              within <strong>two weeks</strong>, following verification and
-              transitional planning.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                3. Quality Supervision & Monitoring
+              </h3>
+              <p className="text-gray-900 text-sm">
+                A Suzannah supervisor will visit periodically to perform
+                discreet performance reviews, collect feedback, and confirm
+                adherence to our standards. Additional visits may be scheduled
+                upon request.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">
-              5. Uniforms & Professional Presentation
-            </h3>
-            <p className="text-gray-900 text-sm">
-              All staff are provided with elegant uniforms and receive training
-              in etiquette, grooming, and service presentation to reflect the
-              standards of an elite household.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                4. Staff Replacement Policy
+              </h3>
+              <p className="text-gray-900 text-sm">
+                If a team member underperforms, submit a replacement request to
+                your Account Manager. We aim to provide a suitable replacement
+                within <strong>two weeks</strong>, following verification and
+                transitional planning.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">
-              6. Client Support & Issue Resolution
-            </h3>
-            <p className="text-gray-900 text-sm">
-              Our Client Support Team prioritizes premium client inquiries. We
-              commit to acknowledging issues within <strong>24 hours</strong>{" "}
-              and resolving urgent concerns promptly.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                5. Uniforms & Professional Presentation
+              </h3>
+              <p className="text-gray-900 text-sm">
+                All staff are provided with elegant uniforms and receive
+                training in etiquette, grooming, and service presentation to
+                reflect the standards of an elite household.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">7. Payroll & Staff Management</h3>
-            <p className="text-gray-900 text-sm">
-              All payroll, salary administration and statutory obligations
-              related to team members are managed by Suzannah. Clients are not
-              required to handle staff salaries directly.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                6. Client Support & Issue Resolution
+              </h3>
+              <p className="text-gray-900 text-sm">
+                Our Client Support Team prioritizes premium client inquiries. We
+                commit to acknowledging issues within <strong>24 hours</strong>{" "}
+                and resolving urgent concerns promptly.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">8. Live-in Staff Off-Days</h3>
-            <p className="text-gray-900 text-sm">
-              Live-in staff are entitled to off-days during the last weekend of
-              each month. This schedule can be adjusted to suit household needs
-              with prior notice. Temporary cover can be arranged for essential
-              continuity.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                7. Payroll & Staff Management
+              </h3>
+              <p className="text-gray-900 text-sm">
+                All payroll, salary administration and statutory obligations
+                related to team members are managed by Suzannah. Clients are not
+                required to handle staff salaries directly.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">9. Confidentiality & Discretion</h3>
-            <p className="text-gray-900 text-sm">
-              All Suzannah staff are bound by strict confidentiality agreements.
-              We protect client privacy and treat household information with
-              absolute discretion. Any breach results in immediate termination
-              and remediation.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                8. Live-in Staff Off-Days
+              </h3>
+              <p className="text-gray-900 text-sm">
+                Live-in staff are entitled to off-days during the last weekend
+                of each month. This schedule can be adjusted to suit household
+                needs with prior notice. Temporary cover can be arranged for
+                essential continuity.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">
-              10. Trial Period & Performance Guarantee
-            </h3>
-            <p className="text-gray-900 text-sm">
-              New placements include a <strong>trial period</strong> during
-              which performance is monitored. If a staff member does not meet
-              agreed expectations, we will provide replacements or corrective
-              training as required.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                9. Confidentiality & Discretion
+              </h3>
+              <p className="text-gray-900 text-sm">
+                All Suzannah staff are bound by strict confidentiality
+                agreements. We protect client privacy and treat household
+                information with absolute discretion. Any breach results in
+                immediate termination and remediation.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">11. Liability & Insurance</h3>
-            <p className="text-gray-900 text-sm">
-              Suzannah maintains professional liability insurance for the
-              services we provide. Clients should notify us immediately of any
-              incident to initiate an investigation and any required insurance
-              claims.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                10. Trial Period & Performance Guarantee
+              </h3>
+              <p className="text-gray-900 text-sm">
+                New placements include a <strong>trial period</strong> during
+                which performance is monitored. If a staff member does not meet
+                agreed expectations, we will provide replacements or corrective
+                training as required.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">12. Termination & Notice</h3>
-            <p className="text-gray-900 text-sm">
-              Either party may terminate the service agreement with prior
-              written notice as stipulated in the service contract. Termination
-              terms (notice period and any applicable fees) will be described in
-              the individual engagement agreement.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                11. Liability & Insurance
+              </h3>
+              <p className="text-gray-900 text-sm">
+                Suzannah maintains professional liability insurance for the
+                services we provide. Clients should notify us immediately of any
+                incident to initiate an investigation and any required insurance
+                claims.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">13. Governing Law</h3>
-            <p className="text-gray-900 text-sm">
-              These terms are governed by the laws of the Federal Republic of
-              Nigeria. Any disputes shall be settled through negotiation or, if
-              necessary, legal processes in Nigeria.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                12. Termination & Notice
+              </h3>
+              <p className="text-gray-900 text-sm">
+                Either party may terminate the service agreement with prior
+                written notice as stipulated in the service contract.
+                Termination terms (notice period and any applicable fees) will
+                be described in the individual engagement agreement.
+              </p>
+            </section>
 
-          <section className="mt-3">
-            <h3 className="text-xl font-semibold text-yellow-700">Contact & Consent</h3>
-            <p className="text-gray-900 text-sm">
-              For queries or to exercise data rights, contact{" "}
-              <a
-                href="mailto:privacy@suzannahhomecare.com"
-                className="text-purple-700 underline"
-              >
-                privacy@suzannahhomecare.com
-              </a>
-              . By engaging Suzannah, you agree to these terms and consent to
-              the processing of personal data necessary to deliver our services.
-            </p>
-          </section>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                13. Governing Law
+              </h3>
+              <p className="text-gray-900 text-sm">
+                These terms are governed by the laws of the Federal Republic of
+                Nigeria. Any disputes shall be settled through negotiation or,
+                if necessary, legal processes in Nigeria.
+              </p>
+            </section>
 
-          <footer className="mt-8 border-t pt-6 text-sm text-gray-600">
-            <p className="text-gray-900 text-sm">
-              © {new Date().getFullYear()} Suzannah Home &amp; Care Services —
-              All rights reserved.
-            </p>
-          </footer>
-        </article>
+            <section className="mt-3">
+              <h3 className="text-xl font-semibold text-yellow-700">
+                Contact & Consent
+              </h3>
+              <p className="text-gray-900 text-sm">
+                For queries or to exercise data rights, contact{" "}
+                <a
+                  href="mailto:suzannahhomeandcareservices@gmail.com"
+                  className="text-purple-700 underline"
+                >
+                  suzannahhomeandcareservices@gmail.com
+                </a>
+                . By engaging Suzannah, you agree to these terms and consent to
+                the processing of personal data necessary to deliver our
+                services.
+              </p>
+            </section>
+
+            <footer className="mt-8 border-t pt-6 text-sm text-gray-600">
+              <p className="text-gray-900 text-sm">
+                © {new Date().getFullYear()} Suzannah Home &amp; Care Services —
+                All rights reserved.
+              </p>
+            </footer>
+          </article>
         </div>
       </div>
 
-      <div className="min-h-screen bg-gradient-to-b from-white to-yellow-50 text-gray-800 p-3 md:p-16">
+      <div
+        id="privacy-policy"
+        className="min-h-screen bg-gradient-to-b from-white to-yellow-50 text-gray-800 p-3 md:p-16"
+      >
         <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-4 md:p-16 border border-yellow-100">
           <h1 className="text-4xl font-semibold text-center mb-8 text-yellow-800">
             Privacy Policy
@@ -463,10 +570,10 @@ export default function Home({ searchParams }: HomeProps) {
                 information. To exercise these rights or make inquiries, please
                 contact us at{" "}
                 <a
-                  href="mailto:info@suzannahservices.com"
+                  href="mailto:suzannahhomeandcareservices@gmail.com"
                   className="text-yellow-700 font-semibold"
                 >
-                  info@suzannahservices.com
+                  suzannahhomeandcareservices@gmail.com
                 </a>
                 .
               </p>
@@ -493,10 +600,10 @@ export default function Home({ searchParams }: HomeProps) {
                 <br />
                 Email:{" "}
                 <a
-                  href="mailto:info@suzannahservices.com"
+                  href="mailto:suzannahhomeandcareservices@gmail.com"
                   className="text-yellow-700 font-semibold"
                 >
-                  info@suzannahservices.com
+                  suzannahhomeandcareservices@gmail.com
                 </a>
                 <br />
                 Phone: +234 800 000 0000

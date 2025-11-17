@@ -2,6 +2,7 @@ import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandWhatsapp,
+  IconSparkles,
 } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -52,7 +53,7 @@ export const Footer = () => {
           </a>
         </div>
 
-        <div className="self-start w-full max-sm:gap-3">
+        <div className="self-start w-full max-sm:gap-3 col-span-2">
           <p className="max-sm:hidden">More</p>
           <p className="font-bold">Quick Links</p>
           <Link
@@ -62,8 +63,15 @@ export const Footer = () => {
           </Link>
           <a href="/#services-section">
             <p className="relative z-10 font-thin max-sm:text-sm max-sm:mt-2 max-sm:text-white">
-              Services
+              Domestic services
             </p>
+          </a>
+
+          <a href="/executive" className="flex items-center">
+            <p className="text-white relative z-10 font-light max-sm:text-sm max-sm:mt-2 ">
+             Executive Household management concierge 
+            </p>
+            <span className="text-xs bg-red-800 rounded-md px-1 py-1 flex items-center">NEW <IconSparkles color="white" stroke={2} size={12} /></span>
           </a>
           {/* <a href="#">
                         <p className="font-thin max-sm:text-sm max-sm:mt-2 max-sm:text-gray-200">Mission</p>
