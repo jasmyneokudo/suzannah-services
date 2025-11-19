@@ -163,7 +163,7 @@ export default function Home({ searchParams }: HomeProps) {
 
       <section className="mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-4 py-8 px-6 bg-luxury-gold/10 border border-luxury-gold/30 rounded-lg">
-          <p className="text-2xl md:text-3xl font-young-serif font-semibold text-[#020617]">
+          <p className="text-2xl md:text-3xl font-young-serif font-semibold text-blue-950">
             Trusted by 20+ discerning households
           </p>
           <a href="#premium-packages-section">
@@ -181,7 +181,7 @@ export default function Home({ searchParams }: HomeProps) {
           <p className="text-4xl z-50 md:text-6xl font-young-serif font-bold text-[#FFC105]">
             2/10 Slots Left
           </p>
-          <p className="text-lg text-muted-foreground">for 2026</p>
+          <p className="text-lg text-muted-foreground text-blue-950">for 2026</p>
           <a href="/executive/#premium-packages-section">
             <button className="mt-4 z-50 bg-[#FFC105] hover:bg-[#FFC105]/90 text-white font-semibold px-6 py-3 text-lg rounded-sm">
               Book Your Slot Now
