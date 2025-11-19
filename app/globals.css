@@ -6,6 +6,15 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+
+    /* Luxury color palette */
+  --luxury-gold: 45 100% 51%;
+  --luxury-gold-soft: 45 100% 96%;
+  --luxury-ivory: 40 33% 97%;
+  --luxury-champagne: 42 47% 88%;
+  --luxury-emerald: 158 64% 30%;
+  --luxury-royal-blue: 221 83% 25%;
+  --luxury-accent: 45 100% 51%;
 }
 
 @media (prefers-color-scheme: dark) {

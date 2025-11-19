@@ -18,6 +18,17 @@ module.exports = {
         unifrakturCook: ["var(--unifrakturCook)"],
         'young-serif': ["var(--youngSerif)"],
         // Add more custom font families as needed
+      },
+      colors: {
+        luxury: {
+					gold: 'hsl(var(--luxury-gold))',
+					'gold-soft': 'hsl(var(--luxury-gold-soft))',
+					ivory: 'hsl(var(--luxury-ivory))',
+					champagne: 'hsl(var(--luxury-champagne))',
+					emerald: 'hsl(var(--luxury-emerald))',
+					'royal-blue': 'hsl(var(--luxury-royal-blue))',
+					accent: 'hsl(var(--luxury-accent))'
+				}
       }
     },
   },
