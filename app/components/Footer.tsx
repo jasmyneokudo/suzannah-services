@@ -57,12 +57,12 @@ export const Footer = () => {
           <p className="max-sm:hidden">More</p>
           <p className="font-bold">Quick Links</p>
           <Link
-            className="relative z-10 font-thin max-sm:text-sm max-sm:mt-2 max-sm:text-white"
+            className="relative z-10 font-light max-sm:text-sm max-sm:mt-2 max-sm:text-white"
             href="/about-us"
           > About Us
           </Link>
           <a href="/#services-section">
-            <p className="relative z-10 font-thin max-sm:text-sm max-sm:mt-2 max-sm:text-white">
+            <p className="relative z-10 font-light max-sm:text-sm max-sm:mt-2 max-sm:text-white">
               Domestic services
             </p>
           </a>

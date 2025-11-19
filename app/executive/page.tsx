@@ -7,9 +7,9 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
 const words = [
-  "For Discerning Homes.",
-  "For the mordern Executive.",
-  "For those who value Time, Discretion and Perfection.",
+  "for Discerning Homes.",
+  "for the Modern Executive.",
+  "for those who value Time, Discretion and Perfection.",
 ];
 
 type HomeProps = {
@@ -25,12 +25,15 @@ export default function Home({ searchParams }: HomeProps) {
   // Tracks scroll progress for this element ONLY
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"],
+    offset: ["start 90%", "end 20%"],
   });
 
   // Map scroll position → upward movement
-  const y = useTransform(scrollYProgress, [0, 1], ["0px", "-100px"]);
-  const opacity = useTransform(scrollYProgress, [0, 0], [1, 0.6]);
+    // Gentle upward motion (Apple-style)
+  const y = useTransform(scrollYProgress, [0, 1], ["20px", "-20px"]);
+
+  // Elegant luxury fade (slow in → slow out)
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   useEffect(() => {
     const interval = setInterval(
@@ -111,10 +114,10 @@ export default function Home({ searchParams }: HomeProps) {
           }}
           className="text-center space-y-4 p-8 rounded-lg border "
         >
-          <motion.div ref={ref} style={{ y, opacity }}>
+          <motion.div transition={{ duration: 0.3, ease: [0.52, 0.72, 0, 1] }} ref={ref} style={{ y }}>
             <h3 style={{ color: "hsl(45 100% 51%)" }}>Purpose</h3>
           </motion.div>
-          <motion.div ref={ref} style={{ y, opacity }}>
+          <motion.div transition={{ duration: 0.3, ease: [0.52, 0.72, 0, 1] }} ref={ref} style={{ y }}>
             <p className="text-black">
               We exist to redefine how domestic service is delivered in Nigeria.
             </p>
@@ -127,10 +130,10 @@ export default function Home({ searchParams }: HomeProps) {
           }}
           className="text-center space-y-4 p-8 rounded-lg border "
         >
-          <motion.div ref={ref} style={{ y, opacity }}>
+          <motion.div transition={{ duration: 0.3, ease: [0.52, 0.72, 0, 1] }} ref={ref} style={{ y }}>
             <h3 style={{ color: "hsl(45 100% 51%)" }}>Purpose</h3>
           </motion.div>
-          <motion.div ref={ref} style={{ y, opacity }}>
+          <motion.div transition={{ duration: 0.3, ease: [0.52, 0.72, 0, 1] }} ref={ref} style={{ y }}>
             <p className="text-black">
               We exist to redefine how domestic service is delivered in Nigeria.
             </p>
@@ -143,10 +146,11 @@ export default function Home({ searchParams }: HomeProps) {
           }}
           className="text-center space-y-4 p-8 rounded-lg border "
         >
-          <motion.div ref={ref} style={{ y, opacity }}>
+          <motion.div  transition={{ duration: 0.3, ease: [0.52, 0.72, 0, 1] }}   ref={ref} style={{ y }}>
             <h3 style={{ color: "hsl(45 100% 51%)" }}>Purpose</h3>
           </motion.div>
-          <motion.div ref={ref} style={{ y, opacity }}>
+          <motion.div
+          transition={{ duration: 0.3, ease: [0.52, 0.72, 0, 1] }} ref={ref} style={{ y }}>
             <p className="text-black">
               We exist to redefine how domestic service is delivered in Nigeria.
             </p>
