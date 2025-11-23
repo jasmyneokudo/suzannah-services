@@ -71,7 +71,7 @@ export const Footer = () => {
             <p className="text-white relative z-10 font-light max-sm:text-sm max-sm:mt-2 ">
              Executive Household management concierge 
             </p>
-            <span className="text-xs bg-red-800 rounded-md px-1 py-1 flex items-center">NEW <IconSparkles color="white" stroke={2} size={12} /></span>
+            <span className="text-xs bg-luxury-gold rounded-md px-1 py-1 flex items-center">NEW <IconSparkles color="white" stroke={2} size={12} /></span>
           </a>
           {/* <a href="#">
                         <p className="font-thin max-sm:text-sm max-sm:mt-2 max-sm:text-gray-200">Mission</p>
