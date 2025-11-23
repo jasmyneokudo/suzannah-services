@@ -233,7 +233,7 @@ export default function Home({ searchParams }: HomeProps) {
                     // emptyIcon={<IconHeart size="25" />}
                 /> */}
             <p className="text-lg text-foreground/90 italic leading-relaxed">
-              &quot;I&quot;m highly impressed with your services. The staff
+              &quot;I&apos;m highly impressed with your services. The staff
               assigned to my home is hardworking, neat, respectful and above all
               very patient.&quot;
             </p>
