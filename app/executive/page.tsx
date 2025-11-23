@@ -240,7 +240,7 @@ export default function Home({ searchParams }: HomeProps) {
             <div className="border-t border-luxury-champagne/50 pt-4">
               <p className="font-semibold text-foreground">Mrs Zainab Sani</p>
               <p className="text-sm text-muted-foreground">
-                Kano state, Nigeria
+                Abuja, Nigeria
               </p>
             </div>
           </div>
