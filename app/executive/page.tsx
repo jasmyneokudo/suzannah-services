@@ -269,7 +269,7 @@ export default function Home({ searchParams }: HomeProps) {
               &quot;I&quot;m impressed and satisfied with your services, truly reliable! The staff assigned to our home is experienced.&quot;
             </p>
             <div className="border-t border-luxury-champagne/50 pt-4">
-              <p className="font-semibold text-foreground">Mrs Zainab Sani</p>
+              <p className="font-semibold text-foreground">Mrs Irene A</p>
               <p className="text-sm text-muted-foreground">
                 Abuja, Nigeria
               </p>
