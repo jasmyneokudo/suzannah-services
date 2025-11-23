@@ -266,7 +266,7 @@ export default function Home({ searchParams }: HomeProps) {
                     // emptyIcon={<IconHeart size="25" />}
                 /> */}
             <p className="text-lg text-foreground/90 italic leading-relaxed">
-              &quot;I&quot;m impressed and satisfied with your services, truly reliable! The staff assigned to our home is experienced.&quot;
+              &quot;I&apos;m impressed and satisfied with your services, truly reliable! The staff assigned to our home is experienced.&quot;
             </p>
             <div className="border-t border-luxury-champagne/50 pt-4">
               <p className="font-semibold text-foreground">Mrs Irene A</p>
