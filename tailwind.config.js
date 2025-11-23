@@ -20,6 +20,7 @@ module.exports = {
         // Add more custom font families as needed
       },
       colors: {
+        foreground: 'hsl(var(--foreground))',
         luxury: {
 					gold: 'hsl(var(--luxury-gold))',
 					'gold-soft': 'hsl(var(--luxury-gold-soft))',
