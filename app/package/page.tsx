@@ -178,12 +178,12 @@ export default function Home({ searchParams }: HomeProps) {
     <div className="bg-white h-full p-5">
       <div className="flex z-50 items-center sticky top-0 bg-white pt-5 pb-3 border-b border-[#F3E8C6]">
         <IconPuzzle size={25} className="mr-3" color="#1e3a8a" stroke={1.5} />
-        <h1 className="font-bold text-center text-lg">
+        <h1 className="font-bold text-center text-lg text-black">
           Customize your package
         </h1>
       </div>
 
-      <div className="self-center mx-auto rounded-full bg-blue-900 w-12 h-12 items-center flex justify-center my-5">
+      <div className="text-black self-center mx-auto rounded-full bg-blue-900 w-12 h-12 items-center flex justify-center my-5">
         {selectedPackage.icon}
       </div>
       <h2 className="text-center mt-1 font-semibold text-lg">
@@ -208,7 +208,7 @@ export default function Home({ searchParams }: HomeProps) {
           borderWidth: 1,
         }}
       >
-        <h3 className="font-semibold">Childcare Professional</h3>
+        <h3 className="font-semibold text-black">Childcare Professional</h3>
         <FormControl className="text-black dark:text-gray-900" sx={{ mt: 2 }}>
           <FormLabel id="demo-radio-buttons-group-label">
             Accomodation Preference
@@ -284,7 +284,7 @@ export default function Home({ searchParams }: HomeProps) {
           borderWidth: 1,
         }}
       >
-        <h3 className="font-semibold">Private Chef</h3>
+        <h3 className="font-semibold text-black">Private Chef</h3>
         <FormControl className="text-black dark:text-gray-900" sx={{ mt: 2 }}>
           <FormLabel id="demo-radio-buttons-group-label">
             Accomodation Preference
@@ -359,7 +359,7 @@ export default function Home({ searchParams }: HomeProps) {
           borderWidth: 1,
         }}
       >
-        <h3 className="font-semibold">Professional Housekeeper</h3>
+        <h3 className="font-semibold text-black">Professional Housekeeper</h3>
         <FormControl className="text-black dark:text-gray-900" sx={{ mt: 2 }}>
           <FormLabel id="demo-radio-buttons-group-label">
             Accomodation Preference
@@ -430,7 +430,7 @@ export default function Home({ searchParams }: HomeProps) {
 
       {type !== 1 && (
         <>
-          <h1 className="border-b border-[#F3E8C6] mt-5 font-semibold">
+          <h1 className="border-b border-[#F3E8C6] mt-5 font-semibold text-black">
             Additional Staff Members ({type === 2 ? '1 choice'  : '2 choices'})
           </h1>
 

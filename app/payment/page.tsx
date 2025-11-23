@@ -83,10 +83,10 @@ export default function Home({ searchParams }: HomeProps) {
           color="#1e3a8a"
           stroke={1.5}
         />
-        <h1 className="font-bold text-center text-lg">Payment Plans</h1>
+        <h1 className="font-bold text-center text-lg text-black">Payment Plans</h1>
       </div>
 
-      <h1 className="mt-3 font-semibold text-lg text-center">
+      <h1 className="mt-3 font-semibold text-lg text-center text-black">
         {selectedPackage?.serviceName}
       </h1>
 
@@ -106,7 +106,7 @@ export default function Home({ searchParams }: HomeProps) {
           }  rounded-md p-4 mt-4`}
         >
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Monthly</h2>
+            <h2 className="text-xl text-black font-semibold">Monthly</h2>
             <FormControlLabel
               value="monthly"
               control={<Radio />}
@@ -138,7 +138,7 @@ export default function Home({ searchParams }: HomeProps) {
             <p className="text-white font-medium">Save 8%</p>
           </div>
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Bi-Annual</h2>
+            <h2 className="text-xl font-semibold text-black">Bi-Annual</h2>
             <FormControlLabel
               value="biannual"
               control={<Radio />}
@@ -183,7 +183,7 @@ export default function Home({ searchParams }: HomeProps) {
             <p className="text-white font-medium">Save 15%</p>
           </div>
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Annual</h2>
+            <h2 className="text-xl font-semibold text-black">Annual</h2>
             <FormControlLabel
               value="annual"
               control={<Radio />}
@@ -219,7 +219,7 @@ export default function Home({ searchParams }: HomeProps) {
         </div>
       </RadioGroup>
 
-      <h2 className="mt-5 text-xl font-bold">Client Information</h2>
+      <h2 className="mt-5 text-xl font-bold text-black">Client Information</h2>
 
       <div className="mt-5 rounded-md border border-gray-300 p-5">
         <TextField
