@@ -29,6 +29,10 @@ module.exports = {
 					emerald: 'hsl(var(--luxury-emerald))',
 					'royal-blue': 'hsl(var(--luxury-royal-blue))',
 					accent: 'hsl(var(--luxury-accent))'
+				},
+        muted: {
+					DEFAULT: 'hsl(var(--muted))',
+					foreground: 'hsl(var(--muted-foreground))'
 				}
       }
     },
