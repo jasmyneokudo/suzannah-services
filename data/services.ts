@@ -1,5 +1,18 @@
 export const services = [
   {
+    serviceName: "Nanny + Help Services",
+    serviceDescription:
+      "An experienced and caring Nanny-Help who lives in your home to provide loving childcare and assist with essential household duties.",
+    whatsIncluded: [
+      "Daily childcare, including feeding, bathing, and dressing.",
+      "Assistance with meal preparation and basic cooking.",
+      "General home organization and tidiness.",
+      "Accompanying children to school, activities, or appointments (if required).",
+      "Assistance with small household errands.",
+    ],
+    price: "₦95,500"
+  },
+  {
     serviceName: "Nanny Services",
     serviceDescription:
       "Reliable, experienced Nannies who provide loving care for your children and support with their daily routines in the comfort of your home.",
@@ -23,19 +36,7 @@ export const services = [
     ],
     price: "₦70,500"
   },
-  {
-    serviceName: "Nanny + Help Services",
-    serviceDescription:
-      "An experienced and caring Nanny-Help who lives in your home to provide loving childcare and assist with essential household duties.",
-    whatsIncluded: [
-      "Daily childcare, including feeding, bathing, and dressing.",
-      "Assistance with meal preparation and basic cooking.",
-      "General home organization and tidiness.",
-      "Accompanying children to school, activities, or appointments (if required).",
-      "Assistance with small household errands.",
-    ],
-    price: "₦95,500"
-  },
+  
   {
     serviceName: "Housekeeper Services",
     serviceDescription:
