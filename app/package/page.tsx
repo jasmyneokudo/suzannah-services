@@ -1,6 +1,6 @@
 "use client";
 
-import { premiumServicePackages } from "@/data/premiumServicePackages";
+import { PremiumServicePackages } from "@/data/premiumServicePackages";
 import {
   ModeOfWork,
   StaffMemberDetails,
@@ -23,6 +23,7 @@ import Button from "../components/Button";
 import { IconPuzzle } from "@tabler/icons-react";
 import { useAppContext } from "../context/AppContext";
 import CustomStaffMember from "../components/CustomStaffMember";
+import { HouseholdSection } from "../sections/HouseHoldSection";
 
 type HomeProps = {
   searchParams?: {
@@ -75,7 +76,7 @@ export default function Home({ searchParams }: HomeProps) {
 
   const { premiumPackageRequest, setPremiumPackageRequest } = useAppContext();
 
-  const selectedPackage = premiumServicePackages[type - 1];
+  const selectedPackage = PremiumServicePackages()[type - 1];
 
   useEffect(() => {
     if (selectedPackage) {
@@ -431,7 +432,7 @@ export default function Home({ searchParams }: HomeProps) {
       {type !== 1 && (
         <>
           <h1 className="border-b border-[#F3E8C6] mt-5 font-semibold text-black">
-            Additional Staff Members ({type === 2 ? '1 choice'  : '2 choices'})
+            Additional Staff Members ({type === 2 ? "1 choice" : "2 choices"})
           </h1>
 
           <CustomStaffMember
@@ -452,12 +453,14 @@ export default function Home({ searchParams }: HomeProps) {
                 additionalStaffMembers: updatedAdditionalStaffMembers,
               });
             }}
-            staffDetails={premiumPackageRequest.additionalStaffMembers[0] || {
-              accomodationPreference: "Live-in",
-              genderPreference: "Female",
-              otherPreferences: "",
-              staffMemberRole: ""
-            }}
+            staffDetails={
+              premiumPackageRequest.additionalStaffMembers[0] || {
+                accomodationPreference: "Live-in",
+                genderPreference: "Female",
+                otherPreferences: "",
+                staffMemberRole: "",
+              }
+            }
           />
 
           {type === 3 && (
@@ -487,14 +490,19 @@ export default function Home({ searchParams }: HomeProps) {
         </>
       )}
 
+      <HouseholdSection
+        householdDetails={premiumPackageRequest.householdDetails}
+        setHouseholdDetails={(householdDetails) => {
+          setPremiumPackageRequest({
+            ...premiumPackageRequest,
+            householdDetails: householdDetails,
+          });
+        }}
+      />
+
       <div className="mt-3 flex justify-between border-t border-[#F3E8C6]">
         <Button
-          //   disabled={
-          //     clientRequest.workMode === "Live-in"
-          //       ? disableButton()
-          //       : clientRequest.workingDays.length === 0 || disableButton()
-          //   }
-          //   onClick={onContinue}
+          onClick={() => router.push("/executive")}
           outline
           style={{
             width: "150px",
@@ -506,11 +514,9 @@ export default function Home({ searchParams }: HomeProps) {
           buttonName="Cancel"
         />
         <Button
-          //   disabled={
-          //     clientRequest.workMode === "Live-in"
-          //       ? disableButton()
-          //       : clientRequest.workingDays.length === 0 || disableButton()
-          //   }
+          disabled={
+            premiumPackageRequest.householdDetails.buildingDescription === ""
+          }
           onClick={proceedToPaymeent}
           style={{
             width: "150px",

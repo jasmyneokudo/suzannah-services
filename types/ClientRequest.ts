@@ -48,7 +48,10 @@ export type StaffRole = "nanny" | "housekeeper" | "chef";
 
 export type PremiumPackagePaymentPlan = "monthly" | "biannual" | "annual";
 
-export const PremiumPackageNetPercentages: Record<PremiumPackagePaymentPlan, number> = {
+export const PremiumPackageNetPercentages: Record<
+  PremiumPackagePaymentPlan,
+  number
+> = {
   monthly: 1,
   biannual: 0.92,
   annual: 0.85,
@@ -59,7 +62,16 @@ export type StaffMemberDetails = {
   accomodationPreference: ModeOfWork;
   genderPreference: string;
   otherPreferences: string;
-}
+};
+
+export type HouseHoldDetails = {
+  buildingDescription: string;
+  numberOfHouseholdOccupants: number | undefined;
+  kidsDetails?: string;
+  petDetails?: string;
+  otherInformation: string;
+};
+
 export interface PremiumPackageRequest {
   packageType: number;
   coreStaffMembers: {
@@ -92,4 +104,5 @@ export interface PremiumPackageRequest {
     phoneNumber: string;
     address: string;
   };
+  householdDetails: HouseHoldDetails;
 }

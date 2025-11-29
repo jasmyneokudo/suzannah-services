@@ -14,28 +14,34 @@ import {
   Radio,
   TextField,
 } from "@mui/material";
+import { IconTrash } from "@tabler/icons-react";
 
 interface CustomStaffMemberProps {
   staffDetails: StaffMemberDetails;
   setStaffDetails: (details: StaffMemberDetails) => void;
   number: number;
+  deleteStaffMember?: () => void;
 }
 
 const CustomStaffMember = ({
   setStaffDetails,
   staffDetails,
   number,
+  deleteStaffMember,
 }: CustomStaffMemberProps) => {
   return (
     <div
-      className="p-6 rounded-lg mt-4"
-      style={{
-        background: "linear-gradient(135deg, hsl(40 33% 97%), hsl(42 47% 88%))",
-        borderColor: "hsl(42 47% 88%)",
-        borderWidth: 1,
-      }}
+      className="p-6 rounded-lg mt-4 relative bg-gradient-to-b from-luxury-ivory to-luxury-champagne border-luxury-champagne border"
+      
     >
-      <FormControl fullWidth sx={{ mt: 2 }}>
+      {deleteStaffMember && (
+        <IconTrash
+          onClick={deleteStaffMember}
+          stroke={2}
+          className="absolute top-3 right-3 text-stone-700"
+        />
+      )}
+      <FormControl fullWidth sx={{ mt: 3 }}>
         <FormLabel id="demo2-simple-select-label">
           Select Addition Staff Member {number}
         </FormLabel>
@@ -62,9 +68,7 @@ const CustomStaffMember = ({
       </FormControl>
 
       <FormControl className="text-black dark:text-gray-900" sx={{ mt: 2 }}>
-        <FormLabel >
-          Accomodation Preference
-        </FormLabel>
+        <FormLabel>Accomodation Preference</FormLabel>
         <RadioGroup
           row
           // aria-labelledby="demo-radio-buttons-group-label"
@@ -82,7 +86,7 @@ const CustomStaffMember = ({
             control={<Radio />}
             label="Live-in"
           />
-          
+
           <FormControlLabel
             value="Live-out"
             control={<Radio />}
@@ -91,7 +95,6 @@ const CustomStaffMember = ({
         </RadioGroup>
       </FormControl>
 
-      
       <FormControl className="text-black dark:text-gray-900" sx={{ mt: 2 }}>
         <FormLabel id="gender-radio-buttons-group-label">
           Gender Preference

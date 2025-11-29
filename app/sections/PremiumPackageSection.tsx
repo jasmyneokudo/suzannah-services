@@ -1,4 +1,4 @@
-import { premiumServicePackages } from "@/data/premiumServicePackages";
+import { PremiumServicePackages } from "@/data/premiumServicePackages";
 import { IconCheck, IconSpaces } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
@@ -19,11 +19,15 @@ export const PremiumPackageSection = () => {
         Curated Household Management Concierge for distinguished homes.
       </p>
 
-      {premiumServicePackages.map((servicePackage, index) => (
+    <div className="grid grid-cols-[1fr_1fr] gap-x-8 px-10 max-sm:flex max-sm:flex-col max-sm:px-0">
+      {PremiumServicePackages().map((servicePackage, index: number) => (
         <div
-          // onClick={() => alert('Our Premium Home Services Packages will be available on the 1st of December 2025, Send a Whatsapp message to be added to the waiting list. Thank you!')}
           onClick={() => {
-            router.push(`/package?type=${index + 1}`);
+            if (index === 3) {
+              router.push("/build");
+            } else {
+              router.push(`/package?type=${index + 1}`);
+            }
           }}
           key={index}
           className={`mt-6 p-3 rounded-lg border text-card-foreground shadow-sm  ${
@@ -40,7 +44,9 @@ export const PremiumPackageSection = () => {
             {servicePackage.serviceName}
           </h2>
           <h4 className="text-center text-luxury-gold font-bold mt-1">
-            ₦{servicePackage.investment.toLocaleString()} per month
+            {index !== 3
+              ? `₦${servicePackage.investment.toLocaleString()} per month`
+              : "Custom pricing based on your selection"}
           </h4>
 
           <p className="text-black font-semibold mt-3">Includes: </p>
@@ -74,6 +80,7 @@ export const PremiumPackageSection = () => {
           </ol>
         </div>
       ))}
+      </div>
     </section>
   );
 };

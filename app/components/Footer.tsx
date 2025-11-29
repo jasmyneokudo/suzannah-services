@@ -20,7 +20,7 @@ export const Footer = () => {
       />
 
       <div className="flex-col justify-center grid-cols-3 w-1/2 max-sm:w-full text-white grid-flow-row grid place-items-center">
-        <div className="max-sm:hidden">
+        <div className="hidden">
           <a href="#">
             <p>Resources</p>
           </a>
@@ -38,7 +38,7 @@ export const Footer = () => {
           </a>
         </div>
 
-        <div className="max-sm:hidden">
+        <div className="hidden">
           <a href="#">
             <p>Social</p>
           </a>
@@ -134,7 +134,7 @@ export const Footer = () => {
                   priority
                 /> */}
 
-      <div className="flex absolute bottom-16 max-sm:top-16 right-16 max-sm:right-10 justify-between w-1/6 max-sm:w-1/5 px-10 max-sm:px-0">
+      <div className="flex absolute bottom-16 top-16 right-16 max-sm:right-10 justify-between w-[200px] max-sm:w-1/5 px-10 max-sm:px-0">
         <a href="https://www.facebook.com/share/1A1j127rsf/">
           <IconBrandFacebook fill="white" color="white" stroke={1} />
         </a>

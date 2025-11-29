@@ -3,6 +3,7 @@
 import { Checkbox, FormControlLabel } from "@mui/material";
 import {
   IconCreditCard,
+  IconHomeHeart,
   IconPackage,
   IconShoppingCartPlus,
   IconUser,
@@ -10,7 +11,7 @@ import {
 import dynamic from "next/dynamic";
 import { useAppContext } from "../context/AppContext";
 import { useRouter } from "next/navigation";
-import { premiumServicePackages } from "@/data/premiumServicePackages";
+import { PremiumServicePackages } from "@/data/premiumServicePackages";
 import { useState } from "react";
 import { PremiumPackageNetPercentages } from "@/types/ClientRequest";
 import SelectedStaffDetails from "../components/SelectedStaffDetails";
@@ -100,41 +101,48 @@ export default function Home({ searchParams }: HomeProps) {
         </div>
         <p className="text-sm text-gray-500">
           {
-            premiumServicePackages[premiumPackageRequest.packageType]
+            PremiumServicePackages()[premiumPackageRequest.packageType - 1]
               .serviceName
           }
         </p>
-
-        {/* Divider */}
         <div className="bg-gray-400 h-[0.2px] w-full my-3" />
 
-        <SelectedStaffDetails
-          staffMemberRole="Professional Nanny"
-          genderPreference={nanny.genderPreference}
-          accomodationPreference={nanny.accomodationPreference}
-          otherPreferences={nanny.otherPreferences}
-        />
+        {/* Divider */}
+        {type !== 4 && (
+          <>
+            <SelectedStaffDetails
+              staffMemberRole="Professional Nanny"
+              genderPreference={nanny.genderPreference}
+              accomodationPreference={nanny.accomodationPreference}
+              otherPreferences={nanny.otherPreferences}
+            />
 
-        <SelectedStaffDetails
-          staffMemberRole="Professional Housekeeper"
-          genderPreference={housekeeper.genderPreference}
-          accomodationPreference={housekeeper.accomodationPreference}
-          otherPreferences={housekeeper.otherPreferences}
-        />
+            <SelectedStaffDetails
+              staffMemberRole="Professional Housekeeper"
+              genderPreference={housekeeper.genderPreference}
+              accomodationPreference={housekeeper.accomodationPreference}
+              otherPreferences={housekeeper.otherPreferences}
+            />
 
-        <SelectedStaffDetails
-          staffMemberRole="Private Chef"
-          genderPreference={chef.genderPreference}
-          accomodationPreference={chef.accomodationPreference}
-          otherPreferences={chef.otherPreferences}
-        />
+            <SelectedStaffDetails
+              staffMemberRole="Private Chef"
+              genderPreference={chef.genderPreference}
+              accomodationPreference={chef.accomodationPreference}
+              otherPreferences={chef.otherPreferences}
+            />
+          </>
+        )}
 
         {type !== 1 && (
           <>
-            <h1 className="mt-5 font-semibold text-black">
-              Additional Staff Members
-            </h1>
-            <div className="bg-gray-400 h-[0.2px] w-full my-3" />
+            {type !== 4 && (
+              <>
+                <h1 className="mt-5 font-semibold text-black">
+                  Additional Staff Members
+                </h1>
+                <div className="bg-gray-400 h-[0.2px] w-full my-3" />
+              </>
+            )}
 
             {premiumPackageRequest.additionalStaffMembers.map(
               (staffMember, index) => (
@@ -149,6 +157,48 @@ export default function Home({ searchParams }: HomeProps) {
             )}
           </>
         )}
+      </div>
+
+      <div className="mt-3 rounded-md border border-gray-300 p-4 shadow-sm">
+        <div className="flex z-50 items-center sticky top-0 bg-white ">
+          <IconHomeHeart
+            size={25}
+            className="mr-3"
+            color="#1e3a8a"
+            stroke={1.5}
+          />
+          <h1 className="font-semibold text-center text-lg text-black">
+            Your Household Details
+          </h1>
+        </div>
+
+        <div className="bg-gray-400 h-[0.2px] w-full my-3" />
+
+        <div className="mt-2 flex justify-between text-gray-500">
+          <p>Household type: </p>
+          <p>{premiumPackageRequest.householdDetails.buildingDescription}</p>
+        </div>
+
+        <div className="mt-2 flex justify-between text-gray-500">
+          <p>Household occupants: </p>
+          <p>{premiumPackageRequest.householdDetails.numberOfHouseholdOccupants}</p>
+        </div>
+
+        <div className="mt-2 flex justify-between text-gray-500">
+          <p>Kids: </p>
+          <p>{premiumPackageRequest.householdDetails.kidsDetails}</p>
+        </div>
+
+        <div className="mt-2 flex justify-between text-gray-500">
+          <p>Pets: </p>
+          <p>{premiumPackageRequest.householdDetails.petDetails}</p>
+        </div>
+
+        <div className="mt-2 flex justify-between text-gray-500">
+          <p>Note: </p>
+          <p>{premiumPackageRequest.householdDetails.otherInformation}</p>
+        </div>
+        
       </div>
 
       <div className="mt-3 rounded-md border border-gray-300 p-4 shadow-sm">
@@ -180,7 +230,7 @@ export default function Home({ searchParams }: HomeProps) {
           <p>
             ₦
             {(
-              premiumServicePackages[type - 1].investment *
+              PremiumServicePackages()[type - 1].investment *
               PremiumPackageNetPercentages[
                 premiumPackageRequest.paymentPlan.name
               ]

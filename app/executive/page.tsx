@@ -5,7 +5,7 @@ import { Footer } from "../components/Footer";
 import { PremiumPackageSection } from "../sections/PremiumPackageSection";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-// import { Rating } from "@mui/material";
+import { defaultPremiumPackageRequest, useAppContext } from "../context/AppContext";
 
 const words = [
   "for Discerning Homes.",
@@ -22,6 +22,9 @@ type HomeProps = {
 export default function Home({ searchParams }: HomeProps) {
   const [index, setIndex] = useState(0);
   const ref = useRef(null);
+
+  const { premiumPackageRequest, setPremiumPackageRequest } = useAppContext();
+  
 
   // Tracks scroll progress for this element ONLY
   const { scrollYProgress } = useScroll({
@@ -43,10 +46,14 @@ export default function Home({ searchParams }: HomeProps) {
     );
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    setPremiumPackageRequest(defaultPremiumPackageRequest)
+  }, []);
   return (
     <div className="bg-white">
       <section className="relative  max-sm:h-[400px] w-full">
-        <h1 className="font-crushed text-yellow-500 absolute text-lg font-bold z-50 top-3 left-1/2 -translate-x-1/2">
+        <h1 className="font-crushed text-luxury-gold absolute text-lg font-bold z-50 top-3 left-1/2 -translate-x-1/2">
           SHC
         </h1>
 
@@ -66,7 +73,7 @@ export default function Home({ searchParams }: HomeProps) {
             transition={{ duration: 1.2 }}
             className="text-4xl font-bold"
           >
-            <h2 className="text-yellow-500 text-3xl max-sm:text-lg mx-1 text-center ">
+            <h2 className="text-luxury-gold text-3xl max-sm:text-lg mx-1 text-center ">
               {words[index]}
             </h2>
           </motion.div>
@@ -81,7 +88,6 @@ export default function Home({ searchParams }: HomeProps) {
             alt="Logo"
             width="50"
             height="30"
-            // className="absolute top-2 left-2 z-20"
             priority
           />
         </div>
@@ -104,8 +110,7 @@ export default function Home({ searchParams }: HomeProps) {
             style={{ y }}
           >
             <h3
-              style={{ color: "hsl(45 100% 51%)" }}
-              className="font-young-serif text-lg"
+              className="font-young-serif text-lg text-luxury-gold"
             >
               Purpose
             </h3>
@@ -175,12 +180,12 @@ export default function Home({ searchParams }: HomeProps) {
 
       <PremiumPackageSection />
 
-      <section className="p-6">
+      <section className="p-6 ">
         <h1 className="text-black text-3xl text-center py-4 font-extralight">
           Testimonials
         </h1>
-        <div className="gap-3 flex max-sm:flex-col">
-          <div className="bg-luxury-ivory/40 border border-luxury-champagne/60 rounded-lg p-10 space-y-6 ">
+        <div className="gap-3 grid grid-cols-3 max-sm:flex max-sm:flex-col">
+          <div className="bg-luxury-ivory/40 border border-luxury-champagne/60 rounded-lg p-10 space-y-6">
             <div className="flex gap-1 text-luxury-gold">
               {[...Array(5)].map((_, i) => (
                 <svg
@@ -257,14 +262,6 @@ export default function Home({ searchParams }: HomeProps) {
                 </svg>
               ))}
             </div>
-            {/* <Rating
-                    name="customized-color"
-                    defaultValue={5}
-                    precision={0.5}
-                    sx={{color: 'hsl(45 100% 51%)'}}
-                    // icon={<IconHeartFilled size="25" />}
-                    // emptyIcon={<IconHeart size="25" />}
-                /> */}
             <p className="text-lg text-foreground/90 italic leading-relaxed">
               &quot;I&apos;m impressed and satisfied with your services, truly reliable! The staff assigned to our home is experienced.&quot;
             </p>

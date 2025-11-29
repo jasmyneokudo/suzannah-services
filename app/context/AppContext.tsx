@@ -10,10 +10,7 @@ type AppContextType = {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-
-
-export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [premiumPackageRequest, setPremiumPackageRequest] = useState<PremiumPackageRequest>({
+export const defaultPremiumPackageRequest = {
     packageType: 0,
     coreStaffMembers: {
         nanny: {
@@ -43,8 +40,18 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         email: "",
         phoneNumber: "",
         address: "",
+    },
+    householdDetails: {
+      buildingDescription: "",
+      numberOfHouseholdOccupants: undefined,
+      kidsDetails: "",
+      petDetails: "",
+      otherInformation: ""
     }
-  });
+  }
+
+export const AppProvider = ({ children }: { children: ReactNode }) => {
+  const [premiumPackageRequest, setPremiumPackageRequest] = useState<PremiumPackageRequest>(defaultPremiumPackageRequest);
 
   return (
     <AppContext.Provider value={{ premiumPackageRequest, setPremiumPackageRequest }}>

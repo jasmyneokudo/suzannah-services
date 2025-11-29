@@ -1,6 +1,6 @@
 "use client";
 
-import { premiumServicePackages } from "@/data/premiumServicePackages";
+import { PremiumServicePackages } from "@/data/premiumServicePackages";
 import { RadioGroup, FormControlLabel, Radio, TextField } from "@mui/material";
 import { IconCheck, IconCreditCardPay, IconPuzzle } from "@tabler/icons-react";
 import { SetStateAction, useEffect, useState } from "react";
@@ -17,7 +17,8 @@ type HomeProps = {
 
 export default function Home({ searchParams }: HomeProps) {
   const type: number = Number(searchParams?.type) || 0;
-  const selectedPackage = premiumServicePackages[type - 1];
+  const selectedPackage = PremiumServicePackages()[type - 1];
+  const basePaymentPlan = selectedPackage?.investment;
   const [paymentPlan, setPaymentPlan] = useState<
     "monthly" | "biannual" | "annual"
   >("monthly");
@@ -99,6 +100,7 @@ export default function Home({ searchParams }: HomeProps) {
         value={paymentPlan}
         onChange={handlePaymentPlanChange}
       >
+        {/* Monthly plan radio option */}
         <div
           onClick={() => setPaymentPlan("monthly")}
           className={`border w-full ${
@@ -118,12 +120,13 @@ export default function Home({ searchParams }: HomeProps) {
           <p className="text-sm text-gray-600">Renews every month</p>
 
           <h2 className="text-blue-600 text-2xl font-bold mt-3">
-            ₦{selectedPackage?.investment.toLocaleString()}
+            ₦{basePaymentPlan.toLocaleString()}
+            {/* {premiumPackageRequest.additionalStaffMembers.length} */}
           </h2>
           <p className="text-sm text-gray-600">Total amount</p>
 
           <h2 className="text-black text-lg font-bold border-t pt-2 border-gray-300 mt-3">
-            ₦{selectedPackage?.investment.toLocaleString()}
+            ₦{basePaymentPlan.toLocaleString()}
           </h2>
           <p className="text-sm text-gray-600">per month</p>
         </div>
@@ -150,12 +153,12 @@ export default function Home({ searchParams }: HomeProps) {
           <p className="text-sm text-gray-600">Renews every six (6) month</p>
 
           <h2 className="text-blue-600 text-2xl font-bold mt-3">
-            ₦{(selectedPackage?.investment * 0.92 * 6).toLocaleString()}
+            ₦{(basePaymentPlan * 0.92 * 6).toLocaleString()}
           </h2>
           <p className="text-sm text-gray-600">Total amount</p>
 
           <h2 className="text-black text-lg font-bold border-t pt-2 border-gray-300 mt-3">
-            ₦{(selectedPackage?.investment * 0.92).toLocaleString()}
+            ₦{(basePaymentPlan * 0.92).toLocaleString()}
           </h2>
           <p className="text-sm text-gray-600">per month</p>
 
@@ -168,7 +171,7 @@ export default function Home({ searchParams }: HomeProps) {
             />
             <p className="text-[#2563eb]  font-medium">
               You save ₦
-              {(selectedPackage?.investment * 0.08 * 6).toLocaleString()}
+              {(basePaymentPlan * 0.08 * 6).toLocaleString()}
             </p>
           </div>
         </div>
@@ -195,12 +198,12 @@ export default function Home({ searchParams }: HomeProps) {
 
           <h2 className="text-blue-600 text-2xl font-bold mt-3">
             {" "}
-            ₦{(selectedPackage?.investment * 0.92 * 12).toLocaleString()}
+            ₦{(basePaymentPlan * 0.92 * 12).toLocaleString()}
           </h2>
           <p className="text-sm text-gray-600">Total amount</p>
 
           <h2 className="text-black text-lg font-bold border-t pt-2 border-gray-300 mt-3">
-            ₦{(selectedPackage?.investment * 0.85).toLocaleString()}
+            ₦{(basePaymentPlan * 0.85).toLocaleString()}
           </h2>
           <p className="text-sm text-gray-600">per month</p>
 
@@ -213,7 +216,7 @@ export default function Home({ searchParams }: HomeProps) {
             />
             <p className="text-[#2563eb]  font-medium">
               You save ₦
-              {(selectedPackage?.investment * 0.15 * 12).toLocaleString()}
+              {(basePaymentPlan * 0.15 * 12).toLocaleString()}
             </p>
           </div>
         </div>
