@@ -13,6 +13,8 @@ import {
   FormControlLabel,
   Radio,
   TextField,
+  ListItemText,
+  FormHelperText,
 } from "@mui/material";
 import { IconTrash } from "@tabler/icons-react";
 
@@ -30,10 +32,7 @@ const CustomStaffMember = ({
   deleteStaffMember,
 }: CustomStaffMemberProps) => {
   return (
-    <div
-      className="p-6 rounded-lg mt-4 relative bg-gradient-to-b from-luxury-ivory to-luxury-champagne border-luxury-champagne border"
-      
-    >
+    <div className="p-6 rounded-lg mt-4 relative bg-gradient-to-b from-luxury-ivory to-luxury-champagne border-luxury-champagne border">
       {deleteStaffMember && (
         <IconTrash
           onClick={deleteStaffMember}
@@ -58,12 +57,89 @@ const CustomStaffMember = ({
             });
           }}
         >
-          <MenuItem value="Nanny">Childcare Professional</MenuItem>
-          <MenuItem value="Chef">Private Chef</MenuItem>
-          <MenuItem value="Housekeeper">Professional Housekeeper</MenuItem>
-          <MenuItem value="Driver">Executive Chaffeur/Driver</MenuItem>
-          <MenuItem value="House Attendant/Help">House Attendant/Help</MenuItem>
-          <MenuItem value="Personal Assistant">Personal Assistant</MenuItem>
+          <MenuItem value="Nanny">
+            <div className="w-full h-fit flex flex-col">
+              <ListItemText primary="Childcare Professional" />
+              <p className="text-sm text-gray-600 text-wrap">
+                Warm, highly trained nanny dedicated to nurturing your children with structure, compassion, and refined family etiquette.
+              </p>
+            </div>
+          </MenuItem>
+          <MenuItem value="Chef">
+            <div>
+              <ListItemText primary="Private Chef" />
+              <p className="text-sm text-gray-600  text-wrap">
+                Skilled culinary professional who prepares personalized meals—beautifully plated, nutritious, and tailored to your family’s tastes
+              </p>
+            </div>
+          </MenuItem>
+          <MenuItem value="Housekeeper">
+            <div>
+              <ListItemText primary="Professional Housekeeper" />
+              <p className="text-sm text-gray-600  text-wrap">
+                Meticulous housekeeper who maintains an immaculate, orderly, and
+                elegantly presented home environment every day.
+              </p>
+            </div>
+          </MenuItem>
+          <MenuItem value="Driver">
+            <div>
+              <ListItemText primary="Private Driver" />
+              <p className="text-sm text-gray-600  text-wrap">
+                Reliable, well-groomed driver ensuring safe, punctual, and
+                discreet transportation for your family.
+              </p>
+            </div>
+          </MenuItem>
+          <MenuItem value="House Assistant">
+            <div>
+              <ListItemText primary="Home Assistant" />
+              <p className="text-sm text-gray-600  text-wrap">
+                Versatile home support professional handling daily tasks,
+                errands, and household duties to keep your home running
+                smoothly.
+              </p>
+            </div>
+          </MenuItem>
+          <MenuItem value="Personal Assistant">
+            <div>
+              <ListItemText primary="Personal Assistant" />
+              <p className="text-sm text-gray-600  text-wrap">
+                Polished personal aide who helps manage schedules, errands,
+                communication, and daily coordination with exceptional
+                professionalism.
+              </p>
+            </div>
+          </MenuItem>
+          <MenuItem value="Laundry Attendant">
+            <div>
+              <ListItemText primary="Laundry Attendant" />
+              <p className="text-sm text-gray-600  text-wrap">
+                Dedicated laundry specialist who ensures all clothing, linens,
+                and fabrics are properly washed, pressed, folded, and
+                beautifully organized.
+              </p>
+            </div>
+          </MenuItem>
+          <MenuItem value="Security Assistant">
+            <div>
+              <ListItemText primary="Security Assistant" />
+              <p className="text-sm text-gray-600  text-wrap">
+                Vigilant support personnel focused on monitoring safety
+                routines, access points, and general household security
+                requirements.
+              </p>
+            </div>
+          </MenuItem>
+          <MenuItem value="Gardener">
+            <div>
+              <ListItemText primary="Gardener" />
+              <p className="text-sm text-gray-600  text-wrap">
+                Skilled gardener who keeps your outdoor spaces flourishing,
+                tidy, and beautifully maintained throughout the year.
+              </p>
+            </div>
+          </MenuItem>
         </Select>
       </FormControl>
 
@@ -93,6 +169,10 @@ const CustomStaffMember = ({
             label="Live-out"
           />
         </RadioGroup>
+        <FormHelperText>
+          NB: Working schedule for live-out staff are Mondays to Fridays (8am -
+          5pm)
+        </FormHelperText>
       </FormControl>
 
       <FormControl className="text-black dark:text-gray-900" sx={{ mt: 2 }}>

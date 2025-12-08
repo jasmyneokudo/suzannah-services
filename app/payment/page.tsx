@@ -2,7 +2,7 @@
 
 import { PremiumServicePackages } from "@/data/premiumServicePackages";
 import { RadioGroup, FormControlLabel, Radio, TextField } from "@mui/material";
-import { IconCheck, IconCreditCardPay, IconPuzzle } from "@tabler/icons-react";
+import { IconCheck, IconCreditCardFilled } from "@tabler/icons-react";
 import { SetStateAction, useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import Button from "../components/Button";
@@ -77,11 +77,10 @@ export default function Home({ searchParams }: HomeProps) {
 
   return (
     <div className="bg-white h-full p-5">
-      <div className="flex z-50 items-center sticky top-0 bg-white pt-5 pb-3 border-b border-[#F3E8C6]">
-        <IconCreditCardPay
+      <div className="flex z-50 items-center sticky top-0 bg-white pt-5 pb-3 border-b border-luxury-champagne">
+        <IconCreditCardFilled
           size={25}
-          className="mr-3"
-          color="#1e3a8a"
+          className="mr-3 text-luxury-champagne"
           stroke={1.5}
         />
         <h1 className="font-bold text-center text-lg text-black">Payment Plans</h1>
@@ -104,7 +103,7 @@ export default function Home({ searchParams }: HomeProps) {
         <div
           onClick={() => setPaymentPlan("monthly")}
           className={`border w-full ${
-            paymentPlan === "monthly" ? "border-blue-600" : "border-gray-400"
+            paymentPlan === "monthly" ? "border-blue-950" : "border-gray-400"
           }  rounded-md p-4 mt-4`}
         >
           <div className="flex justify-between items-center">
@@ -117,9 +116,9 @@ export default function Home({ searchParams }: HomeProps) {
             />
           </div>
 
-          <p className="text-sm text-gray-600">Renews every month</p>
+          <p className="text-sm text-gray-600">To renew every month</p>
 
-          <h2 className="text-blue-600 text-2xl font-bold mt-3">
+          <h2 className="text-blue-950 text-2xl font-bold mt-3">
             ₦{basePaymentPlan.toLocaleString()}
             {/* {premiumPackageRequest.additionalStaffMembers.length} */}
           </h2>
@@ -134,10 +133,10 @@ export default function Home({ searchParams }: HomeProps) {
         <div
           onClick={() => setPaymentPlan("biannual")}
           className={`border relative w-full ${
-            paymentPlan === "biannual" ? "border-blue-600" : "border-gray-400"
+            paymentPlan === "biannual" ? "border-blue-950" : "border-gray-400"
           }  rounded-md p-4 mt-4`}
         >
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3 rounded-xl bg-blue-600 px-3 flex items-center">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3 rounded-xl bg-blue-950 px-3 flex items-center">
             <p className="text-white font-medium">Save 8%</p>
           </div>
           <div className="flex justify-between items-center">
@@ -150,9 +149,9 @@ export default function Home({ searchParams }: HomeProps) {
             />
           </div>
 
-          <p className="text-sm text-gray-600">Renews every six (6) month</p>
+          <p className="text-sm text-gray-600">To renew every six (6) month</p>
 
-          <h2 className="text-blue-600 text-2xl font-bold mt-3">
+          <h2 className="text-blue-950 text-2xl font-bold mt-3">
             ₦{(basePaymentPlan * 0.92 * 6).toLocaleString()}
           </h2>
           <p className="text-sm text-gray-600">Total amount</p>
@@ -162,14 +161,13 @@ export default function Home({ searchParams }: HomeProps) {
           </h2>
           <p className="text-sm text-gray-600">per month</p>
 
-          <div className="mt-2 border-t -mx-4 border-[#2563eb]/10 flex bg-blue-600/5 py-4">
+          <div className="mt-2 border-t -mx-4 border-[#2563eb]/10 flex bg-blue-950/5 py-4">
             <IconCheck
-              color="#2563eb"
               stroke={2}
               size={20}
-              className="mr-2 ml-4 shrink-0"
+              className="mr-2 ml-4 shrink-0 text-blue-950"
             />
-            <p className="text-[#2563eb]  font-medium">
+            <p className="text-blue-950  font-medium">
               You save ₦
               {(basePaymentPlan * 0.08 * 6).toLocaleString()}
             </p>
@@ -179,10 +177,10 @@ export default function Home({ searchParams }: HomeProps) {
         <div
           onClick={() => setPaymentPlan("annual")}
           className={`border relative w-full ${
-            paymentPlan === "annual" ? "border-blue-600" : "border-gray-400"
+            paymentPlan === "annual" ? "border-blue-950" : "border-gray-400"
           }  rounded-md p-4 mt-4`}
         >
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3 rounded-xl bg-blue-600 px-3 flex items-center">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -mt-3 rounded-xl bg-blue-950 px-3 flex items-center">
             <p className="text-white font-medium">Save 15%</p>
           </div>
           <div className="flex justify-between items-center">
@@ -194,9 +192,9 @@ export default function Home({ searchParams }: HomeProps) {
               labelPlacement="start"
             />
           </div>
-          <p className="text-sm text-gray-600">Renews every year</p>
+          <p className="text-sm text-gray-600">To renew every year</p>
 
-          <h2 className="text-blue-600 text-2xl font-bold mt-3">
+          <h2 className="text-blue-950 text-2xl font-bold mt-3">
             {" "}
             ₦{(basePaymentPlan * 0.92 * 12).toLocaleString()}
           </h2>
@@ -209,12 +207,11 @@ export default function Home({ searchParams }: HomeProps) {
 
           <div className="mt-2 border-t -mx-4 border-[#2563eb]/10 flex bg-blue-600/5 py-4">
             <IconCheck
-              color="#2563eb"
               stroke={2}
               size={20}
-              className="mr-2 ml-4 shrink-0"
+              className="mr-2 ml-4 shrink-0 text-blue-950"
             />
-            <p className="text-[#2563eb]  font-medium">
+            <p className="text-blue-950  font-medium">
               You save ₦
               {(basePaymentPlan * 0.15 * 12).toLocaleString()}
             </p>

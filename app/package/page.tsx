@@ -13,14 +13,11 @@ import {
   FormControlLabel,
   Radio,
   TextField,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
-import { IconPuzzle } from "@tabler/icons-react";
+import { IconPuzzle, IconPuzzleFilled } from "@tabler/icons-react";
 import { useAppContext } from "../context/AppContext";
 import CustomStaffMember from "../components/CustomStaffMember";
 import { HouseholdSection } from "../sections/HouseHoldSection";
@@ -55,24 +52,6 @@ export default function Home({ searchParams }: HomeProps) {
     gender: "Female",
     others: "",
   });
-
-  const [additionalStaffMember1, setAdditionalStaffMember1] = useState<{}>({
-    staffMemberRole: "",
-    workMode: "Live-in",
-    gender: "Female",
-    othersPreferences: "",
-  });
-
-  const [additionalStaffMember2, setAdditionalStaffMember2] = useState<{}>({
-    staffMemberRole: "",
-    workMode: "Live-in",
-    gender: "Female",
-    othersPreferences: "",
-  });
-
-  const [gender, setGender] = useState<"Female" | "Male" | "Any Gender">(
-    "Female"
-  );
 
   const { premiumPackageRequest, setPremiumPackageRequest } = useAppContext();
 
@@ -177,14 +156,14 @@ export default function Home({ searchParams }: HomeProps) {
 
   return (
     <div className="bg-white h-full p-5">
-      <div className="flex z-50 items-center sticky top-0 bg-white pt-5 pb-3 border-b border-[#F3E8C6]">
-        <IconPuzzle size={25} className="mr-3" color="#1e3a8a" stroke={1.5} />
+      <div className="flex z-50 items-center sticky top-0 bg-white pt-5 pb-3 border-b border-luxury-champagne">
+        <IconPuzzleFilled size={25} className="mr-3 text-luxury-champagne" stroke={1.5} />
         <h1 className="font-bold text-center text-lg text-black">
           Customize your package
         </h1>
       </div>
 
-      <div className="text-black self-center mx-auto rounded-full bg-blue-900 w-12 h-12 items-center flex justify-center my-5">
+      <div className="text-black self-center mx-auto rounded-full bg-blue-950 w-12 h-12 items-center flex justify-center my-5">
         {selectedPackage.icon}
       </div>
       <h2 className="text-center mt-1 font-semibold text-lg">

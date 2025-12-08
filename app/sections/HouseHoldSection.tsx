@@ -72,8 +72,8 @@ export const HouseholdSection = ({
         </FormControl>
 
         <FormControl>
-          <FormLabel className="mt-2" id="gender-radio-buttons-group-label">
-            Kids in the household? If yes, please provide details.
+          <FormLabel className="mt-3" id="gender-radio-buttons-group-label">
+        Any kids in the household? If yes, please provide details.
           </FormLabel>
           <TextField
             value={householdDetails.kidsDetails}

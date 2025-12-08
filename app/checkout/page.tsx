@@ -5,7 +5,7 @@ import {
   IconCreditCard,
   IconHomeHeart,
   IconPackage,
-  IconShoppingCartPlus,
+  IconShoppingCartFilled,
   IconUser,
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
@@ -15,6 +15,7 @@ import { PremiumServicePackages } from "@/data/premiumServicePackages";
 import { useState } from "react";
 import { PremiumPackageNetPercentages } from "@/types/ClientRequest";
 import SelectedStaffDetails from "../components/SelectedStaffDetails";
+import { useGoogleSheets } from "@/hooks/useGoogleSheets";
 
 const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
 
@@ -35,6 +36,7 @@ export default function Home({ searchParams }: HomeProps) {
   const { premiumPackageRequest, setPremiumPackageRequest } = useAppContext();
   const router = useRouter();
 
+  const { updateValues } = useGoogleSheets();
   const { nanny, chef, housekeeper } = premiumPackageRequest.coreStaffMembers;
   const [termsAccepted, setTermsAccepted] = useState(false);
 
@@ -44,9 +46,24 @@ export default function Home({ searchParams }: HomeProps) {
     setTermsAccepted(event.target.checked);
   };
 
+  async function sendRequestDetails() {
+    // update excel sheet
+    await updateValues([
+      [
+        new Date(Date.now()).toLocaleString(),
+        premiumPackageRequest.packageType - 1,
+        JSON.stringify(premiumPackageRequest.coreStaffMembers),
+        JSON.stringify(premiumPackageRequest.additionalStaffMembers),
+        JSON.stringify(premiumPackageRequest.paymentPlan),
+        JSON.stringify(premiumPackageRequest.householdDetails),
+        JSON.stringify(premiumPackageRequest.clientInformation)
+      ],
+    ]);
+  }
+
   const componentProps = {
     email: premiumPackageRequest.clientInformation.email,
-    amount: premiumPackageRequest.paymentPlan.totalAmount * 100, // Paystack expects amount in kobo
+    amount: (premiumPackageRequest.paymentPlan.totalAmount + 2000) * 100, // Paystack expects amount in kobo
     metadata: {
       custom_fields: [
         {
@@ -57,12 +74,11 @@ export default function Home({ searchParams }: HomeProps) {
       ],
     },
     publicKey,
-    text: `Pay Now (₦${premiumPackageRequest.paymentPlan.totalAmount.toLocaleString()})`,
+    text: `Pay Now (₦${(premiumPackageRequest.paymentPlan.totalAmount+2000).toLocaleString()})`,
     onSuccess: async () => {
-      //   await sendRequestDetails();
+        await sendRequestDetails();
       //   resetCustomerRequest();
-      //   router.push(pathname);
-      //   setRequestStage(0);
+        router.push('/executive');
       alert(
         "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly."
       );
@@ -72,11 +88,10 @@ export default function Home({ searchParams }: HomeProps) {
 
   return (
     <div className="bg-white h-full p-5 text-black">
-      <div className="flex z-50 items-center sticky top-0 bg-white pt-5 pb-3 border-b border-[#F3E8C6]">
-        <IconShoppingCartPlus
+      <div className="flex z-50 items-center sticky top-0 bg-white pt-5 pb-3 border-b border-luxury-champagne">
+        <IconShoppingCartFilled
           size={25}
-          className="mr-3"
-          color="#1e3a8a"
+          className="mr-3 text-luxury-champagne"
           stroke={1.5}
         />
         <h1 className="font-bold text-center text-lg">Confirmation</h1>
@@ -91,8 +106,7 @@ export default function Home({ searchParams }: HomeProps) {
         <div className="flex z-50 items-center sticky top-0 bg-white ">
           <IconPackage
             size={25}
-            className="mr-3"
-            color="#1e3a8a"
+            className="mr-3 text-blue-950"
             stroke={1.5}
           />
           <h1 className="font-semibold text-center text-lg text-black">
@@ -163,8 +177,7 @@ export default function Home({ searchParams }: HomeProps) {
         <div className="flex z-50 items-center sticky top-0 bg-white ">
           <IconHomeHeart
             size={25}
-            className="mr-3"
-            color="#1e3a8a"
+            className="mr-3 text-blue-950"
             stroke={1.5}
           />
           <h1 className="font-semibold text-center text-lg text-black">
@@ -205,8 +218,7 @@ export default function Home({ searchParams }: HomeProps) {
         <div className="flex z-50 items-center sticky top-0 bg-white ">
           <IconCreditCard
             size={25}
-            className="mr-3"
-            color="#1e3a8a"
+            className="mr-3 text-blue-950"
             stroke={1.5}
           />
           <h1 className="font-semibold text-center text-lg">
@@ -227,7 +239,7 @@ export default function Home({ searchParams }: HomeProps) {
 
         <div className="mt-2 flex justify-between text-gray-500">
           <p>Amount: </p>
-          <p>
+          <p className="font-bold text-black">
             ₦
             {(
               PremiumServicePackages()[type - 1].investment *
@@ -239,7 +251,7 @@ export default function Home({ searchParams }: HomeProps) {
         </div>
         <div className="mt-2 flex justify-between text-gray-500">
           <p>Duration: </p>
-          <p>
+          <p className="font-bold text-black">
             {premiumPackageRequest.paymentPlan.name === "monthly"
               ? "1 Month"
               : premiumPackageRequest.paymentPlan.name === "biannual"
@@ -248,20 +260,25 @@ export default function Home({ searchParams }: HomeProps) {
           </p>
         </div>
 
+        <div className="mt-2 flex justify-between text-gray-500">
+          <p>Payment Gateway Charges: </p>
+          <p className="font-bold text-black">₦2,000</p>
+        </div>
+
         {/* Divider */}
         <div className="bg-gray-400 h-[0.2px] w-full my-3" />
 
-        <div className="mt-2 flex justify-between font-bold text-black">
+        <div className="mt-2 flex justify-between text-red-700 font-extrabold">
           <p>Total Amount:</p>
           <p>
-            ₦ {premiumPackageRequest.paymentPlan.totalAmount.toLocaleString()}
+            ₦ {(premiumPackageRequest.paymentPlan.totalAmount + 2000).toLocaleString()}
           </p>
         </div>
       </div>
 
       <div className="mt-3 rounded-md border border-gray-300 p-4 shadow-sm">
         <div className="flex z-50 items-center sticky top-0 bg-white ">
-          <IconUser size={25} className="mr-3" color="#1e3a8a" stroke={1.5} />
+          <IconUser size={25} className="mr-3 text-blue-950" stroke={1.5} />
           <h1 className="font-semibold text-center text-lg">
             Client Information
           </h1>

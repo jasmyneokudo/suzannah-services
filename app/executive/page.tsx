@@ -5,7 +5,11 @@ import { Footer } from "../components/Footer";
 import { PremiumPackageSection } from "../sections/PremiumPackageSection";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { defaultPremiumPackageRequest, useAppContext } from "../context/AppContext";
+import {
+  defaultPremiumPackageRequest,
+  useAppContext,
+} from "../context/AppContext";
+import { LuxuryFAQSection } from "../sections/PremiumFAQs";
 
 const words = [
   "for Discerning Homes.",
@@ -24,7 +28,6 @@ export default function Home({ searchParams }: HomeProps) {
   const ref = useRef(null);
 
   const { premiumPackageRequest, setPremiumPackageRequest } = useAppContext();
-  
 
   // Tracks scroll progress for this element ONLY
   const { scrollYProgress } = useScroll({
@@ -48,7 +51,7 @@ export default function Home({ searchParams }: HomeProps) {
   }, []);
 
   useEffect(() => {
-    setPremiumPackageRequest(defaultPremiumPackageRequest)
+    setPremiumPackageRequest(defaultPremiumPackageRequest);
   }, []);
   return (
     <div className="bg-white">
@@ -109,9 +112,7 @@ export default function Home({ searchParams }: HomeProps) {
             ref={ref}
             style={{ y }}
           >
-            <h3
-              className="font-young-serif text-lg text-luxury-gold"
-            >
+            <h3 className="font-young-serif text-lg text-luxury-gold">
               Purpose
             </h3>
           </motion.div>
@@ -244,9 +245,7 @@ export default function Home({ searchParams }: HomeProps) {
             </p>
             <div className="border-t border-luxury-champagne/50 pt-4">
               <p className="font-semibold text-foreground">Mrs Zainab Sani</p>
-              <p className="text-sm text-muted-foreground">
-                Abuja, Nigeria
-              </p>
+              <p className="text-sm text-muted-foreground">Abuja, Nigeria</p>
             </div>
           </div>
 
@@ -263,13 +262,12 @@ export default function Home({ searchParams }: HomeProps) {
               ))}
             </div>
             <p className="text-lg text-foreground/90 italic leading-relaxed">
-              &quot;I&apos;m impressed and satisfied with your services, truly reliable! The staff assigned to our home is experienced.&quot;
+              &quot;I&apos;m impressed and satisfied with your services, truly
+              reliable! The staff assigned to our home is experienced.&quot;
             </p>
             <div className="border-t border-luxury-champagne/50 pt-4">
               <p className="font-semibold text-foreground">Mrs Irene A</p>
-              <p className="text-sm text-muted-foreground">
-                Abuja, Nigeria
-              </p>
+              <p className="text-sm text-muted-foreground">Abuja, Nigeria</p>
             </div>
           </div>
         </div>
@@ -292,6 +290,9 @@ export default function Home({ searchParams }: HomeProps) {
           </a>
         </div>
       </section>
+
+      <LuxuryFAQSection/>
+
       <Footer />
     </div>
   );
