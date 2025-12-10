@@ -396,7 +396,7 @@ export default function Home({ searchParams }: HomeProps) {
                 3. Quality Supervision & Monitoring
               </h3>
               <p className="text-gray-900 text-sm">
-                A Suzannah supervisor will visit periodically to perform
+                Our dedicated household team supervisor will visit periodically to perform
                 discreet performance reviews, collect feedback, and confirm
                 adherence to our standards. Additional visits may be scheduled
                 upon request.
@@ -443,7 +443,7 @@ export default function Home({ searchParams }: HomeProps) {
               </h3>
               <p className="text-gray-900 text-sm">
                 All payroll, salary administration and statutory obligations
-                related to team members are managed by Suzannah. Clients are not
+                related to team members are managed by us. Clients are not
                 required to handle staff salaries directly.
               </p>
             </section>
@@ -456,7 +456,7 @@ export default function Home({ searchParams }: HomeProps) {
                 Live-in staff are entitled to off-days during the last weekend
                 of each month. This schedule can be adjusted to suit household
                 needs with prior notice. Temporary cover can be arranged for
-                essential continuity.
+                essential continuity if necessary.
               </p>
             </section>
 
@@ -465,7 +465,7 @@ export default function Home({ searchParams }: HomeProps) {
                 9. Confidentiality & Discretion
               </h3>
               <p className="text-gray-900 text-sm">
-                All Suzannah staff are bound by strict confidentiality
+                All our staff are bound by strict confidentiality
                 agreements. We protect client privacy and treat household
                 information with absolute discretion. Any breach results in
                 immediate termination and remediation.
@@ -484,21 +484,21 @@ export default function Home({ searchParams }: HomeProps) {
               </p>
             </section>
 
-            <section className="mt-3">
+            {/* <section className="mt-3">
               <h3 className="text-xl font-semibold text-yellow-700">
                 11. Liability & Insurance
               </h3>
               <p className="text-gray-900 text-sm">
-                Suzannah maintains professional liability insurance for the
+                We maintain professional liability insurance for the
                 services we provide. Clients should notify us immediately of any
                 incident to initiate an investigation and any required insurance
                 claims.
               </p>
-            </section>
+            </section> */}
 
             <section className="mt-3">
               <h3 className="text-xl font-semibold text-yellow-700">
-                12. Termination & Notice
+                11. Termination & Notice
               </h3>
               <p className="text-gray-900 text-sm">
                 Either party may terminate the service agreement with prior
@@ -510,7 +510,7 @@ export default function Home({ searchParams }: HomeProps) {
 
             <section className="mt-3">
               <h3 className="text-xl font-semibold text-yellow-700">
-                13. Governing Law
+                12. Governing Law
               </h3>
               <p className="text-gray-900 text-sm">
                 These terms are governed by the laws of the Federal Republic of
@@ -531,7 +531,7 @@ export default function Home({ searchParams }: HomeProps) {
                 >
                   suzannahhomeandcareservices@gmail.com
                 </a>
-                . By engaging Suzannah, you agree to these terms and consent to
+                . By engaging Suzannah Home & Care Services, you agree to these terms and consent to
                 the processing of personal data necessary to deliver our
                 services.
               </p>
