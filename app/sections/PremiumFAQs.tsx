@@ -86,15 +86,13 @@ const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded
   return (
     <section className="px-4 pb-24">
       <div className="mx-auto">
-        <div className="text-center mb-16">
           <h1 className="text-black text-3xl text-center py-4 font-extralight">
             FAQs
           </h1>
-          <p className="text-center text-sm text-blue-950 font-sans mt-2">
+          <p className="text-center text-sm text-blue-950 font-sans mt-2 mb-4">
             Everthing you need to know about our household management bespoke
             packages.
           </p>
-        </div>
         <div className="max-sm:flex max-sm:flex-col grid-cols-3 grid-flow-row grid place-items-center">
           {luxuryFaqs.map((faq, key) => (
             <div key={key} className="align-middle text-center w-10/12">
