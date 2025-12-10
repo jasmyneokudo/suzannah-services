@@ -63,7 +63,7 @@ const luxuryFaqs = [
 export const LuxuryFAQSection = () => {
   const [expanded, setExpanded] = useState<string | false>(false);
 
-const handleChange = (panel: string) => (event, isExpanded) => {
+const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
   setExpanded(isExpanded ? panel : false);
 };
   const Accordion = styled((props: AccordionProps) => (
