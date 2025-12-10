@@ -166,10 +166,10 @@ export default function Home({ searchParams }: HomeProps) {
       <div className="text-black self-center mx-auto rounded-full bg-blue-950 w-12 h-12 items-center flex justify-center my-5">
         {selectedPackage.icon}
       </div>
-      <h2 className="text-center mt-1 font-semibold text-lg">
+      <h2 className="text-center mt-1 text-black font-semibold text-lg">
         {selectedPackage.serviceName}
       </h2>
-      <h3 className="mt-2 text-center text-gray-500 text-base">
+      <h3 className="mt-2 text-center font-bold text-luxury-gold text-base">
         ₦{selectedPackage.investment.toLocaleString()} per month
       </h3>
       <p className="mt-3 text-gray-600 text-sm">
