@@ -1,5 +1,12 @@
-import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import {
+  AccordionSummary,
+  AccordionDetails,
+  AccordionProps,
+  styled,
+} from "@mui/material";
 import { IconChevronDown } from "@tabler/icons-react";
+import MuiAccordion from "@mui/material/Accordion";
+import { useState } from "react";
 
 const luxuryFaqs = [
   {
@@ -54,6 +61,28 @@ const luxuryFaqs = [
 ];
 
 export const LuxuryFAQSection = () => {
+  const [expanded, setExpanded] = useState<string | false>(false);
+
+const handleChange = (panel: string) => (event, isExpanded) => {
+  setExpanded(isExpanded ? panel : false);
+};
+  const Accordion = styled((props: AccordionProps) => (
+    <MuiAccordion disableGutters elevation={0} square {...props} />
+  ))(({ theme }) => ({
+    borderRadius: 10,
+    marginBottom: theme.spacing(1),
+    border: `0.8px solid ${theme.palette.divider}`,
+    "&:not(:last-child)": {
+      borderBottom: 0,
+    },
+    "&::before": {
+      display: "none",
+    },
+    "&.Mui-expanded": {
+      backgroundColor: "hsl(42 47% 88%)",
+    },
+  }));
+
   return (
     <section className="px-4 pb-24">
       <div className="mx-auto">
@@ -70,21 +99,14 @@ export const LuxuryFAQSection = () => {
           {luxuryFaqs.map((faq, key) => (
             <div key={key} className="align-middle text-center w-10/12">
               <Accordion
-                className="border border-luxury-champagne/60  rounded-lg px-6 py-2"
-                sx={{
-                  // border: 0.4,
-                  // borderColor: 'hsl(42 47% 88%)',
-                  backgroundColor: "hsl(40 33% 97%)",
-                  // borderRadius: '20%',
-                  mt: 2,
-                }}
+              expanded={expanded === `panel${key}`} onChange={handleChange(`panel${key}`)}
               >
                 <AccordionSummary
                   expandIcon={<IconChevronDown stroke={2} color="#172554" />}
                   aria-controls="panel1-content"
                   id="panel1-header"
                 >
-                  <div className="flex justify-center items-center">
+                  <div className="flex font-bold justify-center items-center">
                     {faq.question}
                   </div>
                 </AccordionSummary>

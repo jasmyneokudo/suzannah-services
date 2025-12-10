@@ -17,7 +17,7 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
-import { IconPuzzle, IconPuzzleFilled } from "@tabler/icons-react";
+import { IconPuzzleFilled } from "@tabler/icons-react";
 import { useAppContext } from "../context/AppContext";
 import CustomStaffMember from "../components/CustomStaffMember";
 import { HouseholdSection } from "../sections/HouseHoldSection";
@@ -175,7 +175,7 @@ export default function Home({ searchParams }: HomeProps) {
       <p className="mt-3 text-gray-600 text-sm">
         At Suzannah Home & Care Services, we understand that true luxury is not
         just comfort — it’s peace of mind. Our Managed Home Service Packages are
-        designed for discerning families and executives who want a *well-run,
+        designed for discerning families and executives who want a well-run,
         elegant home without the stress of managing domestic staff.
       </p>
 
