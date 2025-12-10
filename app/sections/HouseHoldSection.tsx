@@ -22,10 +22,10 @@ export const HouseholdSection = ({
 }: HouseholdSectionProps) => {
   return (
     <div className="mt-10">
-      <h2 className="text-xl font-bold">Household Details</h2>
+      <h2 className="text-xl font-bold text-black">Household Details</h2>
       <p className="mt-2 text-sm text-gray-600">
-        Getting to know about your kind of household would enable us tailor our
-        services to better suit your needs.
+        By getting to know about your household, we better understand your unique needs and this enables us tailor our
+        services to better serve you.
       </p>
 
       <div className="p-6 rounded-lg mt-4 relative bg-gradient-to-b from-luxury-ivory to-luxury-champagne border-luxury-champagne border">
