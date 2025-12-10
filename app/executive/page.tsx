@@ -170,7 +170,7 @@ export default function Home({ searchParams }: HomeProps) {
 
       <section className="mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-4 py-8 px-6 bg-luxury-gold/10 border border-luxury-gold/30 rounded-lg">
-          <p className="text-2xl md:text-3xl font-young-serif font-semibold text-blue-950">
+          <p className="text-2xl md:text-3xl font-young-serif font-semibold text-black">
             Trusted by 20+ discerning households
           </p>
           <a href="#premium-packages-section">

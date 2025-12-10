@@ -32,7 +32,7 @@ export default function Home({ searchParams }: HomeProps) {
       <div className="flex z-50 items-center sticky top-0 bg-white pt-5 pb-3 border-b border-[#F3E8C6]">
         <IconHammer fill="hsl(42 47% 88%)" size={25} className="mr-3 text-luxury-champagne" stroke={1.5} />
         <h1 className="font-bold text-center text-lg text-gray-600">
-          Build your custom household package
+          Build your own household package
         </h1>
       </div>
 
