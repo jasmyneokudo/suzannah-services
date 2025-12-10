@@ -1,3 +1,4 @@
+import { PRICING } from "@/data/servicePrices";
 import { ServiceType } from "@/types/ClientRequest";
 import { useMemo } from "react";
 
@@ -19,16 +20,6 @@ interface Options {
 }
 
 const BASE_STAFF_PAY = 50000;
-
-export const PRICING: Record<ServiceType, number> = {
-  "Nanny Services": 85500,
-  "General Help Services": 80500,
-  "Nanny + Help Services": 95500,
-  "Housekeeper Services": 75500,
-  "Home Cook Services": 90500,
-  "Driving Services": 140500,
-  "Elder Caregiving Services": 150500
-};
 
 export function usePaymentPlan(
   service: ServiceType,

@@ -1,3 +1,5 @@
+import { PRICING } from "./servicePrices";
+
 export const services = [
   {
     serviceName: "Nanny + Help Services",
@@ -5,12 +7,12 @@ export const services = [
       "An experienced and caring Nanny-Help who lives in your home to provide loving childcare and assist with essential household duties.",
     whatsIncluded: [
       "Daily childcare, including feeding, bathing, and dressing.",
-      "Assistance with meal preparation and basic cooking.",
-      "General home organization and tidiness.",
       "Accompanying children to school, activities, or appointments (if required).",
+      "Assistance with kids meal preparation",
+      "General home organization and tidiness.",
       "Assistance with small household errands.",
     ],
-    price: "₦95,500"
+    price: `₦${PRICING["Nanny + Help Services"].toLocaleString()}`,
   },
   {
     serviceName: "Nanny Services",
@@ -22,7 +24,7 @@ export const services = [
       "Monitoring children’s health and safety at all times.",
       "Supervising homework and educational activities.",
     ],
-    price: "₦85,500"
+    price: `₦${PRICING["Nanny Services"].toLocaleString()}`,
   },
   {
     serviceName: "General Help Services",
@@ -34,9 +36,9 @@ export const services = [
       "Grocery assistance and household supply management.",
       "Assistance with meal prep and household errands",
     ],
-    price: "₦70,500"
+    price: `₦${PRICING["General Help Services"].toLocaleString()}`,
   },
-  
+
   {
     serviceName: "Housekeeper Services",
     serviceDescription:
@@ -47,7 +49,7 @@ export const services = [
       "Bed-making and linen changes on schedule.",
       "Seasonal deep cleaning tasks (as agreed).",
     ],
-    price: "₦75,500"
+    price: `₦${PRICING["Housekeeper Services"].toLocaleString()}`,
   },
   {
     serviceName: "Home Cook Services",
@@ -59,7 +61,7 @@ export const services = [
       "Grocery shopping or assistance with food supply management.",
       "Maintaining kitchen cleanliness and proper food storage.",
     ],
-    price: "₦85,500"
+    price: `₦${PRICING["Home Cook Services"].toLocaleString()}`,
   },
   {
     serviceName: "Elder Caregiving Services",
@@ -72,19 +74,19 @@ export const services = [
       "Engaging companionship and emotional support.",
       "Escort to appointments, walks, or social activities (as agreed).",
     ],
-    price: "₦130,500"
+    price: `₦${PRICING["Elder Caregiving Services"].toLocaleString()}`,
   },
   {
-  serviceName: "Driving Services",
-  serviceDescription:
-    "Professional, courteous, and reliable drivers committed to providing safe, comfortable, and stress-free transportation for you and your family — whether for daily commutes, school runs, or executive travel.",
-  whatsIncluded: [
-    "Experienced and background-verified driver assigned to your home or office.",
-    "Safe and defensive driving for all road conditions.",
-    "Prompt school pick-up and drop-off for children (if required).",
-    "Errand and shopping support as directed by the client.",
-    "Vehicle care assistance — cleaning, fueling, and basic maintenance checks.",
-  ],
-  price: "₦140,500"
-}
+    serviceName: "Driving Services",
+    serviceDescription:
+      "Professional, courteous, and reliable drivers committed to providing safe, comfortable, and stress-free transportation for you and your family — whether for daily commutes, school runs, or executive travel.",
+    whatsIncluded: [
+      "Experienced and background-verified driver assigned to your home or office.",
+      "Safe and defensive driving for all road conditions.",
+      "Prompt school pick-up and drop-off for children (if required).",
+      "Errand and shopping support as directed by the client.",
+      "Vehicle care assistance — cleaning, fueling, and basic maintenance checks.",
+    ],
+    price: `₦${PRICING["Driving Services"].toLocaleString()}`,
+  },
 ];
