@@ -5,7 +5,7 @@ export const PRICING: Record<ServiceType, number> = {
   "General Help Services": 85500,
   "Nanny + Help Services": 95500,
   "Housekeeper Services": 80500,
-  "Home Cook Services": 90500,
+  "Home Cook Services": 150500,
   "Driving Services": 140500,
-  "Elder Caregiving Services": 150500
+  "Elder Caregiving Services": 200500
 };
