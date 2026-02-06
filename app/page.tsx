@@ -845,7 +845,7 @@ export default function Home({ searchParams }: HomeProps) {
         </section>
 
         {/* CUSTOM REQUEST SECTION */}
-        <section className="py-8 max-sm:px-10 w-full">
+        <section className="py-8 hidden max-sm:px-10 w-full">
           <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700">
             CUSTOM REQUEST
           </h1>
