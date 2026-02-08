@@ -721,7 +721,7 @@ export default function Home({ searchParams }: HomeProps) {
               onChange={(e) =>
                 setClientRequest({
                   ...clientRequest,
-                  clientEmail: e.target.value,
+                  clientEmail: e.target.value.trim(),
                 })
               }
             />
