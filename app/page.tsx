@@ -181,13 +181,49 @@ export default function Home({ searchParams }: HomeProps) {
     publicKey,
     text: `Pay Now (₦${bookingFee.toLocaleString()})`,
     onSuccess: async () => {
-      await sendRequestDetails();
-      resetCustomerRequest();
-      router.push(pathname);
-      setRequestStage(0);
-      alert(
-        "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly."
-      );
+      const requestArray = [
+        new Date(Date.now()).toLocaleString(),
+        clientRequest.serviceType,
+        clientRequest.clientName,
+        clientRequest.clientEmail,
+        clientRequest.clientPhoneNumber,
+        clientRequest.clientAddress,
+        clientRequest.serviceType === "Driving Services"
+          ? clientRequest.numberOfPassengers + " Passengers"
+          : clientRequest.numberOfKids,
+        clientRequest.numberOfDiners,
+        clientRequest.agesOfKids,
+        clientRequest.typeOfHouse,
+        clientRequest.numberOfRooms,
+        clientRequest.extraHomeInformation,
+        clientRequest.workMode,
+        clientRequest.employeeGender,
+        clientRequest.employeeAgeRange,
+        clientRequest.employeeTribePreference,
+        clientRequest.employeeReligionPreference,
+        clientRequest.workingDays.join(", "),
+        clientRequest.workingHours.join(", "),
+        clientRequest.extraComment,
+        clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
+        clientRequest.bookingFee,
+        clientRequest.elderAgeRange,
+        clientRequest.elderGender,
+        clientRequest.elderHealthConditions,
+      ];
+
+       try {
+        await sendRequestDetails(requestArray);
+        resetCustomerRequest();
+        router.push(pathname);
+        setRequestStage(0);
+        alert(
+          "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly."
+        );
+      } catch (err) {
+        console.error("Failed to send request details", err);
+        return; // stop the flow
+      }
+
     },
     onClose: () => alert("Are you sure?"),
   };
@@ -202,12 +238,12 @@ export default function Home({ searchParams }: HomeProps) {
     }
   }, [step]);
 
-  useEffect(() => {
-    if (step === 3 && clientRequest.bookingFee === 0) {
-      alert("Something went wrong, please try booking again.");
-      router.push("/#services-section");
-    }
-  }, [clientRequest]);
+  // useEffect(() => {
+  //   if (step === 3 && clientRequest.bookingFee === 0) {
+  //     alert("Something went wrong, please try booking again.");
+  //     router.push("/#services-section");
+  //   }
+  // }, [clientRequest, step, router]);
 
   useEffect(() => {
     if (clientRequest.serviceType === "Driving Services") {
@@ -215,7 +251,7 @@ export default function Home({ searchParams }: HomeProps) {
     }
   }, [clientRequest.serviceType]);
 
-  async function sendRequestDetails() {
+  async function sendRequestDetails(requestArray: any[]) {
     const requestBody = `
       Incoming Client Request ${new Date(Date.now()).toLocaleString()}\n:
       Service Type: ${clientRequest.serviceType},
@@ -275,35 +311,7 @@ export default function Home({ searchParams }: HomeProps) {
     `;
     // update excel sheet
     await updateValues([
-      [
-        new Date(Date.now()).toLocaleString(),
-        clientRequest.serviceType,
-        clientRequest.clientName,
-        clientRequest.clientEmail,
-        clientRequest.clientPhoneNumber,
-        clientRequest.clientAddress,
-        clientRequest.serviceType === "Driving Services"
-          ? clientRequest.numberOfPassengers + " Passengers"
-          : clientRequest.numberOfKids,
-        clientRequest.numberOfDiners,
-        clientRequest.agesOfKids,
-        clientRequest.typeOfHouse,
-        clientRequest.numberOfRooms,
-        clientRequest.extraHomeInformation,
-        clientRequest.workMode,
-        clientRequest.employeeGender,
-        clientRequest.employeeAgeRange,
-        clientRequest.employeeTribePreference,
-        clientRequest.employeeReligionPreference,
-        clientRequest.workingDays.join(", "),
-        clientRequest.workingHours.join(", "),
-        clientRequest.extraComment,
-        clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
-        clientRequest.bookingFee,
-        clientRequest.elderAgeRange,
-        clientRequest.elderGender,
-        clientRequest.elderHealthConditions,
-      ],
+      requestArray,
     ]);
 
     // send order details to whatsapp number
