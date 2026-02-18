@@ -50,7 +50,7 @@ const luxuryFaqs = [
     id: "7",
     question: "Do you serve areas outside Lagos and Abuja?",
     answer:
-      "We currently serve elite households in Lagos, Abuja, and Port Harcourt. We're expanding to other major cities. Contact us to discuss service availability in your location — we accommodate special arrangements for exceptional clients.",
+      "We currently serve households in Lagos, Abuja, and Port Harcourt. We're expanding to other major cities. Contact us to discuss service availability in your location — we accommodate special arrangements for exceptional clients.",
   },
   {
     id: "8",

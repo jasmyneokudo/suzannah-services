@@ -33,7 +33,7 @@ import "./loader.css";
 
 const PaystackButton = dynamic(
   () => import("react-paystack").then((mod) => mod.PaystackButton),
-  { ssr: false } // This ensures the component is only loaded on the client-side
+  { ssr: false }, // This ensures the component is only loaded on the client-side
 );
 
 import { IconBrandWhatsapp, IconFileDescription } from "@tabler/icons-react";
@@ -124,7 +124,7 @@ export default function Home({ searchParams }: HomeProps) {
   };
 
   const [clientRequest, setClientRequest] = useState<CustomerRequest>(
-    defaultCustomerRequest
+    defaultCustomerRequest,
   );
 
   const [customRequest, setCustomRequest] = useState(defaultCustomRequest);
@@ -211,19 +211,18 @@ export default function Home({ searchParams }: HomeProps) {
         clientRequest.elderHealthConditions,
       ];
 
-       try {
+      try {
         await sendRequestDetails(requestArray);
         resetCustomerRequest();
         router.push(pathname);
         setRequestStage(0);
         alert(
-          "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly."
+          "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly.",
         );
       } catch (err) {
         console.error("Failed to send request details", err);
         return; // stop the flow
       }
-
     },
     onClose: () => alert("Are you sure?"),
   };
@@ -310,9 +309,7 @@ export default function Home({ searchParams }: HomeProps) {
       Service Fee: ${clientRequest.bookingFee}
     `;
     // update excel sheet
-    await updateValues([
-      requestArray,
-    ]);
+    await updateValues([requestArray]);
 
     // send order details to whatsapp number
     try {
@@ -571,8 +568,8 @@ export default function Home({ searchParams }: HomeProps) {
                     {clientRequest.serviceType === "Home Cook Services"
                       ? `${clientRequest.numberOfDiners} people to be cooked for`
                       : clientRequest.serviceType === "Driving Services"
-                      ? `${clientRequest.numberOfPassengers} individuals to be driven`
-                      : `${clientRequest.typeOfHouse} home with ${clientRequest.numberOfRooms}`}
+                        ? `${clientRequest.numberOfPassengers} individuals to be driven`
+                        : `${clientRequest.typeOfHouse} home with ${clientRequest.numberOfRooms}`}
                   </p>
                 </span>
                 <span className="flex items-center justify-between mt-2 gap-3">
@@ -852,6 +849,22 @@ export default function Home({ searchParams }: HomeProps) {
           </div>
         </section>
 
+        {/* PREMIUM SERVICES SECTION */}
+        <section className="my-10 mx-5 flex flex-col items-center justify-center ">
+          <Image
+            onClick={() => {
+              router.push("/executive");
+            }}
+            src="/images/executive-bg.png"
+            alt="premium services background"
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="w-full h-auto border-8 border-luxury-gold rounded-lg max-sm:rounded-none"
+            priority
+          />
+        </section>
+
         {/* CUSTOM REQUEST SECTION */}
         <section className="py-8 hidden max-sm:px-10 w-full">
           <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700">
@@ -995,12 +1008,12 @@ export default function Home({ searchParams }: HomeProps) {
                   ]);
 
                   alert(
-                    "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly."
+                    "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly.",
                   );
                   setCustomRequest(defaultCustomRequest);
                 } catch (e) {
                   alert(
-                    "An error occurred, please check your internet connection and retry"
+                    "An error occurred, please check your internet connection and retry",
                   );
                 } finally {
                   setLoading(false);

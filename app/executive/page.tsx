@@ -10,6 +10,9 @@ import {
   useAppContext,
 } from "../context/AppContext";
 import { LuxuryFAQSection } from "../sections/PremiumFAQs";
+import { Fab } from "@mui/material";
+import Link from "next/link";
+import { IconBrandWhatsapp } from "@tabler/icons-react";
 
 const words = [
   "for Discerning Homes.",
@@ -45,7 +48,7 @@ export default function Home({ searchParams }: HomeProps) {
   useEffect(() => {
     const interval = setInterval(
       () => setIndex((i) => (i + 1) % words.length),
-      2500
+      2500,
     );
     return () => clearInterval(interval);
   }, []);
@@ -55,6 +58,21 @@ export default function Home({ searchParams }: HomeProps) {
   }, []);
   return (
     <div className="bg-white">
+      <Fab
+        variant="extended"
+        sx={{
+          position: "fixed",
+          bottom: 16,
+          right: 16,
+          backgroundColor: "#000",
+          color: "white",
+        }}
+      >
+        <Link className="flex items-center" href="https://wa.link/33l45y">
+          <IconBrandWhatsapp size={20} />
+          &nbsp;CUSTOMER SUPPORT
+        </Link>
+      </Fab>
       <section className="relative  max-sm:h-[400px] w-full">
         <h1 className="font-crushed text-luxury-gold absolute text-lg font-bold z-50 top-3 left-1/2 -translate-x-1/2">
           SHC
@@ -171,7 +189,7 @@ export default function Home({ searchParams }: HomeProps) {
       <section className="mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-4 py-8 px-6 bg-luxury-gold/10 border border-luxury-gold/30 rounded-lg">
           <p className="text-2xl md:text-3xl font-young-serif font-semibold text-black">
-            Trusted by 20+ discerning households
+            Trusted by 20+ discerning households around Nigeria
           </p>
           <a href="#premium-packages-section">
             <p className="text-lg text-luxury-gold mt-4">Get Started Today</p>
@@ -291,7 +309,7 @@ export default function Home({ searchParams }: HomeProps) {
         </div>
       </section>
 
-      <LuxuryFAQSection/>
+      <LuxuryFAQSection />
 
       <Footer />
     </div>
