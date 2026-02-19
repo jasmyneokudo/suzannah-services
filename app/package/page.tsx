@@ -163,7 +163,7 @@ export default function Home({ searchParams }: HomeProps) {
         </h1>
       </div>
 
-      <div className="text-black self-center mx-auto rounded-full bg-blue-950 w-12 h-12 items-center flex justify-center my-5">
+      <div className="text-black self-center mx-auto rounded-full bg-luxury-gold w-12 h-12 items-center flex justify-center my-5">
         {selectedPackage.icon}
       </div>
       <h2 className="text-center mt-1 text-black font-semibold text-lg">
@@ -173,10 +173,11 @@ export default function Home({ searchParams }: HomeProps) {
         ₦{selectedPackage.investment.toLocaleString()} per month
       </h3>
       <p className="mt-3 text-gray-600 text-sm">
-        At Suzannah Home & Care Services, we understand that true luxury is not
+        {/* At Suzannah Home & Care Services, we understand that true luxury is not
         just comfort — it’s peace of mind. Our Managed Home Service Packages are
         designed for discerning families and executives who want a well-run,
-        elegant home without the stress of managing domestic staff.
+        elegant home without the stress of managing domestic staff. */}
+        Customize your dedicated household management team by selecting your preferences for each staff member. 
       </p>
 
       <div

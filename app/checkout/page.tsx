@@ -563,7 +563,7 @@ export default function Home({ searchParams }: HomeProps) {
 
           <div className="space-y-10 text-gray-700 leading-relaxed">
             <section>
-              <h2 className="text-2xl font-semibold text-yellow-700 mb-3">
+              <h2 className="text-xl font-semibold text-yellow-700 mb-3">
                 1. Information We Collect
               </h2>
               <p>
@@ -575,7 +575,7 @@ export default function Home({ searchParams }: HomeProps) {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-yellow-700 mb-3">
+              <h2 className="text-xl font-semibold text-yellow-700 mb-3">
                 2. How We Use Your Information
               </h2>
               <ul className="list-disc ml-6 space-y-2">
@@ -595,7 +595,7 @@ export default function Home({ searchParams }: HomeProps) {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-yellow-700 mb-3">
+              <h2 className="text-xl font-semibold text-yellow-700 mb-3">
                 3. Data Protection & Security
               </h2>
               <p>
@@ -607,7 +607,7 @@ export default function Home({ searchParams }: HomeProps) {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-yellow-700 mb-3">
+              <h2 className="text-xl font-semibold text-yellow-700 mb-3">
                 4. Cookies and Analytics
               </h2>
               <p>
@@ -618,7 +618,7 @@ export default function Home({ searchParams }: HomeProps) {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-yellow-700 mb-3">
+              <h2 className="text-xl font-semibold text-yellow-700 mb-3">
                 5. Third-Party Services
               </h2>
               <p>
@@ -629,7 +629,7 @@ export default function Home({ searchParams }: HomeProps) {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-yellow-700 mb-3">
+              <h2 className="text-xl font-semibold text-yellow-700 mb-3">
                 6. Your Rights
               </h2>
               <p>
@@ -647,7 +647,7 @@ export default function Home({ searchParams }: HomeProps) {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-yellow-700 mb-3">
+              <h2 className="text-xl font-semibold text-yellow-700 mb-3">
                 7. Updates to This Policy
               </h2>
               <p>
@@ -657,7 +657,7 @@ export default function Home({ searchParams }: HomeProps) {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-yellow-700 mb-3">
+              <h2 className="text-xl font-semibold text-yellow-700 mb-3">
                 8. Contact Us
               </h2>
               <p>
@@ -673,7 +673,7 @@ export default function Home({ searchParams }: HomeProps) {
                   suzannahhomeandcareservices@gmail.com
                 </a>
                 <br />
-                Phone: +234 800 000 0000
+                Phone: +234 816 007 4083
               </p>
             </section>
           </div>

@@ -160,7 +160,7 @@ export default function Home({ searchParams }: HomeProps) {
             style={{ y }}
           >
             <p className="text-black">
-              Every home deserves trained, trusted professionals who value
+              Homes like yours deserves trained, trusted professionals who value
               discretion as much as skill.
             </p>
           </motion.div>
