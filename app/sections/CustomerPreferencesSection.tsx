@@ -44,7 +44,7 @@ export const CustomerPreferencesSection = ({
 }: CustomerPreferencesSection) => {
   const pathname = usePathname();
   const [agesOfKidsError, setAgesOfKidsError] = useState("");
-  const [workMode, setWorkMode] = useState<ModeOfWork>("Live-in");
+  const [workMode, setWorkMode] = useState<ModeOfWork>(clientRequest.workMode);
   const [duration, setDuration] = useState<Dayjs[]>([
     dayjs("2022-04-17T08:00"),
     dayjs("2022-04-17T12:00"),
@@ -68,7 +68,7 @@ export const CustomerPreferencesSection = ({
 
   const handleSelectDays = (
     event: React.MouseEvent<HTMLElement>,
-    newDays: string[]
+    newDays: string[],
   ) => {
     // setDays(newDays);
     setClientRequest({ ...clientRequest, workingDays: newDays });
@@ -76,7 +76,7 @@ export const CustomerPreferencesSection = ({
 
   const handleWorkModeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWorkMode(
-      (event.target as HTMLInputElement).value as SetStateAction<ModeOfWork>
+      (event.target as HTMLInputElement).value as SetStateAction<ModeOfWork>,
     );
     setClientRequest({
       ...clientRequest,
@@ -124,7 +124,7 @@ export const CustomerPreferencesSection = ({
         .filter((condition) => {
           console.log(
             condition,
-            healthConditions[condition as keyof typeof healthConditions]
+            healthConditions[condition as keyof typeof healthConditions],
           );
 
           return healthConditions[condition as keyof typeof healthConditions];
@@ -139,7 +139,7 @@ export const CustomerPreferencesSection = ({
         ...clientRequest,
         workingHours: [
           `${duration[0].format("hh:mm A")} to ${duration[1]?.format(
-            "hh:mm A"
+            "hh:mm A",
           )}`,
           `${duration[1].hour() - duration[0].hour()} hours`,
         ],
@@ -296,7 +296,7 @@ export const CustomerPreferencesSection = ({
           <RadioGroup
             row
             aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="Live-in"
+            // defaultValue="Live-in"
             value={workMode}
             onChange={handleWorkModeChange}
           >
@@ -380,7 +380,7 @@ export const CustomerPreferencesSection = ({
                         ...clientRequest,
                         workingHours: [
                           `${newValue?.format(
-                            "hh:mm A"
+                            "hh:mm A",
                           )} to ${duration[1]?.format("hh:mm A")}`,
                           `${duration[1].hour() - duration[0].hour()} hours`,
                         ],
@@ -416,7 +416,7 @@ export const CustomerPreferencesSection = ({
                         ...clientRequest,
                         workingHours: [
                           `${duration[0]?.format(
-                            "hh:mm A"
+                            "hh:mm A",
                           )} to ${newValue?.format("hh:mm A")}`,
                           `${duration[1].hour() - duration[0].hour()} hours`,
                         ],
@@ -665,6 +665,7 @@ export const CustomerPreferencesSection = ({
                   <MenuItem value={6}>6</MenuItem>
                 </Select>
               </FormControl>
+
               <FormControl fullWidth>
                 <TextField
                   value={clientRequest.agesOfKids}
@@ -680,7 +681,7 @@ export const CustomerPreferencesSection = ({
                     for (let i = 0; i < ages.length; i++) {
                       if (ages[i].trim().length <= 2) {
                         setAgesOfKidsError(
-                          "Please enter a valid age for the next age"
+                          "Please enter a valid age for the next age",
                         );
                       } else {
                         setAgesOfKidsError("");
@@ -689,7 +690,7 @@ export const CustomerPreferencesSection = ({
 
                     clientRequest.numberOfKids !== ages.length
                       ? setAgesOfKidsError(
-                          "Ages of Kids does not correspond with numbers of Kids"
+                          "Ages of Kids does not correspond with numbers of Kids",
                         )
                       : agesOfKidsError;
 
@@ -707,6 +708,74 @@ export const CustomerPreferencesSection = ({
                   months, 4 weeks
                 </FormHelperText>
               </FormControl>
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={clientRequest.newBorns > 0}
+                    onChange={() => {
+                      setClientRequest({
+                        ...clientRequest,
+                        newBorns: clientRequest.newBorns > 0 ? 0 : 1,
+                      });
+                    }}
+                    name="newBorns"
+                  />
+                }
+                label={
+                  <p className="text-sm text-gray-600 mt-2">
+                    Kindly check this box if any of the kids to be cared for is a newborn
+                    (0-2 months)
+                  </p>
+                }
+              />
+
+              {clientRequest.newBorns > 0 && (
+                <FormControl sx={{mt: 2}}fullWidth>
+                  {/* <TextField
+                    value={clientRequest.newBorns}
+                    required
+                    type="number"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setClientRequest({
+                        ...clientRequest,
+                        newBorns: Number(value),
+                      });
+                    }}
+                    placeholder="Number of newborns"
+                    label="Number of newborns"
+                    sx={{ mt: 2 }}
+                  /> */}
+
+                  <InputLabel id="demo-simple-select-label">
+                    Number of newborns
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    required
+                    label="Number of newborns"
+                    value={clientRequest.newBorns.toString()}
+                    onChange={(event: SelectChangeEvent) => {
+                      setClientRequest({
+                        ...clientRequest,
+                        newBorns: Number(event.target.value),
+                      });
+                    }}
+                  >
+                    <MenuItem value={0}>0</MenuItem>
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                    <MenuItem value={4}>4</MenuItem>
+                    <MenuItem value={5}>5</MenuItem>
+                    <MenuItem value={6}>6</MenuItem>
+                    <MenuItem value={6}>7</MenuItem>
+                    <MenuItem value={6}>8</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
             </>
           )}
 

@@ -54,14 +54,14 @@ export function usePaymentPlan(
       clientPrice += (options.extraDiners <= 2 ? 1 : options.extraDiners/2) * 20000;
     }
 
-    // Add 12k per new born
+    // Add 15k per new born
     if (options.newBorns && options.newBorns > 0) {
-      clientPrice += (options.newBorns) * 12000;
+      clientPrice += (options.newBorns) * 15000;
     }
 
-     // Add 12k per elder health condition
+     // Add 15k per elder health condition
     if (options.elderHealthConditions && options.elderHealthConditions > 0) {
-      clientPrice += (options.elderHealthConditions) * 12000;
+      clientPrice += (options.elderHealthConditions) * 15000;
     }
 
     // round to nearest 100

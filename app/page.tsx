@@ -102,6 +102,7 @@ export default function Home({ searchParams }: HomeProps) {
     clientEmail: "",
     clientAddress: "",
     numberOfKids: 0,
+    newBorns: 0,
     numberOfDiners: 0,
     workMode: "Live-in",
     workingDays: [],
@@ -145,10 +146,18 @@ export default function Home({ searchParams }: HomeProps) {
       clientRequest.typeOfHouse !== ""
         ? Number(clientRequest.typeOfHouse[0]) + 1 || 1
         : 0,
-    newBorns: (
-      clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks|day|days|0 month|newborn|new born)\b/gi) ||
-      []
-    ).length, // check how many times the word week, weeks, day or days appear
+    // newBorns: (
+    //   clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks|day|days|0 month|newborn|new born)\b/gi) ||
+    //   []
+    // ).length, // check how many times the word week, weeks, day or days appear
+    newBorns:
+      clientRequest.newBorns === 0
+        ? (
+            clientRequest.agesOfKids?.match(
+              /\b(week|weeks|wk|wks|day|days|0 month|newborn|new born)\b/gi,
+            ) || []
+          ).length
+        : clientRequest.newBorns, // if newBorns is 0, use the regex to count, otherwise use the provided number
     extraDiners:
       clientRequest.serviceType === "Home Cook Services"
         ? clientRequest.numberOfDiners

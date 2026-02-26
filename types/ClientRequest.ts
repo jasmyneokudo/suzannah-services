@@ -26,6 +26,7 @@ export interface CustomerRequest {
   clientEmail: string;
   clientAddress: string;
   numberOfKids: number;
+  newBorns: number;
   numberOfDiners: number;
   agesOfKids: string;
   numberOfRooms: string;
