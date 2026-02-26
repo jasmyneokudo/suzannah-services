@@ -146,7 +146,7 @@ export default function Home({ searchParams }: HomeProps) {
         ? Number(clientRequest.typeOfHouse[0]) + 1 || 1
         : 0,
     newBorns: (
-      clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks|day|days|0 month)\b/gi) ||
+      clientRequest.agesOfKids?.match(/\b(week|weeks|wk|wks|day|days|0 month|newborn|new born)\b/gi) ||
       []
     ).length, // check how many times the word week, weeks, day or days appear
     extraDiners:
