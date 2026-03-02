@@ -48,7 +48,7 @@ import { Footer } from "./components/Footer";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 const BOOKING_FEE = 20500;
-const ONE_OFF_FEE = 202500;
+const ONE_OFF_FEE = 232500;
 
 type HomeProps = {
   searchParams?: {
