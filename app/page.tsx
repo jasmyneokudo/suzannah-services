@@ -47,7 +47,7 @@ import { CustomerPreferencesSection } from "./sections/CustomerPreferencesSectio
 import { Footer } from "./components/Footer";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
-const BOOKING_FEE = 20500;
+const BOOKING_FEE = 25500;
 const ONE_OFF_FEE = 262500;
 
 type HomeProps = {
