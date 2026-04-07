@@ -39,7 +39,7 @@ export const faqs = [
     id: 4,
     question: "What if I want the company to handle the candidate's medical tests under the monthly payment plan?",
     answer:
-      "We discovered that most clients prefer to handle medical tests themselves, but if you want us to handle it, we can take care of it with an additional cost of 15,000 naira",
+      "We discovered that most clients prefer to handle medical tests themselves, but if you want us to handle it, we can take care of it with an additional cost of 20,000 naira",
   },
   {
     id: 8,
