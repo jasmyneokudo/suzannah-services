@@ -43,7 +43,7 @@ export function usePaymentPlan(
     }
 
     if (options.extraDays && options.extraDays > 0) {
-      clientPrice += (options.extraDays <= 2 ? 1 : options.extraDays/2) * 15000;
+      clientPrice += (options.extraDays <= 2 ? 1 : options.extraDays/2) * 22500;
     }
 
     if (options.extraFloors && options.extraFloors > 0) {
