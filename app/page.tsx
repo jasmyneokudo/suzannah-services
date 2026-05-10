@@ -137,6 +137,7 @@ export default function Home({ searchParams }: HomeProps) {
 
   const { clientPrice } = usePaymentPlan(clientRequest.serviceType, {
     extraChildren: clientRequest.numberOfKids,
+    nightShift: clientRequest.workMode === "Live-out" && clientRequest.workingHours[1]?.startsWith("-"),
     extraRooms: Number(clientRequest.numberOfRooms[0]),
     extraDays:
       clientRequest.workMode === "Live-in"
@@ -449,6 +450,8 @@ export default function Home({ searchParams }: HomeProps) {
               ...clientRequest,
               bookingFee: clientPrice,
             });
+            console.log('req', clientRequest);
+            
             router.push(pathname + "?step=2");
             setRequestStage(2);
             setPageLoading(true);
@@ -629,8 +632,8 @@ export default function Home({ searchParams }: HomeProps) {
                     Working Hours:
                   </p>
                   <p className="text-xs text-gray-700 text-end">
-                    {clientRequest.workingHours[1]},{" "}
-                    {clientRequest.workingHours[0]}
+                    {(clientRequest.workingHours[1]?.startsWith("-") ? clientRequest.workingHours[1].slice(1) : clientRequest.workingHours[1])},{" "}
+                    {clientRequest.workingHours[0]} {clientRequest.workingHours[1]?.startsWith("-") ? "(NIGHT SHIFT)" : "" }
                   </p>
                 </span>
               </>

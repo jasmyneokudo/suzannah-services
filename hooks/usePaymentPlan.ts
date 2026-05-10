@@ -17,6 +17,7 @@ interface Options {
   extraDiners?: number;
   numberOfPassengers?: number;
   elderHealthConditions?: number;
+  nightShift?: boolean;
 }
 
 const BASE_STAFF_PAY = 50000;
@@ -36,6 +37,10 @@ export function usePaymentPlan(
 
     if (options.extraRooms && options.extraRooms > 0) {
       clientPrice += (options.extraRooms < 3 ? 1 : options.extraRooms/3) * 10000;
+    }
+
+    if (options.nightShift && options.extraDays && options.extraDays > 0) {
+      clientPrice += options.extraDays * 8000;
     }
 
     if (options.numberOfPassengers && options.numberOfPassengers > 0) {

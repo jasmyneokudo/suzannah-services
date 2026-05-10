@@ -426,8 +426,12 @@ export const CustomerPreferencesSection = ({
                 </FormControl>
               </div>
               <FormHelperText sx={{ mt: 2 }}>
-                Working hours: {duration[1].hour() - duration[0].hour()} hour(s)
-                per day
+                Working hours:{" "}
+                {Math.abs(duration[1].hour() - duration[0].hour())} hour(s) per
+                day
+                {duration[0].hour() >= 16 ? (
+                  <p className="text-red-600">Night Shift</p>
+                ) : ""}
               </FormHelperText>
             </LocalizationProvider>
           </>
@@ -724,14 +728,14 @@ export const CustomerPreferencesSection = ({
                 }
                 label={
                   <p className="text-sm text-gray-600 mt-2">
-                    Kindly check this box if any of the kids to be cared for is a newborn
-                    (0-2 months)
+                    Kindly check this box if any of the kids to be cared for is
+                    a newborn (0-2 months)
                   </p>
                 }
               />
 
               {clientRequest.newBorns > 0 && (
-                <FormControl sx={{mt: 2}}fullWidth>
+                <FormControl sx={{ mt: 2 }} fullWidth>
                   {/* <TextField
                     value={clientRequest.newBorns}
                     required
