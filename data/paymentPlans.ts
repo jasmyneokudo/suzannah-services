@@ -28,7 +28,7 @@ export const paymentPlans = [
       "We bring the candidates over to client's selected location for physical interview",
       "Client discusses and agrees on salary directly with their chosen candidate (starting from ₦70,000/month for  Nannies/Helps/Housekeepers (from ₦100,000 for live-out option), ₦150,000/month for cooks (from ₦170,000 for live-out option), ₦150,000/month for drivers (from ₦170,000 for live-out option), ₦180,000/month for Elder Caregivers (from ₦200,000 for live-out option)).",
       "We run medical tests before the staff resumes.",
-      "Replacement is only valid for three (3) months after initial placemment",
+      "Replacement is only valid for two (2) months after initial placemment",
     ],
     benefits: [
       "Opportunity to interview up to 2 candidates and select your preferred candidate.",
