@@ -26,7 +26,7 @@ export const paymentPlans = [
       "Client makes a one-time payment for recruitment & screening.",
       "We conduct interviews and shortlist 2 competent candidates within 2 working days and send their profiles to the client.",
       "We bring the 2 candidates over to client's selected location for physical interview",
-      "Client discusses and agrees on salary directly with their chosen candidate (starting from ₦70,000/month for  Nannies/Helps/Housekeepers (from ₦100,000 for live-out option), ₦150,000/month for cooks (from ₦170,000 for live-out option), ₦150,000/month for drivers (from ₦170,000 for live-out option), ₦180,000/month for Elder Caregivers (from ₦200,000 for live-out option)).",
+      "Client discusses and agrees on salary directly with their chosen candidate (starting from ₦70,000/month for  Nannies/Helps/Housekeepers (from ₦100,000 for live-out option), from ₦150,000/month for cooks (from ₦170,000 for live-out option), from ₦150,000/month for drivers (from ₦170,000 for live-out option), ₦180,000/month for Elder Caregivers (from ₦200,000 for live-out option)).",
       "We run medical tests before the staff resumes.",
       "Replacement is only valid for two (2) months after initial placemment",
     ],
