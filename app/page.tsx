@@ -45,6 +45,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ServicesSection } from "./sections/ServicesSection";
 import { CustomerPreferencesSection } from "./sections/CustomerPreferencesSection";
 import { Footer } from "./components/Footer";
+import { createBooking } from "./services/bookings";
 
 const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
 const BOOKING_FEE = 25500;
@@ -137,12 +138,18 @@ export default function Home({ searchParams }: HomeProps) {
 
   const { clientPrice } = usePaymentPlan(clientRequest.serviceType, {
     extraChildren: clientRequest.numberOfKids,
-    nightShift: clientRequest.workMode === "Live-out" && clientRequest.workingHours[1]?.startsWith("-"),
+    nightShift:
+      clientRequest.workMode === "Live-out" &&
+      clientRequest.workingHours[1]?.startsWith("-"),
     extraRooms: Number(clientRequest.numberOfRooms[0]),
     extraDays:
       clientRequest.workMode === "Live-in"
         ? 0
         : clientRequest.workingDays.length,
+    extraHours:
+      clientRequest.workMode === "Live-in"
+        ? 0
+        : Number(clientRequest?.workingHours[1]?.slice(0, 2)),
     extraFloors:
       clientRequest.typeOfHouse !== ""
         ? Number(clientRequest.typeOfHouse[0]) + 1 || 1
@@ -223,12 +230,41 @@ export default function Home({ searchParams }: HomeProps) {
 
       try {
         await sendRequestDetails(requestArray);
-        resetCustomerRequest();
         router.push(pathname);
-        setRequestStage(0);
+
         alert(
           "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly.",
         );
+        const res = await createBooking(
+          clientRequest.clientName,
+          clientRequest.clientAddress,
+          clientRequest.clientPhoneNumber,
+          clientRequest.clientEmail,
+          clientRequest.workMode,
+          clientRequest.serviceType,
+          clientRequest.employeeGender,
+          clientRequest.employeeAgeRange,
+          clientRequest.paymentPlan,
+          clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
+          clientRequest.bookingFee,
+          clientRequest.numberOfKids,
+          clientRequest.agesOfKids,
+          clientRequest.extraComment,
+          clientRequest.typeOfHouse,
+          clientRequest.numberOfRooms,
+          clientRequest.extraHomeInformation,
+          clientRequest.numberOfDiners,
+          clientRequest.elderAgeRange,
+          clientRequest.elderHealthConditions,
+          false,
+          "",
+          clientRequest.workingHours.join(", "),
+          clientRequest.workingDays.join(", "),
+        );
+        resetCustomerRequest();
+
+        setRequestStage(0);
+        console.log("Booking created:", res);
       } catch (err) {
         console.error("Failed to send request details", err);
         return; // stop the flow
@@ -322,23 +358,23 @@ export default function Home({ searchParams }: HomeProps) {
     await updateValues([requestArray]);
 
     // send order details to whatsapp number
-    try {
-      const res = await fetch("/api/createRequest", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          to: process.env.NEXT_PUBLIC_WASENDERAPI_PHONE_NUMBER,
-          text: requestBody,
-        }),
-      });
+    // try {
+    //   const res = await fetch("/api/createRequest", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       to: process.env.NEXT_PUBLIC_WASENDERAPI_PHONE_NUMBER,
+    //       text: requestBody,
+    //     }),
+    //   });
 
-      const data = await res.json();
-      console.error("data:", data);
-    } catch (err) {
-      console.error("Error:", err);
-    } finally {
-      // setLoading(false);
-    }
+    //   const data = await res.json();
+    //   console.error("data:", data);
+    // } catch (err) {
+    //   console.error("Error:", err);
+    // } finally {
+    //   // setLoading(false);
+    // }
   }
 
   function selectService(serviceType: ServiceType) {
@@ -450,8 +486,8 @@ export default function Home({ searchParams }: HomeProps) {
               ...clientRequest,
               bookingFee: clientPrice,
             });
-            console.log('req', clientRequest);
-            
+            console.log("req", clientRequest);
+
             router.push(pathname + "?step=2");
             setRequestStage(2);
             setPageLoading(true);
@@ -632,8 +668,13 @@ export default function Home({ searchParams }: HomeProps) {
                     Working Hours:
                   </p>
                   <p className="text-xs text-gray-700 text-end">
-                    {(clientRequest.workingHours[1]?.startsWith("-") ? clientRequest.workingHours[1].slice(1) : clientRequest.workingHours[1])},{" "}
-                    {clientRequest.workingHours[0]} {clientRequest.workingHours[1]?.startsWith("-") ? "(NIGHT SHIFT)" : "" }
+                    {clientRequest.workingHours[1]?.startsWith("-")
+                      ? clientRequest.workingHours[1].slice(1)
+                      : clientRequest.workingHours[1]}
+                    , {clientRequest.workingHours[0]}{" "}
+                    {clientRequest.workingHours[1]?.startsWith("-")
+                      ? "(NIGHT SHIFT)"
+                      : ""}
                   </p>
                 </span>
               </>

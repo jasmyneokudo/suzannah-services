@@ -1,0 +1,88 @@
+import axios from "axios";
+
+const URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+export const createBooking = async (
+  clientName: string,
+  clientAddress: string,
+  clientPhone: string,
+  clientEmail: string,
+  accomodationType: string,
+  serviceType: string,
+  candidateGenderPreference: string,
+  candidateAgePreference: string,
+  paymentPlan: string,
+  bookingFeeAmount: number,
+  monthlyFeeAmount: number,
+  numberOfKids?: number,
+  agesOfKids?: string,
+  candidateExtraNotes?: string,
+  typeOfHome?: string,
+  numberOfRooms?: string,
+  homeExtraNotes?: string,
+  numberOfPeopleInHouse?: number,
+  ageOfElders?: string,
+  healthConditionOfElders?: string,
+  hasPets?: boolean,
+  petsDetails?: string,
+  workingHours?: string,
+  workingDays?: string,
+) => {
+  console.log("creating request......", {
+    clientName,
+    clientAddress,
+    clientPhone,
+    clientEmail,
+    accomodationType,
+    serviceType,
+    candidateGenderPreference,
+    candidateAgePreference,
+    numberOfKids,
+    agesOfKids,
+    candidateExtraNotes,
+    typeOfHome,
+    numberOfRooms,
+    homeExtraNotes,
+    numberOfPeopleInHouse,
+    ageOfElders,
+    healthConditionOfElders,
+    hasPets,
+    petsDetails,
+    workingHours,
+    workingDays,
+    paymentPlan,
+    bookingFeeAmount,
+    monthlyFeeAmount,
+  });
+
+  const res = await axios.post(`${URL}/bookings/create`, {
+    clientName,
+    clientAddress,
+    clientPhone,
+    clientEmail,
+    accomodationType,
+    serviceType,
+    candidateGenderPreference,
+    candidateAgePreference,
+    numberOfKids,
+    agesOfKids,
+    candidateExtraNotes,
+    typeOfHome,
+    numberOfRooms,
+    homeExtraNotes,
+    numberOfPeopleInHouse,
+    ageOfElders,
+    healthConditionOfElders,
+    hasPets,
+    petsDetails,
+    workingHours,
+    workingDays,
+    paymentPlan,
+    bookingFeeAmount,
+    monthlyFeeAmount,
+  });
+
+  console.log("booking res", res);
+
+  return res;
+};

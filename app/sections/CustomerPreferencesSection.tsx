@@ -382,7 +382,7 @@ export const CustomerPreferencesSection = ({
                           `${newValue?.format(
                             "hh:mm A",
                           )} to ${duration[1]?.format("hh:mm A")}`,
-                          `${duration[1].hour() - duration[0].hour()} hours`,
+                          `${duration[1].hour() - dayjs(newValue).hour()} hours`,
                         ],
                       });
                     }}
@@ -418,7 +418,7 @@ export const CustomerPreferencesSection = ({
                           `${duration[0]?.format(
                             "hh:mm A",
                           )} to ${newValue?.format("hh:mm A")}`,
-                          `${duration[1].hour() - duration[0].hour()} hours`,
+                          `${dayjs(newValue).hour() - duration[0].hour()} hours`,
                         ],
                       });
                     }}

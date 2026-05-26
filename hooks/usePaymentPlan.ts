@@ -12,6 +12,7 @@ interface Options {
   extraChildren?: number;
   extraRooms?: number;
   extraDays?: number;
+  extraHours?: number;
   extraFloors?: number;
   newBorns?: number;
   extraDiners?: number;
@@ -49,6 +50,11 @@ export function usePaymentPlan(
 
     if (options.extraDays && options.extraDays > 0) {
       clientPrice += (options.extraDays <= 2 ? 1 : options.extraDays/2) * 22500;
+    }
+
+    // increase price if working hours are more than 10 hours
+    if (options.extraHours && options.extraHours > 0 && options.extraDays) {
+      clientPrice += (options.extraHours > 10 ? 10000 * options?.extraDays: 0) ;
     }
 
     if (options.extraFloors && options.extraFloors > 0) {
