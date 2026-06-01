@@ -247,6 +247,7 @@ export default function Home({ searchParams }: HomeProps) {
           clientRequest.paymentPlan,
           clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
           clientRequest.bookingFee,
+          clientRequest.employeeTribePreference,
           clientRequest.numberOfKids,
           clientRequest.agesOfKids,
           clientRequest.extraComment,
