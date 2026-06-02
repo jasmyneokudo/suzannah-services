@@ -1,11 +1,11 @@
 export type ServiceType =
-  | "Nanny Services"
-  | "General Help Services"
-  | "Nanny + Help Services"
-  | "Housekeeper Services"
-  | "Home Cook Services"
-  | "Elder Caregiving Services"
-  | "Driving Services";
+  | "Nanny"
+  | "General Help"
+  | "Nanny + Help"
+  | "Housekeeper"
+  | "Chef"
+  | "Elder Caregiving"
+  | "Driving";
 
 export type PaymentPlan = "monthly" | "one-off";
 

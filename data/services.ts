@@ -2,7 +2,7 @@ import { PRICING } from "./servicePrices";
 
 export const services = [
   {
-    serviceName: "Nanny + Help Services",
+    serviceName: "Nanny + Help",
     serviceDescription:
       "An experienced and caring Nanny-Help who lives in your home to provide loving childcare and assist with essential household duties.",
     whatsIncluded: [
@@ -12,10 +12,10 @@ export const services = [
       "General home organization and tidiness.",
       "Assistance with small household errands.",
     ],
-    price: `₦${PRICING["Nanny + Help Services"].toLocaleString()}`,
+    price: `₦${PRICING["Nanny + Help"].toLocaleString()}`,
   },
   {
-    serviceName: "Nanny Services",
+    serviceName: "Nanny",
     serviceDescription:
       "Reliable, experienced Nannies who provide loving care for your children and support with their daily routines in the comfort of your home.",
     whatsIncluded: [
@@ -24,10 +24,10 @@ export const services = [
       "Monitoring children’s health and safety at all times.",
       "Supervising homework and educational activities.",
     ],
-    price: `₦${PRICING["Nanny Services"].toLocaleString()}`,
+    price: `₦${PRICING["Nanny"].toLocaleString()}`,
   },
   {
-    serviceName: "General Help Services",
+    serviceName: "General Help",
     serviceDescription:
       "Your reliable extra pair of hands, from tidying up to managing household errands, our domestic Helps ensure your home is always at its best.",
     whatsIncluded: [
@@ -36,11 +36,11 @@ export const services = [
       "Grocery assistance and household supply management.",
       "Assistance with meal prep and household errands",
     ],
-    price: `₦${PRICING["General Help Services"].toLocaleString()}`,
+    price: `₦${PRICING["General Help"].toLocaleString()}`,
   },
 
   {
-    serviceName: "Housekeeper Services",
+    serviceName: "Housekeeper",
     serviceDescription:
       "Full-time housekeeper for a consistently clean, well-maintained, and beautifully arranged home, so you never have to worry about the details.",
     whatsIncluded: [
@@ -49,10 +49,10 @@ export const services = [
       "Bed-making and linen changes on schedule.",
       "Seasonal deep cleaning tasks (as agreed).",
     ],
-    price: `₦${PRICING["Housekeeper Services"].toLocaleString()}`,
+    price: `₦${PRICING["Housekeeper"].toLocaleString()}`,
   },
   {
-    serviceName: "Home Cook Services",
+    serviceName: "Chef",
     serviceDescription:
       "Professional cook to prepare fresh, nutritious, and delicious meals tailored to your family’s preferences and dietary needs, so you enjoy stress-free dining every day.",
     whatsIncluded: [
@@ -61,10 +61,10 @@ export const services = [
       "Grocery shopping or assistance with food supply management.",
       "Maintaining kitchen cleanliness and proper food storage.",
     ],
-    price: `₦${PRICING["Home Cook Services"].toLocaleString()}`,
+    price: `₦${PRICING["Chef"].toLocaleString()}`,
   },
   {
-    serviceName: "Elder Caregiving Services",
+    serviceName: "Elder Caregiving",
     serviceDescription:
       "Compassionate and professional caregivers dedicated to supporting elderly loved ones with daily activities, companionship, and personalized care for their comfort and dignity.",
     whatsIncluded: [
@@ -74,10 +74,10 @@ export const services = [
       "Engaging companionship and emotional support.",
       "Escort to appointments, walks, or social activities (as agreed).",
     ],
-    price: `₦${PRICING["Elder Caregiving Services"].toLocaleString()}`,
+    price: `₦${PRICING["Elder Caregiving"].toLocaleString()}`,
   },
   {
-    serviceName: "Driving Services",
+    serviceName: "Driving",
     serviceDescription:
       "Professional, courteous, and reliable drivers committed to providing safe, comfortable, and stress-free transportation for you and your family — whether for daily commutes, school runs, or executive travel.",
     whatsIncluded: [
@@ -87,6 +87,6 @@ export const services = [
       "Errand and shopping support as directed by the client.",
       "Vehicle care assistance — cleaning, fueling, and basic maintenance checks.",
     ],
-    price: `₦${PRICING["Driving Services"].toLocaleString()}`,
+    price: `₦${PRICING["Driving"].toLocaleString()}`,
   },
 ];

@@ -92,7 +92,7 @@ export default function Home({ searchParams }: HomeProps) {
   };
 
   const defaultCustomerRequest: CustomerRequest = {
-    serviceType: "Nanny Services",
+    serviceType: "Nanny",
     employeeGender: "Female",
     employeeAgeRange: "23-27",
     employeeTribePreference: "any tribe",
@@ -135,7 +135,7 @@ export default function Home({ searchParams }: HomeProps) {
     setClientRequest(defaultCustomerRequest);
     // setDays([])
   };
-
+  console.log('service type', clientRequest.serviceType);
   const { clientPrice } = usePaymentPlan(clientRequest.serviceType, {
     extraChildren: clientRequest.numberOfKids,
     nightShift:
@@ -167,15 +167,15 @@ export default function Home({ searchParams }: HomeProps) {
           ).length
         : clientRequest.newBorns, // if newBorns is 0, use the regex to count, otherwise use the provided number
     extraDiners:
-      clientRequest.serviceType === "Home Cook Services"
+      clientRequest.serviceType === "Chef"
         ? clientRequest.numberOfDiners
         : 0,
     numberOfPassengers:
-      clientRequest.serviceType === "Driving Services"
+      clientRequest.serviceType === "Driving"
         ? clientRequest.numberOfPassengers
         : 0,
     elderHealthConditions:
-      clientRequest.serviceType === "Elder Caregiving Services"
+      clientRequest.serviceType === "Elder Caregiving"
         ? clientRequest.elderHealthConditions.split(", ").length
         : 0,
   });
@@ -205,7 +205,7 @@ export default function Home({ searchParams }: HomeProps) {
         clientRequest.clientEmail,
         clientRequest.clientPhoneNumber,
         clientRequest.clientAddress,
-        clientRequest.serviceType === "Driving Services"
+        clientRequest.serviceType === "Driving"
           ? clientRequest.numberOfPassengers + " Passengers"
           : clientRequest.numberOfKids,
         clientRequest.numberOfDiners,
@@ -293,7 +293,7 @@ export default function Home({ searchParams }: HomeProps) {
   // }, [clientRequest, step, router]);
 
   useEffect(() => {
-    if (clientRequest.serviceType === "Driving Services") {
+    if (clientRequest.serviceType === "Driving") {
       setClientRequest({ ...clientRequest, employeeGender: "Male" });
     }
   }, [clientRequest.serviceType]);
@@ -309,19 +309,19 @@ export default function Home({ searchParams }: HomeProps) {
       Address: ${clientRequest.clientAddress},
       Home/Family Details
       ${
-        (clientRequest.serviceType === "Nanny Services" ||
-          clientRequest.serviceType === "Nanny + Help Services") &&
+        (clientRequest.serviceType === "Nanny" ||
+          clientRequest.serviceType === "Nanny + Help") &&
         `Number of Kids: ${clientRequest.numberOfKids},
       Ages of Kids: ${clientRequest.agesOfKids},`
       }
       ${
-        clientRequest.serviceType === "Home Cook Services" &&
+        clientRequest.serviceType === "Chef" &&
         `Number of Diners: ${clientRequest.numberOfDiners},`
       }
       ${
-        (clientRequest.serviceType === "Housekeeper Services" ||
-          clientRequest.serviceType === "Nanny + Help Services" ||
-          clientRequest.serviceType === "General Help Services") &&
+        (clientRequest.serviceType === "Housekeeper" ||
+          clientRequest.serviceType === "Nanny + Help" ||
+          clientRequest.serviceType === "General Help") &&
         `House Type: ${clientRequest.typeOfHouse},
       Number of Rooms: ${clientRequest.numberOfRooms},
       Extra Home Info: ${clientRequest.extraHomeInformation},`
@@ -337,7 +337,7 @@ export default function Home({ searchParams }: HomeProps) {
          Working Hours: ${clientRequest.workingHours.join(", ")},`
       },
       ${
-        clientRequest.serviceType === "Elder Caregiving Services" &&
+        clientRequest.serviceType === "Elder Caregiving" &&
         `Elder Age/Gender: ${clientRequest.elderAgeRange} years, ${
           clientRequest.elderGender
         }
@@ -346,7 +346,7 @@ export default function Home({ searchParams }: HomeProps) {
          },`
       },
       ${
-        clientRequest.serviceType === "Driving Services" &&
+        clientRequest.serviceType === "Driving" &&
         `Number of Passengers: ${clientRequest.numberOfPassengers}`
       },
       Work Mode: ${clientRequest.workMode},
@@ -588,8 +588,8 @@ export default function Home({ searchParams }: HomeProps) {
               </p>
             </span>
 
-            {(clientRequest.serviceType === "Nanny Services" ||
-              clientRequest.serviceType === "Nanny + Help Services") && (
+            {(clientRequest.serviceType === "Nanny" ||
+              clientRequest.serviceType === "Nanny + Help") && (
               <>
                 <span className="flex items-center justify-between mt-2 gap-3">
                   <p className="font-semibold text-black text-sm">
@@ -604,20 +604,20 @@ export default function Home({ searchParams }: HomeProps) {
               </>
             )}
 
-            {(clientRequest.serviceType === "Housekeeper Services" ||
-              clientRequest.serviceType === "General Help Services" ||
-              clientRequest.serviceType === "Driving Services" ||
-              clientRequest.serviceType === "Home Cook Services" ||
-              clientRequest.serviceType === "Nanny + Help Services") && (
+            {(clientRequest.serviceType === "Housekeeper" ||
+              clientRequest.serviceType === "General Help" ||
+              clientRequest.serviceType === "Driving" ||
+              clientRequest.serviceType === "Chef" ||
+              clientRequest.serviceType === "Nanny + Help") && (
               <>
                 <span className="flex items-center justify-between mt-2 gap-3">
                   <p className="font-semibold text-black text-sm">
                     Home Details:
                   </p>
                   <p className="text-xs text-gray-700 text-end">
-                    {clientRequest.serviceType === "Home Cook Services"
+                    {clientRequest.serviceType === "Chef"
                       ? `${clientRequest.numberOfDiners} people to be cooked for`
-                      : clientRequest.serviceType === "Driving Services"
+                      : clientRequest.serviceType === "Driving"
                         ? `${clientRequest.numberOfPassengers} individuals to be driven`
                         : `${clientRequest.typeOfHouse} home with ${clientRequest.numberOfRooms}`}
                   </p>
@@ -691,7 +691,7 @@ export default function Home({ searchParams }: HomeProps) {
               </p>
             </span>
 
-            {clientRequest.serviceType === "Elder Caregiving Services" && (
+            {clientRequest.serviceType === "Elder Caregiving" && (
               <span className="flex items-center justify-between mt-2 gap-3">
                 <p className="font-semibold text-black text-sm">
                   Elder Information:

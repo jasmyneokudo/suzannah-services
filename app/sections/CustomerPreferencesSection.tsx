@@ -86,25 +86,25 @@ export const CustomerPreferencesSection = ({
 
   function disableButton(): boolean {
     if (
-      clientRequest.serviceType === "General Help Services" ||
-      clientRequest.serviceType === "Housekeeper Services"
+      clientRequest.serviceType === "General Help" ||
+      clientRequest.serviceType === "Housekeeper"
     ) {
       return (
         clientRequest.typeOfHouse === "" || clientRequest.numberOfRooms === ""
       );
-    } else if (clientRequest.serviceType === "Nanny Services") {
+    } else if (clientRequest.serviceType === "Nanny") {
       return (
         clientRequest.agesOfKids === "" ||
         clientRequest.numberOfKids === 0 ||
         agesOfKidsError !== ""
       );
-    } else if (clientRequest.serviceType === "Home Cook Services") {
+    } else if (clientRequest.serviceType === "Chef") {
       return clientRequest.numberOfDiners === 0;
-    } else if (clientRequest.serviceType === "Elder Caregiving Services") {
+    } else if (clientRequest.serviceType === "Elder Caregiving") {
       return (
         clientRequest.elderAgeRange === "" || clientRequest.elderGender === ""
       );
-    } else if (clientRequest.serviceType === "Driving Services") {
+    } else if (clientRequest.serviceType === "Driving") {
       return clientRequest.numberOfPassengers === 0;
     } else {
       return (
@@ -464,7 +464,7 @@ export const CustomerPreferencesSection = ({
           Tell us about your household to better match our services
         </p>
 
-        {clientRequest.serviceType === "Elder Caregiving Services" && (
+        {clientRequest.serviceType === "Elder Caregiving" && (
           <div className="flex flex-col">
             <FormControl fullWidth sx={{ mt: 2 }}>
               <InputLabel id="demo-simple-select-label">
@@ -583,7 +583,7 @@ export const CustomerPreferencesSection = ({
             </FormControl>
           </div>
         )}
-        {clientRequest.serviceType === "Home Cook Services" && (
+        {clientRequest.serviceType === "Chef" && (
           <FormControl fullWidth sx={{ mt: 2 }}>
             <InputLabel id="demo-simple-select-label">
               Number of people to be served
@@ -620,11 +620,11 @@ export const CustomerPreferencesSection = ({
             </Select>
           </FormControl>
         )}
-        {clientRequest.serviceType !== "Housekeeper Services" &&
-          clientRequest.serviceType !== "Home Cook Services" &&
-          clientRequest.serviceType !== "Driving Services" &&
-          clientRequest.serviceType !== "Elder Caregiving Services" &&
-          clientRequest.serviceType !== "General Help Services" && (
+        {clientRequest.serviceType !== "Housekeeper" &&
+          clientRequest.serviceType !== "Chef" &&
+          clientRequest.serviceType !== "Driving" &&
+          clientRequest.serviceType !== "Elder Caregiving" &&
+          clientRequest.serviceType !== "General Help" && (
             <>
               <FormControl fullWidth sx={{ mt: 2 }}>
                 <InputLabel id="demo-simple-select-label">
@@ -783,7 +783,7 @@ export const CustomerPreferencesSection = ({
             </>
           )}
 
-        {clientRequest.serviceType === "Driving Services" && (
+        {clientRequest.serviceType === "Driving" && (
           <FormControl fullWidth sx={{ mt: 2 }}>
             <InputLabel id="demo-simple-select-label">
               Number of Individuals to be driven
@@ -813,10 +813,10 @@ export const CustomerPreferencesSection = ({
           </FormControl>
         )}
 
-        {clientRequest.serviceType !== "Nanny Services" &&
-          clientRequest.serviceType !== "Elder Caregiving Services" &&
-          clientRequest.serviceType !== "Driving Services" &&
-          clientRequest.serviceType !== "Home Cook Services" && (
+        {clientRequest.serviceType !== "Nanny" &&
+          clientRequest.serviceType !== "Elder Caregiving" &&
+          clientRequest.serviceType !== "Driving" &&
+          clientRequest.serviceType !== "Chef" && (
             <>
               <FormControl fullWidth sx={{ mt: 2 }}>
                 <InputLabel id="demo-simple-select-label">

@@ -1,12 +1,12 @@
 import { ServiceType } from "@/types/ClientRequest";
 
 export const PRICING: Record<ServiceType, number> = {
-  "Nanny Services": 100500,
-  "General Help Services": 95500,
-  "Nanny + Help Services": 105500,
-  "Housekeeper Services": 90500,
-  "Home Cook Services": 190500,
+  "Nanny": 100500,
+  "General Help": 95500,
+  "Nanny + Help": 105500,
+  "Housekeeper": 90500,
+  "Chef": 190500,
   // take back to 170,500 after eid
-  "Driving Services": 160500,
-  "Elder Caregiving Services": 230500
+  "Driving": 160500,
+  "Elder Caregiving": 230500
 };
