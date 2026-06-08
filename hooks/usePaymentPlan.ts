@@ -33,7 +33,7 @@ export function usePaymentPlan(
 
     // ✅ Add-ons
     if (options.extraChildren && options.extraChildren > 0) {
-      clientPrice += (options.extraChildren) * 20000;
+      clientPrice += (options.extraChildren) * 16000;
     }
 
     if (options.extraRooms && options.extraRooms > 0) {
