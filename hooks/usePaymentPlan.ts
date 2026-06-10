@@ -37,7 +37,7 @@ export function usePaymentPlan(
     }
 
     if (options.extraRooms && options.extraRooms > 0) {
-      clientPrice += (options.extraRooms < 3 ? 1 : options.extraRooms/3) * 10000;
+      clientPrice += (options.extraRooms < 3 ? 1 : options.extraRooms/3) * 15000;
     }
 
     if (options.nightShift && options.extraDays && options.extraDays > 0) {
