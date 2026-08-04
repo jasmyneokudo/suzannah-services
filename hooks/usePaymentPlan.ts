@@ -62,7 +62,7 @@ export function usePaymentPlan(
     }
 
     if (options.extraDiners && options.extraDiners > 0) {
-      clientPrice += (options.extraDiners <= 2 ? 1 : options.extraDiners/2) * 20000;
+      clientPrice += (options.extraDiners <= 2 ? 1 : options.extraDiners/2) * 30000;
     }
 
     // Add 15k per new born
