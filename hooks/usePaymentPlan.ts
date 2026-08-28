@@ -72,7 +72,7 @@ export function usePaymentPlan(
 
      // Add 15k per elder health condition
     if (options.elderHealthConditions && options.elderHealthConditions > 0) {
-      clientPrice += (options.elderHealthConditions) * 20000;
+      clientPrice += (options.elderHealthConditions) * 50000;
     }
 
     // round to nearest 100
