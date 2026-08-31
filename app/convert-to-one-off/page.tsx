@@ -66,7 +66,7 @@ export default function Home() {
   // };
   return (
     <div className="h-full w-full bg-white">
-      <section className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90 h-[30%]  max-sm:h-[280px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
+      <section className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90 h-[30%]  max-sm:h-[300px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
         {/* for our menu items #0D98BA */}
 
         <Link href="/">
@@ -86,7 +86,7 @@ export default function Home() {
           width="0"
           height="0"
           sizes="100vw"
-          className="w-full  h-auto max-sm:h-[280px] opacity-15 rounded-br-[400px] max-sm:rounded-none"
+          className="w-full h-auto max-sm:h-[300px] opacity-15 rounded-br-[400px] max-sm:rounded-none"
           priority
         />
 
@@ -94,7 +94,7 @@ export default function Home() {
           Move From Monthly to One-Off Plan
         </h1>
         <div className="absolute flex  pt-3 justify-around left-1/2 transform -translate-x-1/2  text-center top-[80%] text-base max-sm:top-[53%] self-center max-sm:w-[95%]">
-          <p className="mx-10 text-sm text-blue-200 font-sans mt-2 max-w-xl">
+          <p className="mx-10 text-sm text-blue-200 font-sans mt-4 max-w-xl">
             Happy with your current domestic staff and ready to retain them long-term?
             You can convert your existing Monthly Plan placement to our One-Off
             Payment Plan.
