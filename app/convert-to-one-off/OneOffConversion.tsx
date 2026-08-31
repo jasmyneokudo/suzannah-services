@@ -96,7 +96,7 @@ export default function OneOffConversion() {
         </h1>
         <div className="absolute flex  pt-3 justify-around left-1/2 transform -translate-x-1/2  text-center top-[80%] text-base max-sm:top-[53%] self-center max-sm:w-[95%]">
           <p className="mx-10 text-sm text-blue-100 font-sans mt-4 max-w-xl">
-            Happy with your current domestic staff and ready to retain them long-term ?
+            Happy with your current domestic staff and ready to retain them long-term, while managing them directly ?
             You can convert your existing Monthly Plan placement to our One-Off
             Payment Plan.
           </p>
@@ -111,7 +111,7 @@ export default function OneOffConversion() {
         <h2 className="mb-2 font-semibold text-blue-900">Before You Convert</h2>
 
         <p className="text-sm leading-6 text-blue-800">
-          The Conversion to one one-off plan is intended for clients who have already worked with
+          The Conversion to one one-off plan is intended for clients who have worked with
           their domestic staff member(s) for at least 3 months (or 90 days) and are confident that they would like to retain
           them long-term.
         </p>
@@ -202,7 +202,7 @@ export default function OneOffConversion() {
             <p>
               The One-Off Conversion Plan is available only to existing Suzannah
               Home & Care Services customers who currently have a domestic staff member
-              placed through our Monthly Plan for a minimum period of 3 months (180 days).
+              placed through our Monthly Plan for a minimum period of 3 months (90 days).
             </p>
           </div>
 
