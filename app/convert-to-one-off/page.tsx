@@ -5,6 +5,18 @@ import dynamic from "next/dynamic";
 import { TextField } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Convert to One-Off Plan | Suzannah Home & Care Services",
+  description:
+    "Convert your existing Suzannah Home & Care Services plan from the Monthly Plan to the One-Off Plan.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 
 const PaystackButton = dynamic(
   () => import("react-paystack").then((mod) => mod.PaystackButton),
@@ -66,7 +78,7 @@ export default function Home() {
   // };
   return (
     <div className="h-full w-full bg-white">
-      <section className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90 h-[30%]  max-sm:h-[300px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
+      <section className="z-10 relative w-full items-center justify-between bg-gradient-to-b  from-blue-950 to-[#0D98BA] max-sm:to-blue-950/90 h-[30%]  max-sm:h-[330px] rounded-br-[400px] max-sm:rounded-none text-sm lg:flex">
         {/* for our menu items #0D98BA */}
 
         <Link href="/">
@@ -86,16 +98,16 @@ export default function Home() {
           width="0"
           height="0"
           sizes="100vw"
-          className="w-full h-auto max-sm:h-[300px] opacity-15 rounded-br-[400px] max-sm:rounded-none"
+          className="w-full h-auto max-sm:h-[330px] opacity-15 rounded-br-[400px] max-sm:rounded-none"
           priority
         />
 
-        <h1 className="absolute text-white top-[50%] max-sm:top-[35%] text-center left-[40%] -translate-x-[35%] z-10 font-extralight text-4xl max-sm:text-2xl">
+        <h1 className="absolute text-white top-[50%] max-sm:top-[30%] text-center left-[40%] -translate-x-[35%] z-10 font-extralight text-4xl max-sm:text-2xl">
           Move From Monthly to One-Off Plan
         </h1>
         <div className="absolute flex  pt-3 justify-around left-1/2 transform -translate-x-1/2  text-center top-[80%] text-base max-sm:top-[53%] self-center max-sm:w-[95%]">
-          <p className="mx-10 text-sm text-blue-200 font-sans mt-4 max-w-xl">
-            Happy with your current domestic staff and ready to retain them long-term?
+          <p className="mx-10 text-sm text-blue-100 font-sans mt-4 max-w-xl">
+            Happy with your current domestic staff and ready to retain them long-term ?
             You can convert your existing Monthly Plan placement to our One-Off
             Payment Plan.
           </p>
@@ -110,8 +122,8 @@ export default function Home() {
         <h2 className="mb-2 font-semibold text-blue-900">Before You Convert</h2>
 
         <p className="text-sm leading-6 text-blue-800">
-          The One-Off Plan is intended for clients who have already worked with
-          their domestic staff member(s) and are confident that they would like to retain
+          The Conversion to one one-off plan is intended for clients who have already worked with
+          their domestic staff member(s) for at least 3 months (or 90 days) and are confident that they would like to retain
           them long-term.
         </p>
 
@@ -201,7 +213,7 @@ export default function Home() {
             <p>
               The One-Off Conversion Plan is available only to existing Suzannah
               Home & Care Services customers who currently have a domestic staff member
-              placed through our Monthly Plan.
+              placed through our Monthly Plan for a minimum period of 3 months (180 days).
             </p>
           </div>
 
@@ -273,7 +285,7 @@ export default function Home() {
             <p>
               After conversion, the client is responsible for paying the staff
               member&apos;s salary directly and managing the staff member&apos;s
-              employment.
+              employment, minimum staff member&apos; salary would have been be communicated to client.
             </p>
           </div>
 
@@ -284,12 +296,11 @@ export default function Home() {
 
             <p>
               Once the conversion has been processed, the conversion fee is
-              non-refundable, including where the client subsequently decides
-              not to retain the staff member.
+              non-refundable.
             </p>
           </div>
 
-          <div>
+          {/* <div>
             <h3 className="font-semibold text-gray-900">
               8. Changes to Employment
             </h3>
@@ -299,7 +310,7 @@ export default function Home() {
               significant changes to the domestic staff member&apos; role,
               salary, working conditions or employment status.
             </p>
-          </div>
+          </div> */}
         </div>
 
         {/* Terms Checkbox */}
