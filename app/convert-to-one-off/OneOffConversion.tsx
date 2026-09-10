@@ -12,7 +12,7 @@ const PaystackButton = dynamic(
   { ssr: false }, // This ensures the component is only loaded on the client-side
 );
 
-const CONVERSION_FEE = 227000;
+const CONVERSION_FEE = 242000;
 const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY as string;
 
 export default function OneOffConversion() {
@@ -274,7 +274,7 @@ export default function OneOffConversion() {
             <p>
               After conversion, the client is responsible for paying the staff
               member&apos;s salary directly and managing the staff member&apos;s
-              employment, minimum staff member&apos; salary would have been be communicated to client.
+              employment,the minimum staff member&apos; salary would have been communicated to client.
             </p>
           </div>
 
