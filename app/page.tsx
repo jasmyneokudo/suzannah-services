@@ -188,7 +188,7 @@ export default function Home({ searchParams }: HomeProps) {
     metadata: {
       custom_fields: [
         {
-          display_name: "Customer ID",
+          display_name: JSON.stringify(clientRequest),
           variable_name: "customer_id",
           value: "CUST123",
         },
@@ -298,63 +298,63 @@ export default function Home({ searchParams }: HomeProps) {
   }, [clientRequest.serviceType]);
 
   async function sendRequestDetails(requestArray: any[]) {
-    const requestBody = `
-      Incoming Client Request ${new Date(Date.now()).toLocaleString()}\n:
-      Service Type: ${clientRequest.serviceType},
-      Client's Particulars
-      Name: ${clientRequest.clientName},
-      Email address: ${clientRequest.clientEmail},
-      Phone number: ${clientRequest.clientPhoneNumber},
-      Address: ${clientRequest.clientAddress},
-      Home/Family Details
-      ${
-        (clientRequest.serviceType === "Nanny" ||
-          clientRequest.serviceType === "Nanny + Help") &&
-        `Number of Kids: ${clientRequest.numberOfKids},
-      Ages of Kids: ${clientRequest.agesOfKids},`
-      }
-      ${
-        clientRequest.serviceType === "Chef" &&
-        `Number of Diners: ${clientRequest.numberOfDiners},`
-      }
-      ${
-        (clientRequest.serviceType === "Housekeeper" ||
-          clientRequest.serviceType === "Nanny + Help" ||
-          clientRequest.serviceType === "General Help") &&
-        `House Type: ${clientRequest.typeOfHouse},
-      Number of Rooms: ${clientRequest.numberOfRooms},
-      Extra Home Info: ${clientRequest.extraHomeInformation},`
-      }
-      Candidate Preferences
-      Gender: ${clientRequest.employeeGender},
-      Age Range: ${clientRequest.employeeAgeRange},
-      Tribe Preference: ${clientRequest.employeeTribePreference},
-      Religion Preference: ${clientRequest.employeeReligionPreference},
-      ${
-        clientRequest.workMode === "Live-out" &&
-        `Working Days: ${clientRequest.workingDays.join(", ")},
-         Working Hours: ${clientRequest.workingHours.join(", ")},`
-      },
-      ${
-        clientRequest.serviceType === "Elder Caregiving" &&
-        `Elder Age/Gender: ${clientRequest.elderAgeRange} years, ${
-          clientRequest.elderGender
-        }
-         Elder Health Conditions: ${
-           clientRequest.elderHealthConditions ?? "nil"
-         },`
-      },
-      ${
-        clientRequest.serviceType === "Driving" &&
-        `Number of Passengers: ${clientRequest.numberOfPassengers}`
-      },
-      Work Mode: ${clientRequest.workMode},
-      Other Staff Preferences: ${clientRequest.extraComment},
-      Amount Paid: ${
-        clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE
-      },
-      Service Fee: ${clientRequest.bookingFee}
-    `;
+    // const requestBody = `
+    //   Incoming Client Request ${new Date(Date.now()).toLocaleString()}\n:
+    //   Service Type: ${clientRequest.serviceType},
+    //   Client's Particulars
+    //   Name: ${clientRequest.clientName},
+    //   Email address: ${clientRequest.clientEmail},
+    //   Phone number: ${clientRequest.clientPhoneNumber},
+    //   Address: ${clientRequest.clientAddress},
+    //   Home/Family Details
+    //   ${
+    //     (clientRequest.serviceType === "Nanny" ||
+    //       clientRequest.serviceType === "Nanny + Help") &&
+    //     `Number of Kids: ${clientRequest.numberOfKids},
+    //   Ages of Kids: ${clientRequest.agesOfKids},`
+    //   }
+    //   ${
+    //     clientRequest.serviceType === "Chef" &&
+    //     `Number of Diners: ${clientRequest.numberOfDiners},`
+    //   }
+    //   ${
+    //     (clientRequest.serviceType === "Housekeeper" ||
+    //       clientRequest.serviceType === "Nanny + Help" ||
+    //       clientRequest.serviceType === "General Help") &&
+    //     `House Type: ${clientRequest.typeOfHouse},
+    //   Number of Rooms: ${clientRequest.numberOfRooms},
+    //   Extra Home Info: ${clientRequest.extraHomeInformation},`
+    //   }
+    //   Candidate Preferences
+    //   Gender: ${clientRequest.employeeGender},
+    //   Age Range: ${clientRequest.employeeAgeRange},
+    //   Tribe Preference: ${clientRequest.employeeTribePreference},
+    //   Religion Preference: ${clientRequest.employeeReligionPreference},
+    //   ${
+    //     clientRequest.workMode === "Live-out" &&
+    //     `Working Days: ${clientRequest.workingDays.join(", ")},
+    //      Working Hours: ${clientRequest.workingHours.join(", ")},`
+    //   },
+    //   ${
+    //     clientRequest.serviceType === "Elder Caregiving" &&
+    //     `Elder Age/Gender: ${clientRequest.elderAgeRange} years, ${
+    //       clientRequest.elderGender
+    //     }
+    //      Elder Health Conditions: ${
+    //        clientRequest.elderHealthConditions ?? "nil"
+    //      },`
+    //   },
+    //   ${
+    //     clientRequest.serviceType === "Driving" &&
+    //     `Number of Passengers: ${clientRequest.numberOfPassengers}`
+    //   },
+    //   Work Mode: ${clientRequest.workMode},
+    //   Other Staff Preferences: ${clientRequest.extraComment},
+    //   Amount Paid: ${
+    //     clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE
+    //   },
+    //   Service Fee: ${clientRequest.bookingFee}
+    // `;
     // update excel sheet
     await updateValues([requestArray]);
 
