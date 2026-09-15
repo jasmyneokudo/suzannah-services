@@ -5,7 +5,7 @@ export const PRICING: Record<ServiceType, number> = {
   "General Help": 95500,
   "Nanny + Help": 105500,
   "Housekeeper": 90500,
-  "Chef": 190500,
+  "Chef": 200500,
   // take back to 170,500 after eid
   "Driving": 160500,
   "Elder Caregiving": 270500
