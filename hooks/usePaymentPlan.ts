@@ -37,15 +37,15 @@ export function usePaymentPlan(
     }
 
     if (options.extraRooms && options.extraRooms > 0) {
-      clientPrice += (options.extraRooms < 3 ? 1 : options.extraRooms/3) * 25000;
+      clientPrice += (options.extraRooms < 3 ? 1 : options.extraRooms/3) * 35000;
     }
 
     if (options.nightShift && options.extraDays && options.extraDays > 0) {
-      clientPrice += options.extraDays * 8000;
+      clientPrice += options.extraDays * 10000;
     }
 
     if (options.numberOfPassengers && options.numberOfPassengers > 0) {
-      clientPrice += (options.numberOfPassengers < 3 ? 1 : options.numberOfPassengers/3) * 10000;
+      clientPrice += (options.numberOfPassengers < 3 ? 1 : options.numberOfPassengers/3) * 15000;
     }
 
     if (options.extraDays && options.extraDays > 0) {
@@ -58,7 +58,7 @@ export function usePaymentPlan(
     }
 
     if (options.extraFloors && options.extraFloors > 0) {
-      clientPrice += (options.extraFloors < 2 ? 1 : options.extraFloors/2) * 12000;
+      clientPrice += (options.extraFloors < 2 ? 1 : options.extraFloors/2) * 18000;
     }
 
     if (options.extraDiners && options.extraDiners > 0) {
