@@ -43,6 +43,7 @@ export interface CustomerRequest {
   otherMustBes: string;
   bookingFee: number;
   paymentPlan: PaymentPlan;
+  clientDesire: string;
 }
 
 export type StaffRole = "nanny" | "housekeeper" | "chef";

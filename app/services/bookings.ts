@@ -20,7 +20,7 @@ export const createBooking = async (
   agesOfKids?: string,
   candidateExtraNotes?: string,
   typeOfHome?: string,
-  numberOfRooms?: string,
+  numberOfRooms?: number,
   homeExtraNotes?: string,
   numberOfPeopleInHouse?: number,
   ageOfElders?: string,

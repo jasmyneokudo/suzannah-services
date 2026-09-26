@@ -1,15 +1,11 @@
 "use client";
 
 import AgreementDialog from "./components/AgreementDialog";
-import Button from "./components/Button";
 import FAQBox from "./components/FAQBox";
 import FormControl from "@mui/material/FormControl";
 import Image from "next/image";
-import InputLabel from "@mui/material/InputLabel";
 import Link from "next/link";
-import MenuItem from "@mui/material/MenuItem";
 import ReviewCard from "./components/ReviewCard";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Slider, { Settings } from "react-slick";
 import {
   CustomerRequest,
@@ -20,6 +16,7 @@ import { faqs } from "@/data/faqs";
 import {
   // CircularProgress,
   Fab,
+  FormLabel,
   TextField,
 } from "@mui/material";
 import { Hero } from "./components/Hero";
@@ -123,17 +120,15 @@ export default function Home({ searchParams }: HomeProps) {
     otherMustBes: "",
     bookingFee: 0,
     paymentPlan: "monthly",
+    clientDesire: "",
   };
 
   const [clientRequest, setClientRequest] = useState<CustomerRequest>(
     defaultCustomerRequest,
   );
 
-  const [customRequest, setCustomRequest] = useState(defaultCustomRequest);
-
   const resetCustomerRequest = () => {
     setClientRequest(defaultCustomerRequest);
-    // setDays([])
   };
   const { clientPrice } = usePaymentPlan(clientRequest.serviceType, {
     extraChildren: clientRequest.numberOfKids,
@@ -166,9 +161,7 @@ export default function Home({ searchParams }: HomeProps) {
           ).length
         : clientRequest.newBorns, // if newBorns is 0, use the regex to count, otherwise use the provided number
     extraDiners:
-      clientRequest.serviceType === "Chef"
-        ? clientRequest.numberOfDiners
-        : 0,
+      clientRequest.serviceType === "Chef" ? clientRequest.numberOfDiners : 0,
     numberOfPassengers:
       clientRequest.serviceType === "Driving"
         ? clientRequest.numberOfPassengers
@@ -197,75 +190,18 @@ export default function Home({ searchParams }: HomeProps) {
     publicKey,
     text: `Pay Now (₦${bookingFee.toLocaleString()})`,
     onSuccess: async () => {
-      const requestArray = [
-        new Date(Date.now()).toLocaleString(),
-        clientRequest.serviceType,
-        clientRequest.clientName,
-        clientRequest.clientEmail,
-        clientRequest.clientPhoneNumber,
-        clientRequest.clientAddress,
-        clientRequest.serviceType === "Driving"
-          ? clientRequest.numberOfPassengers + " Passengers"
-          : clientRequest.numberOfKids,
-        clientRequest.numberOfDiners,
-        clientRequest.agesOfKids,
-        clientRequest.typeOfHouse,
-        clientRequest.numberOfRooms,
-        clientRequest.extraHomeInformation,
-        clientRequest.workMode,
-        clientRequest.employeeGender,
-        clientRequest.employeeAgeRange,
-        clientRequest.employeeTribePreference,
-        clientRequest.employeeReligionPreference,
-        clientRequest.workingDays.join(", "),
-        clientRequest.workingHours.join(", "),
-        clientRequest.extraComment,
-        clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
-        clientRequest.bookingFee,
-        clientRequest.elderAgeRange,
-        clientRequest.elderGender,
-        clientRequest.elderHealthConditions,
-      ];
-
       try {
-        await sendRequestDetails(requestArray);
+        await sendRequestDetails();
         router.push(pathname);
+        console.log("pathname------>", pathname);
 
         alert(
           "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly.",
         );
-        const res = await createBooking(
-          clientRequest.clientName,
-          clientRequest.clientAddress,
-          clientRequest.clientPhoneNumber,
-          clientRequest.clientEmail,
-          clientRequest.workMode,
-          clientRequest.serviceType,
-          clientRequest.employeeGender,
-          clientRequest.employeeAgeRange,
-          clientRequest.paymentPlan,
-          clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
-          clientRequest.bookingFee,
-          clientRequest.employeeReligionPreference,
-          clientRequest.employeeTribePreference,
-          clientRequest.numberOfKids,
-          clientRequest.agesOfKids,
-          clientRequest.extraComment,
-          clientRequest.typeOfHouse,
-          clientRequest.numberOfRooms,
-          clientRequest.extraHomeInformation,
-          clientRequest.numberOfDiners,
-          clientRequest.elderAgeRange,
-          clientRequest.elderHealthConditions,
-          false,
-          "",
-          clientRequest.workingHours.join(", "),
-          clientRequest.workingDays.join(", "),
-        );
+
         resetCustomerRequest();
 
         setRequestStage(0);
-        console.log("Booking created:", res);
       } catch (err) {
         console.error("Failed to send request details", err);
         return; // stop the flow
@@ -297,7 +233,90 @@ export default function Home({ searchParams }: HomeProps) {
     }
   }, [clientRequest.serviceType]);
 
-  async function sendRequestDetails(requestArray: any[]) {
+  async function sendRequestDetails() {
+    const requestArray = [
+      new Date(Date.now()).toLocaleString(),
+      clientRequest.serviceType,
+      clientRequest.clientName,
+      clientRequest.clientEmail,
+      clientRequest.clientPhoneNumber,
+      clientRequest.clientAddress,
+      clientRequest.serviceType === "Driving"
+        ? clientRequest.numberOfPassengers + " Passengers"
+        : clientRequest.numberOfKids,
+      clientRequest.numberOfDiners,
+      clientRequest.agesOfKids,
+      clientRequest.typeOfHouse,
+      clientRequest.numberOfRooms,
+      clientRequest.extraHomeInformation,
+      clientRequest.workMode,
+      clientRequest.employeeGender,
+      clientRequest.employeeAgeRange,
+      clientRequest.employeeTribePreference,
+      clientRequest.employeeReligionPreference,
+      clientRequest.workingDays.join(", "),
+      clientRequest.workingHours.join(", "),
+      clientRequest.extraComment,
+      clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
+      clientRequest.bookingFee,
+      clientRequest.elderAgeRange,
+      clientRequest.elderGender,
+      clientRequest.elderHealthConditions,
+      clientRequest.clientDesire,
+    ];
+
+    // update excel sheet
+    try {
+      await updateValues([requestArray]);
+    } catch (error) {
+      console.error("Failed to update spreadsheet:", error);
+    }
+
+    try {
+      await sendConfirmationEmail(
+        clientRequest.clientEmail.trim(),
+        clientRequest.clientName,
+        clientRequest.serviceType,
+        clientRequest.paymentPlan,
+      );
+    } catch (error) {
+      console.error("Failed to send confirmation email:", error);
+    }
+
+    try {
+      const res = await createBooking(
+        clientRequest.clientName,
+        clientRequest.clientAddress,
+        clientRequest.clientPhoneNumber,
+        clientRequest.clientEmail,
+        clientRequest.workMode,
+        clientRequest.serviceType,
+        clientRequest.employeeGender,
+        clientRequest.employeeAgeRange,
+        clientRequest.paymentPlan,
+        clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
+        clientRequest.bookingFee,
+        clientRequest.employeeReligionPreference,
+        clientRequest.employeeTribePreference,
+        clientRequest.numberOfKids,
+        clientRequest.agesOfKids,
+        clientRequest.extraComment,
+        clientRequest.typeOfHouse,
+        Number(clientRequest.numberOfRooms.slice(0, 2)),
+        clientRequest.extraHomeInformation,
+        clientRequest.numberOfDiners,
+        clientRequest.elderAgeRange,
+        clientRequest.elderHealthConditions,
+        false,
+        "",
+        clientRequest.workingHours.join(", "),
+        clientRequest.workingDays.join(", "),
+      );
+      console.log("Booking created:", res);
+    } catch (error) {
+      console.error("Failed to create booking:", error);
+    }
+
     // const requestBody = `
     //   Incoming Client Request ${new Date(Date.now()).toLocaleString()}\n:
     //   Service Type: ${clientRequest.serviceType},
@@ -355,11 +374,6 @@ export default function Home({ searchParams }: HomeProps) {
     //   },
     //   Service Fee: ${clientRequest.bookingFee}
     // `;
-    // update excel sheet
-    await updateValues([requestArray]);
-
-    sendConfirmationEmail(clientRequest.clientEmail.trim(), clientRequest.clientName, clientRequest.serviceType, clientRequest.paymentPlan);
-
 
     // send order details to whatsapp number
     // try {
@@ -430,7 +444,7 @@ export default function Home({ searchParams }: HomeProps) {
   }
 
   return (
-    <main className="flex  bg-white min-h-screen w-full flex-col items-center justify-between overflow-clip">
+    <main className="flex bg-white min-h-screen w-full flex-col items-center justify-between overflow-clip">
       {pageLoading && (
         <Image
           src="/images/suzannah-drop.png"
@@ -803,6 +817,31 @@ export default function Home({ searchParams }: HomeProps) {
                 })
               }
             />
+
+            <FormControl>
+              <FormLabel sx={{ fontSize: 13 }} className="mt-4">
+                What would make you genuinely happy with the service you
+                receive? (We&apos;d love to understand what matters most to you
+                so we can recommend the right person and deliver the best
+                possible experience) (Optional)
+              </FormLabel>
+              <TextField
+                value={clientRequest.clientDesire}
+                onChange={(e) =>
+                  setClientRequest({
+                    ...clientRequest,
+                    clientDesire: e.target.value,
+                  })
+                }
+                type="text"
+                fullWidth
+                sx={{ mt: 2 }}
+                placeholder="What would make you genuinely happy with the service you receive?"
+                multiline
+                rows={4}
+              />
+            </FormControl>
+
             <p className="text-sm text-gray-600 mt-2">
               Kindly review the contact details provided before making payment
             </p>
@@ -922,171 +961,6 @@ export default function Home({ searchParams }: HomeProps) {
           />
         </section>
 
-        {/* CUSTOM REQUEST SECTION */}
-        <section className="py-8 hidden max-sm:px-10 w-full">
-          <h1 className="font-extralight text-3xl text-center text-black dark:text-gray-700">
-            CUSTOM REQUEST
-          </h1>
-          <p className="text-sm text-gray-600 text-start w-1/2 max-sm:w-full ml-auto mr-auto mt-3">
-            Need something specific? Submit your custom requirements and our
-            team will reach out to you promptly.
-          </p>
-
-          <div className="shadow-md w-1/2 ml-auto mr-auto shadow-stone-300 max-sm:w-full p-4 mt-5">
-            <FormControl fullWidth sx={{ mt: 3 }}>
-              <InputLabel id="demo2-simple-select-label">
-                Service Type
-              </InputLabel>
-              <Select
-                displayEmpty
-                labelId="demo2-simple-select-label"
-                id="demo-simple-select"
-                value={customRequest.serviceName}
-                label="Service Type"
-                required
-                onChange={(event: SelectChangeEvent) => {
-                  setCustomRequest({
-                    ...customRequest,
-                    serviceName: event.target.value,
-                  });
-                }}
-              >
-                <MenuItem value="Weekly Nanny Services">
-                  Daily/Weekly Babysitting Service
-                </MenuItem>
-                <MenuItem value="Weekly Housekeeping">
-                  Weekly Housekeeping
-                </MenuItem>
-                <MenuItem value="Weekly Home">Weekly Home Cooking</MenuItem>
-                <MenuItem value="Weekly Market Runs">
-                  Weekly Market Runs/Errands
-                </MenuItem>
-                <MenuItem value="Industrial Home/Office Cleaning">
-                  Industrial Home/Office Cleaning
-                </MenuItem>
-                <MenuItem value="Industrial Home/Office Cleaning">
-                  Other
-                </MenuItem>
-              </Select>
-            </FormControl>
-
-            <TextField
-              label="Address (Where Service will be rendered)"
-              value={customRequest.serviceLocation}
-              onChange={(e) =>
-                setCustomRequest({
-                  ...customRequest,
-                  serviceLocation: e.target.value,
-                })
-              }
-              fullWidth
-              sx={{ mt: 2 }}
-              id="filled-multiline-static"
-              placeholder="Address (Where Service will be rendered)"
-            />
-
-            <TextField
-              label="Additional Comment/Description"
-              value={customRequest.serviceDescription}
-              onChange={(e) =>
-                setCustomRequest({
-                  ...customRequest,
-                  serviceDescription: e.target.value,
-                })
-              }
-              fullWidth
-              sx={{ mt: 2 }}
-              id="filled-multiline-static"
-              placeholder="Additional Comment/Description"
-              multiline
-              rows={4}
-            />
-
-            <TextField
-              label="Name"
-              value={customRequest.name}
-              onChange={(e) =>
-                setCustomRequest({
-                  ...customRequest,
-                  name: e.target.value,
-                })
-              }
-              fullWidth
-              sx={{ mt: 2 }}
-              id="filled-multiline-static"
-              placeholder="Address (Where Service will be rendered)"
-            />
-
-            <TextField
-              label="Email"
-              value={customRequest.emailAddress}
-              onChange={(e) =>
-                setCustomRequest({
-                  ...customRequest,
-                  emailAddress: e.target.value,
-                })
-              }
-              fullWidth
-              sx={{ mt: 2 }}
-              id="filled-multiline-static"
-              placeholder="Email"
-            />
-
-            <TextField
-              label="WhatsApp Number"
-              value={customRequest.whatsappNumber}
-              onChange={(e) =>
-                setCustomRequest({
-                  ...customRequest,
-                  whatsappNumber: e.target.value,
-                })
-              }
-              fullWidth
-              sx={{ mt: 2 }}
-              id="filled-multiline-static"
-              placeholder="Address (Where Service will be rendered)"
-            />
-
-            <Button
-              onClick={async () => {
-                // update excel sheet
-                setLoading(true);
-                try {
-                  await updateValues([
-                    [
-                      new Date(Date.now()).toLocaleString(),
-                      customRequest.serviceName,
-                      customRequest.serviceLocation,
-                      customRequest.serviceDescription,
-                      customRequest.name,
-                      customRequest.emailAddress,
-                      customRequest.whatsappNumber,
-                    ],
-                  ]);
-
-                  alert(
-                    "Your request has been successfully dispatched and our team will reach out to you via WhatsApp shortly. (Also check your email inbox (or spam folder) for a confirmation message from us)",
-                  );
-                  setCustomRequest(defaultCustomRequest);
-                } catch (e) {
-                  alert(
-                    "An error occurred, please check your internet connection and retry",
-                  );
-                } finally {
-                  setLoading(false);
-                }
-              }}
-              disabled={
-                customRequest.emailAddress === "" ||
-                customRequest.serviceLocation === "" ||
-                customRequest.serviceName === "" ||
-                loading
-              }
-              buttonName={loading ? "Submitting..." : "Submit"}
-            />
-          </div>
-        </section>
-
         {/* FOOTER SECTION STARTS */}
         <Footer />
       </div>
@@ -1094,18 +968,23 @@ export default function Home({ searchParams }: HomeProps) {
   );
 }
 
-async function sendConfirmationEmail(clientEmail: string, clientName: string, serviceType: string, paymentPlan: string) {
- console.log("client email", clientEmail) 
+async function sendConfirmationEmail(
+  clientEmail: string,
+  clientName: string,
+  serviceType: string,
+  paymentPlan: string,
+) {
+  console.log("client email", clientEmail);
   const response = await fetch("/api/sendEmail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: clientEmail,
-          name: clientName,
-          subject: "Domestic Service Booking Confirmation",
-          html: `
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: clientEmail,
+      name: clientName,
+      subject: "Domestic Service Booking Confirmation",
+      html: `
     <div>
     <h4>Good day Sir/Madam ${clientName}</h4>
     <p>
@@ -1371,9 +1250,8 @@ A member of our team will contact you on WhatsApp shortly to confirm the details
     <p><strong>Thank you for booking with us, Suzannah Home & Care Services remains committed to providing you peace of mind and domestic excellence through our exceptional domestic services.</p>
             
             </strong></div>`,
-        }),
-      });
+    }),
+  });
 
-    await response.json();
+  await response.json();
 }
-
