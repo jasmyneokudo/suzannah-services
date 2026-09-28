@@ -5,6 +5,7 @@ import { useGoogleSheets } from "@/hooks/useGoogleSheets";
 export async function POST(req: Request) {
   const { updateValues } = useGoogleSheets();
   try {
+    console.log("🔥 PAYSTACK WEBHOOK HIT");
     const rawBody = await req.text();
 
     const signature = req.headers.get("x-paystack-signature");
