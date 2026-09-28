@@ -236,167 +236,167 @@ export default function Home({ searchParams }: HomeProps) {
     }
   }, [clientRequest.serviceType]);
 
-  async function sendRequestDetails() {
-    const requestArray = [
-      new Date(Date.now()).toLocaleString(),
-      clientRequest.serviceType,
-      clientRequest.clientName,
-      clientRequest.clientEmail,
-      clientRequest.clientPhoneNumber,
-      clientRequest.clientAddress,
-      clientRequest.serviceType === "Driving"
-        ? clientRequest.numberOfPassengers + " Passengers"
-        : clientRequest.numberOfKids,
-      clientRequest.numberOfDiners,
-      clientRequest.agesOfKids,
-      clientRequest.typeOfHouse,
-      clientRequest.numberOfRooms,
-      clientRequest.extraHomeInformation,
-      clientRequest.workMode,
-      clientRequest.employeeGender,
-      clientRequest.employeeAgeRange,
-      clientRequest.employeeTribePreference,
-      clientRequest.employeeReligionPreference,
-      clientRequest.workingDays.join(", "),
-      clientRequest.workingHours.join(", "),
-      clientRequest.extraComment,
-      clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
-      clientRequest.bookingFee,
-      clientRequest.elderAgeRange,
-      clientRequest.elderGender,
-      clientRequest.elderHealthConditions,
-      clientRequest.clientDesire,
-    ];
+  // async function sendRequestDetails() {
+  //   const requestArray = [
+  //     new Date(Date.now()).toLocaleString(),
+  //     clientRequest.serviceType,
+  //     clientRequest.clientName,
+  //     clientRequest.clientEmail,
+  //     clientRequest.clientPhoneNumber,
+  //     clientRequest.clientAddress,
+  //     clientRequest.serviceType === "Driving"
+  //       ? clientRequest.numberOfPassengers + " Passengers"
+  //       : clientRequest.numberOfKids,
+  //     clientRequest.numberOfDiners,
+  //     clientRequest.agesOfKids,
+  //     clientRequest.typeOfHouse,
+  //     clientRequest.numberOfRooms,
+  //     clientRequest.extraHomeInformation,
+  //     clientRequest.workMode,
+  //     clientRequest.employeeGender,
+  //     clientRequest.employeeAgeRange,
+  //     clientRequest.employeeTribePreference,
+  //     clientRequest.employeeReligionPreference,
+  //     clientRequest.workingDays.join(", "),
+  //     clientRequest.workingHours.join(", "),
+  //     clientRequest.extraComment,
+  //     clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
+  //     clientRequest.bookingFee,
+  //     clientRequest.elderAgeRange,
+  //     clientRequest.elderGender,
+  //     clientRequest.elderHealthConditions,
+  //     clientRequest.clientDesire,
+  //   ];
 
-    // update excel sheet
-    try {
-      await updateValues([requestArray]);
-    } catch (error) {
-      console.error("Failed to update spreadsheet:", error);
-    }
+  //   // update excel sheet
+  //   try {
+  //     await updateValues([requestArray]);
+  //   } catch (error) {
+  //     console.error("Failed to update spreadsheet:", error);
+  //   }
 
-    try {
-      await sendConfirmationEmail(
-        clientRequest.clientEmail.trim(),
-        clientRequest.clientName,
-        clientRequest.serviceType,
-        clientRequest.paymentPlan,
-      );
-    } catch (error) {
-      console.error("Failed to send confirmation email:", error);
-    }
+  //   try {
+  //     await sendConfirmationEmail(
+  //       clientRequest.clientEmail.trim(),
+  //       clientRequest.clientName,
+  //       clientRequest.serviceType,
+  //       clientRequest.paymentPlan,
+  //     );
+  //   } catch (error) {
+  //     console.error("Failed to send confirmation email:", error);
+  //   }
 
-    try {
-      const res = await createBooking(
-        clientRequest.clientName,
-        clientRequest.clientAddress,
-        clientRequest.clientPhoneNumber,
-        clientRequest.clientEmail,
-        clientRequest.workMode,
-        clientRequest.serviceType,
-        clientRequest.employeeGender,
-        clientRequest.employeeAgeRange,
-        clientRequest.paymentPlan,
-        clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
-        clientRequest.bookingFee,
-        clientRequest.employeeReligionPreference,
-        clientRequest.employeeTribePreference,
-        clientRequest.numberOfKids,
-        clientRequest.agesOfKids,
-        clientRequest.extraComment,
-        clientRequest.typeOfHouse,
-        Number(clientRequest.numberOfRooms.slice(0, 2)),
-        clientRequest.extraHomeInformation,
-        clientRequest.numberOfDiners,
-        clientRequest.elderAgeRange,
-        clientRequest.elderHealthConditions,
-        false,
-        "",
-        clientRequest.workingHours.join(", "),
-        clientRequest.workingDays.join(", "),
-      );
-      console.log("Booking created:", res);
-    } catch (error) {
-      console.error("Failed to create booking:", error);
-    }
+  //   try {
+  //     const res = await createBooking(
+  //       clientRequest.clientName,
+  //       clientRequest.clientAddress,
+  //       clientRequest.clientPhoneNumber,
+  //       clientRequest.clientEmail,
+  //       clientRequest.workMode,
+  //       clientRequest.serviceType,
+  //       clientRequest.employeeGender,
+  //       clientRequest.employeeAgeRange,
+  //       clientRequest.paymentPlan,
+  //       clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE,
+  //       clientRequest.bookingFee,
+  //       clientRequest.employeeReligionPreference,
+  //       clientRequest.employeeTribePreference,
+  //       clientRequest.numberOfKids,
+  //       clientRequest.agesOfKids,
+  //       clientRequest.extraComment,
+  //       clientRequest.typeOfHouse,
+  //       Number(clientRequest.numberOfRooms.slice(0, 2)),
+  //       clientRequest.extraHomeInformation,
+  //       clientRequest.numberOfDiners,
+  //       clientRequest.elderAgeRange,
+  //       clientRequest.elderHealthConditions,
+  //       false,
+  //       "",
+  //       clientRequest.workingHours.join(", "),
+  //       clientRequest.workingDays.join(", "),
+  //     );
+  //     console.log("Booking created:", res);
+  //   } catch (error) {
+  //     console.error("Failed to create booking:", error);
+  //   }
 
-    // const requestBody = `
-    //   Incoming Client Request ${new Date(Date.now()).toLocaleString()}\n:
-    //   Service Type: ${clientRequest.serviceType},
-    //   Client's Particulars
-    //   Name: ${clientRequest.clientName},
-    //   Email address: ${clientRequest.clientEmail},
-    //   Phone number: ${clientRequest.clientPhoneNumber},
-    //   Address: ${clientRequest.clientAddress},
-    //   Home/Family Details
-    //   ${
-    //     (clientRequest.serviceType === "Nanny" ||
-    //       clientRequest.serviceType === "Nanny + Help") &&
-    //     `Number of Kids: ${clientRequest.numberOfKids},
-    //   Ages of Kids: ${clientRequest.agesOfKids},`
-    //   }
-    //   ${
-    //     clientRequest.serviceType === "Chef" &&
-    //     `Number of Diners: ${clientRequest.numberOfDiners},`
-    //   }
-    //   ${
-    //     (clientRequest.serviceType === "Housekeeper" ||
-    //       clientRequest.serviceType === "Nanny + Help" ||
-    //       clientRequest.serviceType === "General Help") &&
-    //     `House Type: ${clientRequest.typeOfHouse},
-    //   Number of Rooms: ${clientRequest.numberOfRooms},
-    //   Extra Home Info: ${clientRequest.extraHomeInformation},`
-    //   }
-    //   Candidate Preferences
-    //   Gender: ${clientRequest.employeeGender},
-    //   Age Range: ${clientRequest.employeeAgeRange},
-    //   Tribe Preference: ${clientRequest.employeeTribePreference},
-    //   Religion Preference: ${clientRequest.employeeReligionPreference},
-    //   ${
-    //     clientRequest.workMode === "Live-out" &&
-    //     `Working Days: ${clientRequest.workingDays.join(", ")},
-    //      Working Hours: ${clientRequest.workingHours.join(", ")},`
-    //   },
-    //   ${
-    //     clientRequest.serviceType === "Elder Caregiving" &&
-    //     `Elder Age/Gender: ${clientRequest.elderAgeRange} years, ${
-    //       clientRequest.elderGender
-    //     }
-    //      Elder Health Conditions: ${
-    //        clientRequest.elderHealthConditions ?? "nil"
-    //      },`
-    //   },
-    //   ${
-    //     clientRequest.serviceType === "Driving" &&
-    //     `Number of Passengers: ${clientRequest.numberOfPassengers}`
-    //   },
-    //   Work Mode: ${clientRequest.workMode},
-    //   Other Staff Preferences: ${clientRequest.extraComment},
-    //   Amount Paid: ${
-    //     clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE
-    //   },
-    //   Service Fee: ${clientRequest.bookingFee}
-    // `;
+  //   // const requestBody = `
+  //   //   Incoming Client Request ${new Date(Date.now()).toLocaleString()}\n:
+  //   //   Service Type: ${clientRequest.serviceType},
+  //   //   Client's Particulars
+  //   //   Name: ${clientRequest.clientName},
+  //   //   Email address: ${clientRequest.clientEmail},
+  //   //   Phone number: ${clientRequest.clientPhoneNumber},
+  //   //   Address: ${clientRequest.clientAddress},
+  //   //   Home/Family Details
+  //   //   ${
+  //   //     (clientRequest.serviceType === "Nanny" ||
+  //   //       clientRequest.serviceType === "Nanny + Help") &&
+  //   //     `Number of Kids: ${clientRequest.numberOfKids},
+  //   //   Ages of Kids: ${clientRequest.agesOfKids},`
+  //   //   }
+  //   //   ${
+  //   //     clientRequest.serviceType === "Chef" &&
+  //   //     `Number of Diners: ${clientRequest.numberOfDiners},`
+  //   //   }
+  //   //   ${
+  //   //     (clientRequest.serviceType === "Housekeeper" ||
+  //   //       clientRequest.serviceType === "Nanny + Help" ||
+  //   //       clientRequest.serviceType === "General Help") &&
+  //   //     `House Type: ${clientRequest.typeOfHouse},
+  //   //   Number of Rooms: ${clientRequest.numberOfRooms},
+  //   //   Extra Home Info: ${clientRequest.extraHomeInformation},`
+  //   //   }
+  //   //   Candidate Preferences
+  //   //   Gender: ${clientRequest.employeeGender},
+  //   //   Age Range: ${clientRequest.employeeAgeRange},
+  //   //   Tribe Preference: ${clientRequest.employeeTribePreference},
+  //   //   Religion Preference: ${clientRequest.employeeReligionPreference},
+  //   //   ${
+  //   //     clientRequest.workMode === "Live-out" &&
+  //   //     `Working Days: ${clientRequest.workingDays.join(", ")},
+  //   //      Working Hours: ${clientRequest.workingHours.join(", ")},`
+  //   //   },
+  //   //   ${
+  //   //     clientRequest.serviceType === "Elder Caregiving" &&
+  //   //     `Elder Age/Gender: ${clientRequest.elderAgeRange} years, ${
+  //   //       clientRequest.elderGender
+  //   //     }
+  //   //      Elder Health Conditions: ${
+  //   //        clientRequest.elderHealthConditions ?? "nil"
+  //   //      },`
+  //   //   },
+  //   //   ${
+  //   //     clientRequest.serviceType === "Driving" &&
+  //   //     `Number of Passengers: ${clientRequest.numberOfPassengers}`
+  //   //   },
+  //   //   Work Mode: ${clientRequest.workMode},
+  //   //   Other Staff Preferences: ${clientRequest.extraComment},
+  //   //   Amount Paid: ${
+  //   //     clientRequest.paymentPlan === "one-off" ? ONE_OFF_FEE : BOOKING_FEE
+  //   //   },
+  //   //   Service Fee: ${clientRequest.bookingFee}
+  //   // `;
 
-    // send order details to whatsapp number
-    // try {
-    //   const res = await fetch("/api/createRequest", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       to: process.env.NEXT_PUBLIC_WASENDERAPI_PHONE_NUMBER,
-    //       text: requestBody,
-    //     }),
-    //   });
+  //   // send order details to whatsapp number
+  //   // try {
+  //   //   const res = await fetch("/api/createRequest", {
+  //   //     method: "POST",
+  //   //     headers: { "Content-Type": "application/json" },
+  //   //     body: JSON.stringify({
+  //   //       to: process.env.NEXT_PUBLIC_WASENDERAPI_PHONE_NUMBER,
+  //   //       text: requestBody,
+  //   //     }),
+  //   //   });
 
-    //   const data = await res.json();
-    //   console.error("data:", data);
-    // } catch (err) {
-    //   console.error("Error:", err);
-    // } finally {
-    //   // setLoading(false);
-    // }
-  }
+  //   //   const data = await res.json();
+  //   //   console.error("data:", data);
+  //   // } catch (err) {
+  //   //   console.error("Error:", err);
+  //   // } finally {
+  //   //   // setLoading(false);
+  //   // }
+  // }
 
   function selectService(serviceType: ServiceType) {
     router.push(pathname + "?step=1");
