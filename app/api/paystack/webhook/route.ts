@@ -4,7 +4,6 @@ import { updateValues } from "../../../lib/googleSheets";
 
 export async function POST(req: Request) {
   try {
-    console.log("🔥 PAYSTACK WEBHOOK HIT");
     const rawBody = await req.text();
 
     const signature = req.headers.get("x-paystack-signature");
@@ -13,13 +12,6 @@ export async function POST(req: Request) {
       .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY!)
       .update(rawBody)
       .digest("hex");
-
-      console.log("SIGNATURE FROM PAYSTACK:", signature);
-console.log("CALCULATED SIGNATURE:", hash);
-console.log(
-  "SECRET KEY PREFIX:",
-  process.env.PAYSTACK_SECRET_KEY?.slice(0, 8)
-);
 
     if (hash !== signature) {
       return new Response("Invalid signature", {
