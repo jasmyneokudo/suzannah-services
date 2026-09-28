@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { processBooking } from "../../../lib/processBooking";
-import { updateValues } from "../../../lib/googlesheets";
+import { updateValues } from "../../../lib/googleSheets";
 
 export async function POST(req: Request) {
   try {
