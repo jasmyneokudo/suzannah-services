@@ -14,6 +14,13 @@ export async function POST(req: Request) {
       .update(rawBody)
       .digest("hex");
 
+      console.log("SIGNATURE FROM PAYSTACK:", signature);
+console.log("CALCULATED SIGNATURE:", hash);
+console.log(
+  "SECRET KEY PREFIX:",
+  process.env.PAYSTACK_SECRET_KEY?.slice(0, 8)
+);
+
     if (hash !== signature) {
       return new Response("Invalid signature", {
         status: 401,
