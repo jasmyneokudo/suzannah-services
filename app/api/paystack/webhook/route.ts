@@ -1,9 +1,8 @@
 import crypto from "crypto";
 import { processBooking } from "../../../lib/processBooking";
-import { useGoogleSheets } from "@/hooks/useGoogleSheets";
+import { updateValues } from "../../../lib/googlesheets";
 
 export async function POST(req: Request) {
-  const { updateValues } = useGoogleSheets();
   try {
     console.log("🔥 PAYSTACK WEBHOOK HIT");
     const rawBody = await req.text();
