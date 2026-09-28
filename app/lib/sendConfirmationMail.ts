@@ -1,3 +1,34 @@
+import nodemailer from "nodemailer";
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+export async function sendEmail({
+  email,
+  name,
+  subject,
+  html,
+}: {
+  email: string;
+  name: string;
+  subject: string;
+  html: string;
+}) {
+  return transporter.sendMail({
+    from: `"Suzannah Home & Care Services" <${process.env.SMTP_USER}>`,
+    to: email,
+    subject,
+    html,
+  });
+}
+
 export async function sendConfirmationEmail(
   clientEmail: string,
   clientName: string,
@@ -5,16 +36,12 @@ export async function sendConfirmationEmail(
   paymentPlan: string,
 ) {
   console.log("client email", clientEmail);
-  const response = await fetch("/api/sendEmail", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: clientEmail,
-      name: clientName,
-      subject: "Domestic Service Booking Confirmation",
-      html: `
+
+  await sendEmail({
+    email: clientEmail,
+    name: clientName,
+    subject: "Domestic Service Booking Confirmation",
+    html: `
     <div>
     <h4>Good day Sir/Madam ${clientName}</h4>
     <p>
@@ -280,8 +307,20 @@ A member of our team will contact you on WhatsApp shortly to confirm the details
     <p><strong>Thank you for booking with us, Suzannah Home & Care Services remains committed to providing you peace of mind and domestic excellence through our exceptional domestic services.</p>
             
             </strong></div>`,
-    }),
   });
 
-  await response.json();
+  console.log("Confirmation email sent successfully");
+  // const response = await fetch("/api/sendEmail", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //     email: clientEmail,
+  //     name: clientName,
+  //     subject: "Domestic Service Booking Confirmation",
+  //   }),
+  // });
+
+  // await response.json();
 }
