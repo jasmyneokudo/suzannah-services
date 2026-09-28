@@ -37,6 +37,7 @@ export async function processBooking(clientRequest: any, updateValues: (arg0: an
       // update excel sheet
       try {
         await updateValues([requestArray]);
+        console.log("successfulyl update spreadsheet", requestArray)
       } catch (error) {
         console.error("Failed to update spreadsheet:", error);
       }
