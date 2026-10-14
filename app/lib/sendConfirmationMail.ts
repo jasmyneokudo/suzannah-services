@@ -1,3 +1,5 @@
+// lib/sendconfirmationmail.ts
+
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
@@ -185,8 +187,8 @@ A member of our team will contact you on WhatsApp shortly to confirm the details
     <li>
       <strong>Cooks</strong>
       <ul>
-        <li>Live-in: From ₦160,000/month</li>
-        <li>Live-out: From ₦200,000/month</li>
+        <li>Live-in: From ₦200,000/month</li>
+        <li>Live-out: From ₦250,000/month</li>
       </ul>
     </li>
 
@@ -194,7 +196,7 @@ A member of our team will contact you on WhatsApp shortly to confirm the details
       <strong>Drivers</strong>
       <ul>
         <li>Live-in: From ₦150,000/month</li>
-        <li>Live-out: From ₦170,000/month</li>
+        <li>Live-out: From ₦180,000/month</li>
       </ul>
     </li>
 
