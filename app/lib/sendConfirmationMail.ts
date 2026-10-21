@@ -180,7 +180,7 @@ A member of our team will contact you on WhatsApp shortly to confirm the details
       <strong>Nannies, Helps &amp; Housekeepers</strong>
       <ul>
         <li>Live-in: From ₦70,000/month</li>
-        <li>Live-out: From ₦100,000/month</li>
+        <li>Live-out: From ₦150,000/month</li>
       </ul>
     </li>
 
